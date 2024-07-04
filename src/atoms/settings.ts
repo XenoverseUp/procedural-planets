@@ -1,27 +1,12 @@
 import { atom } from "jotai";
+import { Vector3 } from "three";
+import { NoiseFilter } from "../util/noise";
+import { VECTOR_ZERO } from "../util/vector";
 
-type Layer = {
-  amplitude: number;
-};
-
-export const meshResolutionAtom = atom(50);
+export const meshResolutionAtom = atom(72);
 export const planetRadiusAtom = atom(1.25);
 export const isWireframeAtom = atom(false);
 
-export const layerCountAtom = atom(1);
-
-export const firstLayerAtom = atom<Layer>({
-  amplitude: 0.5,
-});
-
-export const secondLayerAtom = atom<Layer>({
-  amplitude: 1,
-});
-
-export const thirdLayerAtom = atom<Layer>({
-  amplitude: 1,
-});
-
-export const fourthLayerAtom = atom<Layer>({
-  amplitude: 1,
-});
+export const noiseFiltersAtom = atom<NoiseFilter[]>([
+  new NoiseFilter(0.5, 1, VECTOR_ZERO),
+]);

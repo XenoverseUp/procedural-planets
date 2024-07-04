@@ -1,13 +1,14 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { BufferAttribute, BufferGeometry, Mesh, Vector2, Vector3 } from "three";
 import { createNoise3D, NoiseFunction3D } from "simplex-noise";
+import { useAtomValue } from "jotai";
+import { noiseFiltersAtom } from "../../atoms/settings";
 
 type TerrainFaceProps = {
   resolution: number;
   localUp: Vector3;
   wireframe?: boolean;
   radius?: number;
-  noise: NoiseFunction3D;
 };
 
 const TerrainFace = ({
@@ -15,11 +16,11 @@ const TerrainFace = ({
   localUp,
   wireframe,
   radius = 1,
-  noise,
 }: TerrainFaceProps) => {
   const meshRef = useRef<Mesh>(null);
   const axisA = useRef<Vector3 | null>(null);
   const axisB = useRef<Vector3 | null>(null);
+  const filters = useAtomValue(noiseFiltersAtom);
 
   useLayoutEffect(() => {
     if (!meshRef.current) return;
@@ -44,32 +45,13 @@ const TerrainFace = ({
           .addScaledVector(axisA.current as Vector3, (percent.x - 0.5) * 2)
           .addScaledVector(axisB.current as Vector3, (percent.y - 0.5) * 2);
 
-        const pointOnSphere = pointOnCube
+        const pointOnUnitSphere = pointOnCube.clone().normalize();
+
+        const elevation = filters.at(0)?.evaluate(pointOnUnitSphere) ?? 0;
+
+        const pointOnPlanet = pointOnUnitSphere
           .clone()
-          .normalize()
-          .multiplyScalar(radius);
-
-        const evaluate = (point: Vector3): number => {
-          const strength = 1,
-            roughness = 1;
-          const noiseCenter = new Vector3(0, 0, 0);
-
-          const processedPoint = point
-            .clone()
-            .multiplyScalar(roughness)
-            .add(noiseCenter);
-
-          const simplex =
-            (noise(processedPoint.x, processedPoint.y, processedPoint.z) + 1) /
-            2;
-
-          return simplex * strength;
-        };
-
-        const elevation = evaluate(pointOnSphere);
-
-        const pointOnPlanet = pointOnSphere
-          .clone()
+          .multiplyScalar(radius)
           .multiplyScalar(1 + elevation);
 
         vertices[index] = pointOnPlanet.x;
@@ -100,7 +82,7 @@ const TerrainFace = ({
     geometry.computeBoundingSphere();
 
     meshRef.current!.geometry = geometry;
-  }, [resolution, localUp, radius]);
+  }, [resolution, localUp, radius, filters]);
 
   return (
     <mesh ref={meshRef}>
@@ -110,6 +92,7 @@ const TerrainFace = ({
         color="lightgreen"
         {...{ wireframe }}
       /> */}
+      {/* <meshToonMaterial color="lightblue" /> */}
       <meshNormalMaterial {...{ wireframe }} />
     </mesh>
   );

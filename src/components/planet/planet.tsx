@@ -22,7 +22,6 @@ const Planet = () => {
   const meshResolution = useAtomValue(meshResolutionAtom);
   const isWireframe = useAtomValue(isWireframeAtom);
   const planetRadius = useAtomValue(planetRadiusAtom);
-  const noise = useRef(createNoise3D());
 
   return (
     <mesh>
@@ -30,42 +29,36 @@ const Planet = () => {
         wireframe={isWireframe}
         resolution={meshResolution}
         radius={planetRadius}
-        noise={noise.current}
         localUp={VECTOR_UP}
       />
       <TerrainFace
         wireframe={isWireframe}
         resolution={meshResolution}
         radius={planetRadius}
-        noise={noise.current}
         localUp={VECTOR_DOWN}
       />
       <TerrainFace
         wireframe={isWireframe}
         resolution={meshResolution}
         radius={planetRadius}
-        noise={noise.current}
         localUp={VECTOR_LEFT}
       />
       <TerrainFace
         wireframe={isWireframe}
         resolution={meshResolution}
         radius={planetRadius}
-        noise={noise.current}
         localUp={VECTOR_RIGHT}
       />
       <TerrainFace
         wireframe={isWireframe}
         resolution={meshResolution}
         radius={planetRadius}
-        noise={noise.current}
         localUp={VECTOR_FRONT}
       />
       <TerrainFace
         wireframe={isWireframe}
         resolution={meshResolution}
         radius={planetRadius}
-        noise={noise.current}
         localUp={VECTOR_BACK}
       />
     </mesh>

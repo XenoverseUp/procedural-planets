@@ -1,15 +1,12 @@
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { MarginIcon, ResetIcon } from "@radix-ui/react-icons";
 import { useAtom } from "jotai";
-import { firstLayerAtom } from "../../atoms/settings";
 
 type NoiseLayerDetailProps = {
   title: string;
 };
 
 const NoiseLayerDetail = ({ title }: NoiseLayerDetailProps) => {
-  const [layer, setLayer] = useAtom(firstLayerAtom);
-
   return (
     <Collapsible.Root className="w-full rounded-xl bg-slate-100">
       <Collapsible.Trigger asChild>
@@ -31,13 +28,7 @@ const NoiseLayerDetail = ({ title }: NoiseLayerDetailProps) => {
           </div>
         </div>
       </Collapsible.Trigger>
-      <Collapsible.Content className="px-4">
-        <p>Amplitude: {layer.amplitude}</p>
-        <input
-          type="number"
-          onChange={(e) => setLayer({ amplitude: parseFloat(e.target.value) })}
-        />
-      </Collapsible.Content>
+      <Collapsible.Content className="px-4"></Collapsible.Content>
     </Collapsible.Root>
   );
 };
