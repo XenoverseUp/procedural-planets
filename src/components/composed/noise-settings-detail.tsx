@@ -28,8 +28,24 @@ const NoiseLayerDetail = ({ title }: NoiseLayerDetailProps) => {
           </div>
         </div>
       </Collapsible.Trigger>
-      <Collapsible.Content className="px-4"></Collapsible.Content>
+      <Collapsible.Content className="space-y-2 pb-4 pl-8 pr-4">
+        <NumericValue title="Strength" />
+        <NumericValue title="Roughness" />
+      </Collapsible.Content>
     </Collapsible.Root>
+  );
+};
+
+type NumericValueProps = {
+  title: string;
+};
+
+const NumericValue = ({ title }: NumericValueProps) => {
+  return (
+    <div className="flex items-center justify-between">
+      <p className="text-xs font-medium opacity-50">{title}</p>
+      <input type="number" />
+    </div>
   );
 };
 

@@ -6,7 +6,7 @@ import {
   noiseFiltersAtom,
   planetRadiusAtom,
 } from "../atoms/settings";
-import NoiseLayerDetail from "./composed/noise-layer-detail";
+import NoiseSettingsDetail from "./composed/noise-settings-detail";
 import SliderInput from "./ui/slider-input";
 import { NoiseFilter } from "../util/noise";
 import { VECTOR_ZERO } from "../util/vector";
@@ -46,13 +46,21 @@ const Sidebar = () => {
         />
         <section>
           <NumberInput
-            label="Noise Layers"
+            label="Noise Settings"
             description="Defines the level of detail (LOD) for the generated terrain. Max number of layers is 4."
             defaultValue={noiseFilters.length}
             onIncrement={() => {
               setNoiseFilters((filters) => [
                 ...filters,
-                new NoiseFilter(0.5, 1, VECTOR_ZERO),
+                new NoiseFilter({
+                  strength: 0.3,
+                  roughness: 1,
+                  baseRoughness: 0.5,
+                  center: VECTOR_ZERO,
+                  persistence: 0.5,
+                  minValue: 0,
+                  layerSize: 4,
+                }),
               ]);
             }}
             onDecrement={() => {
@@ -64,7 +72,7 @@ const Sidebar = () => {
 
           <div className="mt-4 w-full space-y-2">
             {noiseFilters.map((_, i) => (
-              <NoiseLayerDetail title={`Noise Layer ${i + 1}`} />
+              <NoiseSettingsDetail title={`Noise Setting ${i + 1}`} />
             ))}
           </div>
         </section>
