@@ -4,6 +4,10 @@ type Layer = {
   amplitude: number;
 };
 
+export const meshResolutionAtom = atom(50);
+export const planetRadiusAtom = atom(1.25);
+export const isWireframeAtom = atom(false);
+
 export const layerCountAtom = atom(1);
 
 export const firstLayerAtom = atom<Layer>({

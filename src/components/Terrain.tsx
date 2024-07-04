@@ -33,7 +33,7 @@ function Terrain() {
     <mesh ref={meshRef}>
       <sphereGeometry args={[1, 64, 64]} />
       {/* <meshStandardMaterial color="lightgreen" /> */}
-      <terrainMaterial attach="material" />
+      <terrainMaterial attach="material" color="lightgreen" />
     </mesh>
   );
 }

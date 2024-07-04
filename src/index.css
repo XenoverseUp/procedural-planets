@@ -9,3 +9,8 @@
     margin: 0;
   }
 }
+
+.aaa {
+  background-image: radial-gradient(rgba(0 0 0 / 0.35) 1px, transparent 0);
+  background-size: 30px 30px;
+}

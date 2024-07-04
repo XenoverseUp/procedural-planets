@@ -1,11 +1,18 @@
 import { MixerHorizontalIcon } from "@radix-ui/react-icons";
 import NumberInput from "./ui/number-input";
 import { useAtom } from "jotai";
-import { layerCountAtom } from "../atoms/settings";
+import {
+  layerCountAtom,
+  meshResolutionAtom,
+  planetRadiusAtom,
+} from "../atoms/settings";
 import NoiseLayerDetail from "./composed/noise-layer-detail";
+import SliderInput from "./ui/slider-input";
 
 const Sidebar = () => {
   const [layerCount, setLayerCount] = useAtom(layerCountAtom);
+  const [meshResolution, setMeshResolution] = useAtom(meshResolutionAtom);
+  const [planetRadius, setPlanetRadius] = useAtom(planetRadiusAtom);
 
   return (
     <aside className="h-full w-96 flex-shrink-0 overflow-hidden rounded-lg bg-white">
@@ -15,7 +22,26 @@ const Sidebar = () => {
           <span>Control Panel</span>
         </h2>
       </header>
-      <div className="p-4">
+      <div className="space-y-8 p-4">
+        <SliderInput
+          label="Planet Radius"
+          defaultValue={planetRadius}
+          onValueChange={setPlanetRadius}
+          labels={["1", "3"]}
+          min={1}
+          max={3}
+          step={0.1}
+        />
+        <SliderInput
+          label="Resolution"
+          description="Defines the level resolution of the planet mesh. The higher this value, the more room for detail. The lower this value, the higher performance."
+          defaultValue={meshResolution}
+          onValueChange={setMeshResolution}
+          labels={["5", "50", "100"]}
+          min={5}
+          max={100}
+          step={5}
+        />
         <section>
           <NumberInput
             label="Noise Layers"

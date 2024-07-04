@@ -1,5 +1,5 @@
 import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type NumberInputProps = {
   label?: string;
@@ -15,6 +15,10 @@ const NumberInput = ({
   onValueChange,
 }: NumberInputProps) => {
   const [inputValue, setInputValue] = useState(defaultValue);
+
+  useEffect(() => {
+    setInputValue(defaultValue);
+  }, [defaultValue]);
 
   const increment = useCallback(() => {
     if (inputValue < 4) {
