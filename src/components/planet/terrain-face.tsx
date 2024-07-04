@@ -1,11 +1,13 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { BufferAttribute, BufferGeometry, Mesh, Vector2, Vector3 } from "three";
+import { createNoise3D, NoiseFunction3D } from "simplex-noise";
 
 type TerrainFaceProps = {
   resolution: number;
   localUp: Vector3;
   wireframe?: boolean;
   radius?: number;
+  noise: NoiseFunction3D;
 };
 
 const TerrainFace = ({
@@ -13,6 +15,7 @@ const TerrainFace = ({
   localUp,
   wireframe,
   radius = 1,
+  noise,
 }: TerrainFaceProps) => {
   const meshRef = useRef<Mesh>(null);
   const axisA = useRef<Vector3 | null>(null);
@@ -46,19 +49,42 @@ const TerrainFace = ({
           .normalize()
           .multiplyScalar(radius);
 
-        vertices[index] = pointOnSphere.x;
-        vertices[index + 1] = pointOnSphere.y;
-        vertices[index + 2] = pointOnSphere.z;
+        const evaluate = (point: Vector3): number => {
+          const strength = 1,
+            roughness = 1;
+          const noiseCenter = new Vector3(0, 0, 0);
+
+          const processedPoint = point
+            .clone()
+            .multiplyScalar(roughness)
+            .add(noiseCenter);
+
+          const simplex =
+            (noise(processedPoint.x, processedPoint.y, processedPoint.z) + 1) /
+            2;
+
+          return simplex * strength;
+        };
+
+        const elevation = evaluate(pointOnSphere);
+
+        const pointOnPlanet = pointOnSphere
+          .clone()
+          .multiplyScalar(1 + elevation);
+
+        vertices[index] = pointOnPlanet.x;
+        vertices[index + 1] = pointOnPlanet.y;
+        vertices[index + 2] = pointOnPlanet.z;
         index += 3;
 
         if (x !== resolution - 1 && y !== resolution - 1) {
           const i = x + y * resolution;
-          triangles[triangleIndex] = i;
-          triangles[triangleIndex + 1] = i + resolution + 1;
-          triangles[triangleIndex + 2] = i + resolution;
-          triangles[triangleIndex + 3] = i;
-          triangles[triangleIndex + 4] = i + 1;
-          triangles[triangleIndex + 5] = i + resolution + 1;
+          triangles[triangleIndex] = i + resolution + 1;
+          triangles[triangleIndex + 1] = i + 1;
+          triangles[triangleIndex + 2] = i;
+          triangles[triangleIndex + 3] = i + resolution;
+          triangles[triangleIndex + 4] = i + resolution + 1;
+          triangles[triangleIndex + 5] = i;
           triangleIndex += 6;
         }
       }
@@ -79,12 +105,12 @@ const TerrainFace = ({
   return (
     <mesh ref={meshRef}>
       <bufferGeometry />
-      <meshPhongMaterial
+      {/* <meshPhongMaterial
         specular="white"
         color="lightgreen"
         {...{ wireframe }}
-      />
-      {/* <meshNormalMaterial color="lightGreen" {...{ wireframe }} /> */}
+      /> */}
+      <meshNormalMaterial {...{ wireframe }} />
     </mesh>
   );
 };
