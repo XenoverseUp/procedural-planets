@@ -13,6 +13,7 @@ function App() {
         <Canvas>
           <ambientLight intensity={0.75} />
           <directionalLight color="white" position={[5, -5, 5]} />
+          <directionalLight color="white" position={[-2, 5, -5]} />
           {/* <Terrain /> */}
           <Planet />
           <OrbitControls />

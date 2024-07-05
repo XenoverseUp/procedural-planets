@@ -1,15 +1,15 @@
 import { MixerHorizontalIcon } from "@radix-ui/react-icons";
-import NumberInput from "./ui/number-input";
+import NumberInput from "@/components/ui/number-input";
 import { useAtom } from "jotai";
 import {
   meshResolutionAtom,
   noiseFiltersAtom,
   planetRadiusAtom,
-} from "../atoms/settings";
-import NoiseSettingsDetail from "./composed/noise-settings-detail";
-import SliderInput from "./ui/slider-input";
-import { NoiseFilter } from "../util/noise";
-import { VECTOR_ZERO } from "../util/vector";
+} from "@/atoms/settings";
+import NoiseSettingsDetail from "@/components/composed/noise-settings-detail";
+import SliderInput from "@/components/ui/slider-input";
+import { NoiseFilter } from "@/util/noise";
+import { VECTOR_ZERO } from "@/util/vector";
 
 const Sidebar = () => {
   const [meshResolution, setMeshResolution] = useAtom(meshResolutionAtom);

@@ -1,7 +1,6 @@
 import { atom } from "jotai";
-import { Vector3 } from "three";
-import { NoiseFilter } from "../util/noise";
-import { VECTOR_ZERO } from "../util/vector";
+import { NoiseFilter } from "@/util/noise";
+import { VECTOR_ZERO } from "@/util/vector";
 
 export const meshResolutionAtom = atom(128);
 export const planetRadiusAtom = atom(1.25);

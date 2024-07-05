@@ -1,8 +1,7 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { BufferAttribute, BufferGeometry, Mesh, Vector2, Vector3 } from "three";
-import { createNoise3D, NoiseFunction3D } from "simplex-noise";
 import { useAtomValue } from "jotai";
-import { noiseFiltersAtom } from "../../atoms/settings";
+import { noiseFiltersAtom } from "@/atoms/settings";
 
 type TerrainFaceProps = {
   resolution: number;
@@ -87,13 +86,9 @@ const TerrainFace = ({
   return (
     <mesh ref={meshRef}>
       <bufferGeometry />
-      {/* <meshPhongMaterial
-        specular="white"
-        color="lightgreen"
-        {...{ wireframe }}
-      /> */}
+      <meshPhongMaterial specular="white" color="white" {...{ wireframe }} />
       {/* <meshToonMaterial color="lightblue" /> */}
-      <meshNormalMaterial {...{ wireframe }} />
+      {/* <meshNormalMaterial {...{ wireframe }} /> */}
     </mesh>
   );
 };
