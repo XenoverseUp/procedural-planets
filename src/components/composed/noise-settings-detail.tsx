@@ -3,14 +3,14 @@ import {
   BarChartIcon,
   CrumpledPaperIcon,
   LayersIcon,
-  MarginIcon,
   ResetIcon,
   ShadowIcon,
   TargetIcon,
   TextAlignBottomIcon,
 } from "@radix-ui/react-icons";
 import { useAtom } from "jotai";
-import { noiseFiltersAtom } from "../../atoms/settings";
+import { noiseFiltersAtom } from "@/atoms/settings";
+import NumericValue from "@/components/ui/numeric-value";
 
 type NoiseLayerDetailProps = {
   title: string;
@@ -51,7 +51,7 @@ const NoiseLayerDetail = ({ title, index }: NoiseLayerDetailProps) => {
               return updated;
             });
           }}
-          step={0.1}
+          step={0.05}
           defaultValue={0.1}
           icon={TargetIcon}
           title="Strength"
@@ -113,7 +113,7 @@ const NoiseLayerDetail = ({ title, index }: NoiseLayerDetailProps) => {
               return updated;
             });
           }}
-          step={0.1}
+          step={0.05}
           defaultValue={0.5}
           icon={BarChartIcon}
           title="Persistence"
@@ -137,60 +137,6 @@ const NoiseLayerDetail = ({ title, index }: NoiseLayerDetailProps) => {
         />
       </Collapsible.Content>
     </Collapsible.Root>
-  );
-};
-
-type NumericValueProps = {
-  title: string;
-  icon?: any;
-  value: number;
-  onValueChange?: (value: number) => void;
-  step?: number;
-  min?: number;
-  max?: number;
-  defaultValue: number;
-  type?: "float" | "int";
-};
-
-const NumericValue = ({
-  title,
-  icon: Icon,
-  value,
-  step = 1,
-  min,
-  max,
-  defaultValue = 0.1,
-  onValueChange,
-  type = "float",
-}: NumericValueProps) => {
-  return (
-    <div className="flex items-center justify-between">
-      <div className="flex cursor-col-resize items-center gap-2 opacity-60">
-        {!!Icon && <Icon />}
-        <p className="text-xs font-medium">{title}</p>
-      </div>
-      <input
-        defaultValue={value}
-        step={step}
-        {...(min !== undefined && { min })}
-        {...(max !== undefined && { max })}
-        onChange={(e) => {
-          const value =
-            type === "float"
-              ? parseFloat(e.target.value || defaultValue.toString())
-              : parseInt(e.target.value || defaultValue.toString());
-
-          onValueChange?.(value);
-
-          e.target.value = value.toString();
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Backspace") e.target.value = "";
-        }}
-        type="number"
-        className="h-6 min-w-4 flex-shrink-0 rounded bg-slate-200 text-center text-xs font-medium text-slate-600"
-      />
-    </div>
   );
 };
 

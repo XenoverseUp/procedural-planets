@@ -1,7 +1,7 @@
 import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
 import { useCallback, useEffect, useState } from "react";
 
-type NumberInputProps = {
+type StepInputProps = {
   label?: string;
   description?: string;
   defaultValue?: number;
@@ -10,14 +10,14 @@ type NumberInputProps = {
   onDecrement?: (value: number) => void;
 };
 
-const NumberInput = ({
+const StepInput = ({
   label,
   description,
   defaultValue = 1,
   onValueChange,
   onIncrement,
   onDecrement,
-}: NumberInputProps) => {
+}: StepInputProps) => {
   const [inputValue, setInputValue] = useState(defaultValue);
 
   useEffect(() => {
@@ -85,4 +85,4 @@ const NumberInput = ({
   );
 };
 
-export default NumberInput;
+export default StepInput;

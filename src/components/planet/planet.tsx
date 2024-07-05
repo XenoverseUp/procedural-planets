@@ -14,53 +14,51 @@ import {
   isWireframeAtom,
   meshResolutionAtom,
   planetRadiusAtom,
-} from "../../atoms/settings";
+  rendersGlobeAtom,
+} from "@/atoms/settings";
 import { createNoise3D } from "simplex-noise";
 import { useRef } from "react";
+import WireFace from "./wire-face";
+
+const directions = [
+  VECTOR_UP,
+  VECTOR_DOWN,
+  VECTOR_LEFT,
+  VECTOR_RIGHT,
+  VECTOR_FRONT,
+  VECTOR_BACK,
+];
 
 const Planet = () => {
   const meshResolution = useAtomValue(meshResolutionAtom);
   const isWireframe = useAtomValue(isWireframeAtom);
   const planetRadius = useAtomValue(planetRadiusAtom);
+  const rendersGlobe = useAtomValue(rendersGlobeAtom);
 
   return (
     <mesh>
-      <TerrainFace
-        wireframe={isWireframe}
-        resolution={meshResolution}
-        radius={planetRadius}
-        localUp={VECTOR_UP}
-      />
-      <TerrainFace
-        wireframe={isWireframe}
-        resolution={meshResolution}
-        radius={planetRadius}
-        localUp={VECTOR_DOWN}
-      />
-      <TerrainFace
-        wireframe={isWireframe}
-        resolution={meshResolution}
-        radius={planetRadius}
-        localUp={VECTOR_LEFT}
-      />
-      <TerrainFace
-        wireframe={isWireframe}
-        resolution={meshResolution}
-        radius={planetRadius}
-        localUp={VECTOR_RIGHT}
-      />
-      <TerrainFace
-        wireframe={isWireframe}
-        resolution={meshResolution}
-        radius={planetRadius}
-        localUp={VECTOR_FRONT}
-      />
-      <TerrainFace
-        wireframe={isWireframe}
-        resolution={meshResolution}
-        radius={planetRadius}
-        localUp={VECTOR_BACK}
-      />
+      {directions.map((direction, i) => {
+        if (rendersGlobe || direction === VECTOR_FRONT)
+          return (
+            <TerrainFace
+              wireframe={isWireframe}
+              resolution={meshResolution}
+              radius={planetRadius}
+              localUp={direction}
+              key={`terrain-face-${i}`}
+              renderBackface={!rendersGlobe}
+            />
+          );
+
+        return (
+          <WireFace
+            resolution={10}
+            radius={planetRadius}
+            localUp={direction}
+            key={`wire-face-${i}`}
+          />
+        );
+      })}
     </mesh>
   );
 };

@@ -1,5 +1,5 @@
 import { MixerHorizontalIcon } from "@radix-ui/react-icons";
-import NumberInput from "@/components/ui/number-input";
+import StepInput from "@/components/ui/step-input";
 import { useAtom } from "jotai";
 import {
   meshResolutionAtom,
@@ -21,7 +21,7 @@ const Sidebar = () => {
       <header className="border-b px-4 py-3">
         <h2 className="flex items-center gap-2 text-sm font-medium">
           <MixerHorizontalIcon />
-          <span>Control Panel</span>
+          <span>Planet Generator</span>
         </h2>
       </header>
       <div className="space-y-8 p-4">
@@ -45,7 +45,7 @@ const Sidebar = () => {
           step={2}
         />
         <section>
-          <NumberInput
+          <StepInput
             label="Noise Settings"
             description="Defines the level of detail (LOD) for the generated terrain. Max number of layers is 4."
             defaultValue={noiseFilters.length}

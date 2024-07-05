@@ -5,6 +5,7 @@ import { VECTOR_ZERO } from "@/util/vector";
 export const meshResolutionAtom = atom(128);
 export const planetRadiusAtom = atom(1.25);
 export const isWireframeAtom = atom(false);
+export const rendersGlobeAtom = atom(true);
 
 export const noiseFiltersAtom = atom<NoiseFilter[]>([
   new NoiseFilter({

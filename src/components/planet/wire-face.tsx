@@ -1,35 +1,18 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
-import {
-  BufferAttribute,
-  BufferGeometry,
-  DoubleSide,
-  FrontSide,
-  Mesh,
-  Vector2,
-  Vector3,
-} from "three";
+import { BufferAttribute, BufferGeometry, Mesh, Vector2, Vector3 } from "three";
 import { useAtomValue } from "jotai";
 import { noiseFiltersAtom } from "@/atoms/settings";
 
-type TerrainFaceProps = {
+type WireFaceProps = {
   resolution: number;
   localUp: Vector3;
-  wireframe?: boolean;
   radius?: number;
-  renderBackface?: boolean;
 };
 
-const TerrainFace = ({
-  resolution,
-  localUp,
-  wireframe,
-  radius = 1,
-  renderBackface = false,
-}: TerrainFaceProps) => {
+const WireFace = ({ resolution, localUp, radius = 1 }: WireFaceProps) => {
   const meshRef = useRef<Mesh>(null);
   const axisA = useRef<Vector3 | null>(null);
   const axisB = useRef<Vector3 | null>(null);
-  const filters = useAtomValue(noiseFiltersAtom);
 
   useLayoutEffect(() => {
     if (!meshRef.current) return;
@@ -54,18 +37,14 @@ const TerrainFace = ({
           .addScaledVector(axisA.current as Vector3, (percent.x - 0.5) * 2)
           .addScaledVector(axisB.current as Vector3, (percent.y - 0.5) * 2);
 
-        const pointOnUnitSphere = pointOnCube.clone().normalize();
-
-        const elevation = filters.at(0)?.evaluate(pointOnUnitSphere) ?? 0;
-
-        const pointOnPlanet = pointOnUnitSphere
+        const pointOnSphere = pointOnCube
           .clone()
-          .multiplyScalar(radius)
-          .multiplyScalar(1 + elevation);
+          .normalize()
+          .multiplyScalar(radius);
 
-        vertices[index] = pointOnPlanet.x;
-        vertices[index + 1] = pointOnPlanet.y;
-        vertices[index + 2] = pointOnPlanet.z;
+        vertices[index] = pointOnSphere.x;
+        vertices[index + 1] = pointOnSphere.y;
+        vertices[index + 2] = pointOnSphere.z;
         index += 3;
 
         if (x !== resolution - 1 && y !== resolution - 1) {
@@ -91,19 +70,16 @@ const TerrainFace = ({
     geometry.computeBoundingSphere();
 
     meshRef.current!.geometry = geometry;
-  }, [resolution, localUp, radius, filters]);
+  }, [resolution, localUp, radius]);
 
   return (
     <mesh ref={meshRef}>
       <bufferGeometry />
-      <meshPhongMaterial specular="white" color="white" {...{ wireframe }} />
+      {/* <meshPhongMaterial specular="white" color="white" {...{ wireframe }} /> */}
       {/* <meshToonMaterial color="lightblue" /> */}
-      {/* <meshNormalMaterial
-        {...{ wireframe }}
-        side={renderBackface ? DoubleSide : FrontSide}
-      /> */}
+      <meshBasicMaterial color="lightblue" wireframe />
     </mesh>
   );
 };
 
-export default TerrainFace;
+export default WireFace;
