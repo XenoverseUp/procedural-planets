@@ -1,4 +1,11 @@
-import { OrbitControls, Stats } from "@react-three/drei";
+import {
+  OrbitControls,
+  Stats,
+  Resize,
+  Sky,
+  Stage,
+  Float,
+} from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import Sidebar from "./components/sidebar";
 import Planet from "./components/planet/planet";
@@ -14,8 +21,21 @@ function App() {
           <directionalLight color="white" position={[5, -5, 5]} />
           <directionalLight color="white" position={[-2, 5, -5]} />
           <OrbitControls />
+          <Float
+            speed={5}
+            rotationIntensity={0.5}
+            floatIntensity={1}
+            floatingRange={[-0.02, 0.02]}
+          >
+            <Planet />
+          </Float>
+          {/* <Sky
+            distance={450000}
+            sunPosition={[0, 1, 0]}
+            inclination={0}
+            azimuth={0.25}
+          /> */}
           <Stats />
-          <Planet />
         </Canvas>
       </div>
       <Sidebar />

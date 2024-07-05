@@ -106,6 +106,7 @@ const NumericValue = ({
         step={step}
         {...(min !== undefined && { min })}
         {...(max !== undefined && { max })}
+        onFocus={(e) => input.current?.select()}
         onChange={(e) => {
           const value =
             type === "float"
@@ -116,13 +117,9 @@ const NumericValue = ({
 
           e.target.value = value.toString();
         }}
-        onKeyDown={(e) => {
-          // @ts-ignore
-          if (e.key === "Backspace") e.target.value = "";
-        }}
         ref={input}
         type="number"
-        className="h-6 min-w-4 flex-shrink-0 rounded bg-slate-200 text-center text-xs font-medium text-slate-600"
+        className="h-6 w-20 min-w-4 flex-shrink-0 rounded bg-slate-200 text-center text-xs font-medium text-slate-600"
       />
     </div>
   );

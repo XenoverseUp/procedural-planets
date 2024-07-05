@@ -1,6 +1,7 @@
 import * as Collapsible from "@radix-ui/react-collapsible";
 import {
   BarChartIcon,
+  Crosshair1Icon,
   CrumpledPaperIcon,
   LayersIcon,
   ResetIcon,
@@ -11,6 +12,8 @@ import {
 import { useAtom } from "jotai";
 import { noiseFiltersAtom } from "@/atoms/settings";
 import NumericValue from "@/components/ui/numeric-value";
+import VectorValue from "../ui/vector-value";
+import { Vector3 } from "three";
 
 type NoiseLayerDetailProps = {
   title: string;
@@ -134,6 +137,21 @@ const NoiseLayerDetail = ({ title, index }: NoiseLayerDetailProps) => {
           icon={LayersIcon}
           title="Layer Count"
           type="int"
+        />
+        <div className="h-0.5" aria-hidden></div>
+        <VectorValue
+          title="Noise Center"
+          value={noiseFilters.at(index)?.center as Vector3}
+          onValueChange={(value) => {
+            setNoiseFilters((noiseFilters) => {
+              const updated = [...noiseFilters];
+              updated[index].center = value;
+
+              return updated;
+            });
+          }}
+          icon={Crosshair1Icon}
+          step={0.05}
         />
       </Collapsible.Content>
     </Collapsible.Root>

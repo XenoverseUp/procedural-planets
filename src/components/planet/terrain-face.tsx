@@ -10,6 +10,7 @@ import {
 } from "three";
 import { useAtomValue } from "jotai";
 import { noiseFiltersAtom } from "@/atoms/settings";
+import { MeshTransmissionMaterial } from "@react-three/drei";
 
 type TerrainFaceProps = {
   resolution: number;
@@ -96,12 +97,17 @@ const TerrainFace = ({
   return (
     <mesh ref={meshRef}>
       <bufferGeometry />
-      <meshPhongMaterial specular="white" color="white" {...{ wireframe }} />
-      {/* <meshToonMaterial color="lightblue" /> */}
-      {/* <meshNormalMaterial
+      <meshPhongMaterial
+        specular="white"
+        color="white"
         {...{ wireframe }}
         side={renderBackface ? DoubleSide : FrontSide}
-      /> */}
+      />
+      {/* <meshToonMaterial color="lightblue" /> */}
+      <meshNormalMaterial
+        {...{ wireframe }}
+        side={renderBackface ? DoubleSide : FrontSide}
+      />
     </mesh>
   );
 };
