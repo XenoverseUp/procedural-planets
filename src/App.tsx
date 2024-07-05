@@ -1,6 +1,5 @@
 import { OrbitControls, Stats } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import Terrain from "./components/Terrain";
 import Sidebar from "./components/sidebar";
 import Planet from "./components/planet/planet";
 import Toolbar from "./components/composed/toolbar";
@@ -14,9 +13,9 @@ function App() {
           <ambientLight intensity={0.75} />
           <directionalLight color="white" position={[5, -5, 5]} />
           <directionalLight color="white" position={[-2, 5, -5]} />
-          {/* <Terrain /> */}
-          <Planet />
           <OrbitControls />
+          <Stats />
+          <Planet />
         </Canvas>
       </div>
       <Sidebar />
