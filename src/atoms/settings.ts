@@ -11,10 +11,11 @@ export const noiseFiltersAtom = atom<NoiseFilter[]>([
   new NoiseFilter({
     strength: 0.2,
     roughness: 2.25,
-    baseRoughness: 0.71,
+    baseRoughness: 0.7,
     center: VECTOR_ZERO,
     persistence: 0.5,
     minValue: 1.1,
     layerCount: 5,
+    enabled: true,
   }),
 ]);

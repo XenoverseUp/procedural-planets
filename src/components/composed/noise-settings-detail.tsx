@@ -1,6 +1,8 @@
 import * as Collapsible from "@radix-ui/react-collapsible";
+import * as Checkbox from "@radix-ui/react-checkbox";
 import {
   BarChartIcon,
+  CheckIcon,
   Crosshair1Icon,
   CrumpledPaperIcon,
   LayersIcon,
@@ -24,7 +26,7 @@ const NoiseLayerDetail = ({ title, index }: NoiseLayerDetailProps) => {
   const [noiseFilters, setNoiseFilters] = useAtom(noiseFiltersAtom);
 
   return (
-    <Collapsible.Root className="w-full rounded-xl bg-slate-100">
+    <Collapsible.Root className="w-full rounded-xl border bg-slate-100">
       <Collapsible.Trigger asChild>
         <div className="flex cursor-pointer select-none items-center justify-between px-4 py-3">
           <h4 className="flex items-center gap-2 text-sm font-medium">
@@ -32,14 +34,23 @@ const NoiseLayerDetail = ({ title, index }: NoiseLayerDetailProps) => {
           </h4>
 
           <div className="flex items-center gap-2">
-            <button
-              className="rounded p-1 transition-colors hover:bg-black/5"
-              onClick={(e) => {
-                e.stopPropagation();
+            <Checkbox.Root
+              onClick={(e) => e.stopPropagation()}
+              className="flex size-5 items-center justify-center rounded border bg-white"
+              checked={noiseFilters.at(index)?.enabled}
+              onCheckedChange={(checked) => {
+                setNoiseFilters((noiseFilters) => {
+                  const updated = [...noiseFilters];
+                  updated[index].enabled = checked as boolean;
+
+                  return updated;
+                });
               }}
             >
-              <ResetIcon />
-            </button>
+              <Checkbox.Indicator asChild>
+                <CheckIcon />
+              </Checkbox.Indicator>
+            </Checkbox.Root>
           </div>
         </div>
       </Collapsible.Trigger>

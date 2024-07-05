@@ -21,20 +21,13 @@ function App() {
           <directionalLight color="white" position={[5, -5, 5]} />
           <directionalLight color="white" position={[-2, 5, -5]} />
           <OrbitControls />
-          <Float
+          {/* <Float
             speed={5}
             rotationIntensity={0.5}
             floatIntensity={1}
             floatingRange={[-0.02, 0.02]}
-          >
-            <Planet />
-          </Float>
-          {/* <Sky
-            distance={450000}
-            sunPosition={[0, 1, 0]}
-            inclination={0}
-            azimuth={0.25}
-          /> */}
+          ></Float> */}
+          <Planet />
           <Stats />
         </Canvas>
       </div>

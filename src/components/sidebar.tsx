@@ -32,7 +32,7 @@ const Sidebar = () => {
           labels={["1", "2"]}
           min={1}
           max={2}
-          step={0.1}
+          step={0.05}
         />
         <SliderInput
           label="Resolution"
@@ -53,13 +53,14 @@ const Sidebar = () => {
               setNoiseFilters((filters) => [
                 ...filters,
                 new NoiseFilter({
-                  strength: 0.3,
-                  roughness: 1,
-                  baseRoughness: 0.5,
+                  strength: 0.2,
+                  roughness: 2.25,
+                  baseRoughness: 0.7,
                   center: VECTOR_ZERO,
                   persistence: 0.5,
-                  minValue: 0,
-                  layerCount: 4,
+                  minValue: 1.1,
+                  layerCount: 5,
+                  enabled: true,
                 }),
               ]);
             }}

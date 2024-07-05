@@ -1,3 +1,5 @@
+// import { add } from "@/as/build/assembly";
+
 import { useEffect, useLayoutEffect, useRef } from "react";
 import {
   BufferAttribute,
@@ -30,7 +32,7 @@ const TerrainFace = ({
   const meshRef = useRef<Mesh>(null);
   const axisA = useRef<Vector3 | null>(null);
   const axisB = useRef<Vector3 | null>(null);
-  const filters = useAtomValue(noiseFiltersAtom);
+  const noiseFilters = useAtomValue(noiseFiltersAtom);
 
   useLayoutEffect(() => {
     if (!meshRef.current) return;
@@ -42,6 +44,9 @@ const TerrainFace = ({
   useEffect(() => {
     const vertices: Float32Array = new Float32Array(resolution ** 2 * 3);
     const triangles: Uint32Array = new Uint32Array((resolution - 1) ** 2 * 6);
+
+    // const result = add(3, 5);
+    // console.log(`Result is ${result} from AssemblyScript.`);
 
     let index = 0;
     let triangleIndex = 0;
@@ -57,7 +62,12 @@ const TerrainFace = ({
 
         const pointOnUnitSphere = pointOnCube.clone().normalize();
 
-        const elevation = filters.at(0)?.evaluate(pointOnUnitSphere) ?? 0;
+        let elevation = 0;
+
+        for (let i = 0; i < noiseFilters.length; i++) {
+          if (!noiseFilters.at(i)?.enabled) continue;
+          elevation += noiseFilters.at(i)?.evaluate(pointOnUnitSphere) ?? 0;
+        }
 
         const pointOnPlanet = pointOnUnitSphere
           .clone()
@@ -92,7 +102,7 @@ const TerrainFace = ({
     geometry.computeBoundingSphere();
 
     meshRef.current!.geometry = geometry;
-  }, [resolution, localUp, radius, filters]);
+  }, [resolution, localUp, radius, noiseFilters]);
 
   return (
     <mesh ref={meshRef}>

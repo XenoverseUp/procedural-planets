@@ -6,6 +6,7 @@ type int = number;
 type float = number;
 
 type NoiseFilterParameters = {
+  enabled: boolean;
   strength?: float;
   roughness?: float;
   center?: Vector3;
@@ -23,6 +24,7 @@ export class NoiseFilter {
   baseRoughness: float;
   minValue: float;
   layerCount: int;
+  enabled: boolean;
 
   #noise: NoiseFunction3D;
 
@@ -34,6 +36,7 @@ export class NoiseFilter {
     baseRoughness = 1,
     minValue = 1.22,
     layerCount = 1,
+    enabled = true,
   }: NoiseFilterParameters) {
     this.strength = strength;
     this.roughness = roughness;
@@ -42,6 +45,7 @@ export class NoiseFilter {
     this.baseRoughness = baseRoughness;
     this.minValue = minValue;
     this.layerCount = layerCount;
+    this.enabled = enabled;
 
     this.#noise = createNoise3D();
   }
