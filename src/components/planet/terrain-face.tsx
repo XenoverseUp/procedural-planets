@@ -1,5 +1,3 @@
-// import { add } from "@/as/build/assembly";
-
 import { useEffect, useLayoutEffect, useRef } from "react";
 import {
   BufferAttribute,
@@ -12,7 +10,7 @@ import {
 } from "three";
 import { useAtomValue } from "jotai";
 import { noiseFiltersAtom } from "@/atoms/settings";
-import { MeshTransmissionMaterial } from "@react-three/drei";
+import { generateTerrain, memory } from "@/assembly/build/release";
 
 type TerrainFaceProps = {
   resolution: number;
@@ -45,8 +43,26 @@ const TerrainFace = ({
     const vertices: Float32Array = new Float32Array(resolution ** 2 * 3);
     const triangles: Uint32Array = new Uint32Array((resolution - 1) ** 2 * 6);
 
-    // const result = add(3, 5);
-    // console.log(`Result is ${result} from AssemblyScript.`);
+    const pointer = generateTerrain(resolution);
+    const data = new Uint32Array(memory.buffer, pointer, 2);
+    const vertexPointer = data[0];
+    const indexPointer = data[1];
+
+    const vertexLength = resolution; //resolution ** 2 * 3;
+    const verticess = new Float32Array(
+      memory.buffer,
+      vertexPointer,
+      vertexLength,
+    );
+
+    const indicesLength = resolution; //(resolution - 1) ** 2 * 6;
+    const triangless = new Uint16Array(
+      memory.buffer,
+      indexPointer,
+      indicesLength,
+    );
+
+    console.log({ verticess, triangless });
 
     let index = 0;
     let triangleIndex = 0;
