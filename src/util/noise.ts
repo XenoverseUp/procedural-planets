@@ -12,17 +12,17 @@ type NoiseFilterParameters = {
   baseRoughness?: float;
   persistence?: float;
   minValue?: float;
-  layerSize?: int;
+  layerCount?: int;
 };
 
 export class NoiseFilter {
-  #strength: float;
-  #roughness: float;
-  #center: Vector3;
-  #persistence: float;
-  #baseRoughness: float;
-  #minValue: float;
-  #layerSize: int;
+  strength: float;
+  roughness: float;
+  center: Vector3;
+  persistence: float;
+  baseRoughness: float;
+  minValue: float;
+  layerCount: int;
 
   #noise: NoiseFunction3D;
 
@@ -33,37 +33,37 @@ export class NoiseFilter {
     persistence = 0.5,
     baseRoughness = 1,
     minValue = 1.22,
-    layerSize = 1,
+    layerCount = 1,
   }: NoiseFilterParameters) {
-    this.#strength = strength;
-    this.#roughness = roughness;
-    this.#center = center;
-    this.#persistence = persistence;
-    this.#baseRoughness = baseRoughness;
-    this.#minValue = minValue;
-    this.#layerSize = layerSize;
+    this.strength = strength;
+    this.roughness = roughness;
+    this.center = center;
+    this.persistence = persistence;
+    this.baseRoughness = baseRoughness;
+    this.minValue = minValue;
+    this.layerCount = layerCount;
 
     this.#noise = createNoise3D();
   }
 
   evaluate = (point: Vector3): float => {
     let noise: float = 0;
-    let frequency: float = this.#baseRoughness;
+    let frequency: float = this.baseRoughness;
     let amplitude: float = 1;
 
-    for (let i = 0; i < this.#layerSize; i++) {
+    for (let i = 0; i < this.layerCount; i++) {
       const processedPoint = point
         .clone()
         .multiplyScalar(frequency)
-        .add(this.#center);
+        .add(this.center);
 
       noise += (this.#noise(...processedPoint.toArray()) + 1) * 0.5 * amplitude;
-      frequency *= this.#roughness;
-      amplitude *= this.#persistence;
+      frequency *= this.roughness;
+      amplitude *= this.persistence;
     }
 
-    noise = Math.max(0, noise - this.#minValue);
+    noise = Math.max(0, noise - this.minValue);
 
-    return noise * this.#strength;
+    return noise * this.strength;
   };
 }

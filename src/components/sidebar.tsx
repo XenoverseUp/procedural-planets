@@ -59,7 +59,7 @@ const Sidebar = () => {
                   center: VECTOR_ZERO,
                   persistence: 0.5,
                   minValue: 0,
-                  layerSize: 4,
+                  layerCount: 4,
                 }),
               ]);
             }}
@@ -72,7 +72,11 @@ const Sidebar = () => {
 
           <div className="mt-4 w-full space-y-2">
             {noiseFilters.map((_, i) => (
-              <NoiseSettingsDetail title={`Noise Setting ${i + 1}`} />
+              <NoiseSettingsDetail
+                key={`noise-filter-${i}`}
+                index={i}
+                title={`Noise Setting ${i + 1}`}
+              />
             ))}
           </div>
         </section>

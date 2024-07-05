@@ -9,12 +9,12 @@ export const isWireframeAtom = atom(false);
 
 export const noiseFiltersAtom = atom<NoiseFilter[]>([
   new NoiseFilter({
-    strength: 0.1,
-    roughness: 2,
+    strength: 0.2,
+    roughness: 2.25,
     baseRoughness: 0.71,
     center: VECTOR_ZERO,
     persistence: 0.5,
     minValue: 1.1,
-    layerSize: 5,
+    layerCount: 5,
   }),
 ]);
