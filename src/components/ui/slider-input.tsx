@@ -35,7 +35,7 @@ const SliderInput = ({
 
         <div className="flex w-1/2 flex-col items-center gap-2">
           {labels && (
-            <div className="flex w-full justify-between">
+            <div className="flex w-full justify-between px-2">
               {labels.map((label, i) => (
                 <span key={`${label}-slider-i`} className="text-xs opacity-60">
                   {label}

@@ -69,8 +69,17 @@ const WireFace = ({ resolution, localUp, radius = 1 }: WireFaceProps) => {
     geometry.computeVertexNormals();
     geometry.computeBoundingSphere();
 
-    meshRef.current!.geometry = geometry;
-  }, [resolution, localUp, radius]);
+    if (meshRef.current) {
+      const oldGeometry = meshRef.current.geometry;
+      meshRef.current.geometry = geometry;
+      if (oldGeometry) oldGeometry.dispose();
+    }
+
+    return () => {
+      geometry.dispose();
+      meshRef.current?.geometry.dispose();
+    };
+  }, [radius]);
 
   return (
     <mesh ref={meshRef}>

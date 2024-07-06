@@ -1,6 +1,4 @@
-import { extend } from "@react-three/fiber";
 import TerrainFace from "./terrain-face";
-import { Vector3 } from "three";
 import {
   VECTOR_BACK,
   VECTOR_DOWN,
@@ -8,7 +6,7 @@ import {
   VECTOR_LEFT,
   VECTOR_RIGHT,
   VECTOR_UP,
-} from "../../util/vector";
+} from "@/lib/vector";
 import { useAtomValue } from "jotai";
 import {
   isWireframeAtom,
@@ -16,8 +14,7 @@ import {
   planetRadiusAtom,
   rendersGlobeAtom,
 } from "@/atoms/settings";
-import { createNoise3D } from "simplex-noise";
-import { useRef } from "react";
+
 import WireFace from "./wire-face";
 
 const directions = [

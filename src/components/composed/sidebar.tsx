@@ -8,8 +8,8 @@ import {
 } from "@/atoms/settings";
 import NoiseSettingsDetail from "@/components/composed/noise-settings-detail";
 import SliderInput from "@/components/ui/slider-input";
-import { NoiseFilter } from "@/util/noise";
-import { VECTOR_ZERO } from "@/util/vector";
+import { SimpleNoiseFilter } from "@/lib/noise";
+import { VECTOR_ZERO } from "@/lib/vector";
 
 const Sidebar = () => {
   const [meshResolution, setMeshResolution] = useAtom(meshResolutionAtom);
@@ -17,14 +17,14 @@ const Sidebar = () => {
   const [noiseFilters, setNoiseFilters] = useAtom(noiseFiltersAtom);
 
   return (
-    <aside className="h-full w-96 flex-shrink-0 overflow-hidden rounded-lg bg-white">
+    <aside className="flex h-full w-96 flex-shrink-0 flex-col overflow-hidden rounded-lg bg-white">
       <header className="border-b px-4 py-3">
         <h2 className="flex items-center gap-2 text-sm font-medium">
           <MixerHorizontalIcon />
           <span>Planet Generator</span>
         </h2>
       </header>
-      <div className="space-y-8 p-4">
+      <div className="space-y-8 overflow-y-auto overflow-x-hidden p-4">
         <SliderInput
           label="Planet Radius"
           defaultValue={planetRadius}
@@ -39,9 +39,9 @@ const Sidebar = () => {
           description="Defines the level resolution of the planet mesh. The higher this value, the more room for detail. The lower this value, the higher performance."
           defaultValue={meshResolution}
           onValueChange={setMeshResolution}
-          labels={["8", "256", "512"]}
+          labels={["8", "256"]}
           min={8}
-          max={512}
+          max={256}
           step={2}
         />
         <section>
@@ -52,7 +52,7 @@ const Sidebar = () => {
             onIncrement={() => {
               setNoiseFilters((filters) => [
                 ...filters,
-                new NoiseFilter({
+                new SimpleNoiseFilter({
                   strength: 0.2,
                   roughness: 2.25,
                   baseRoughness: 0.7,

@@ -1,7 +1,7 @@
 import * as Toggle from "@radix-ui/react-toggle";
 import { GlobeIcon } from "@radix-ui/react-icons";
 import { ClassValue } from "clsx";
-import cn from "@/util/cn";
+import cn from "@/lib/cn";
 import { useAtom } from "jotai";
 import { isWireframeAtom, rendersGlobeAtom } from "@/atoms/settings";
 

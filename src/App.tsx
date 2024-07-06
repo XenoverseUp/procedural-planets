@@ -1,15 +1,8 @@
-import {
-  OrbitControls,
-  Stats,
-  Resize,
-  Sky,
-  Stage,
-  Float,
-} from "@react-three/drei";
+import { OrbitControls, Stats, Float } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import Sidebar from "./components/sidebar";
-import Planet from "./components/planet/planet";
-import Toolbar from "./components/composed/toolbar";
+import Sidebar from "@/components/composed/sidebar";
+import Planet from "@/components/planet/planet";
+import Toolbar from "@/components/composed/toolbar";
 
 function App() {
   return (

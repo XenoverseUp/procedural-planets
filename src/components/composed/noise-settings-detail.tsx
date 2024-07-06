@@ -81,7 +81,7 @@ const NoiseLayerDetail = ({ title, index }: NoiseLayerDetailProps) => {
             });
           }}
           defaultValue={2}
-          step={0.1}
+          step={0.05}
           min={0}
           icon={CrumpledPaperIcon}
           title="Roughness"
@@ -96,7 +96,7 @@ const NoiseLayerDetail = ({ title, index }: NoiseLayerDetailProps) => {
               return updated;
             });
           }}
-          step={0.1}
+          step={0.05}
           min={0}
           defaultValue={0.7}
           icon={ShadowIcon}
@@ -112,7 +112,7 @@ const NoiseLayerDetail = ({ title, index }: NoiseLayerDetailProps) => {
               return updated;
             });
           }}
-          step={0.1}
+          step={0.05}
           defaultValue={1}
           icon={TextAlignBottomIcon}
           title="Base Elevation"
@@ -127,7 +127,7 @@ const NoiseLayerDetail = ({ title, index }: NoiseLayerDetailProps) => {
               return updated;
             });
           }}
-          step={0.05}
+          step={0.01}
           defaultValue={0.5}
           icon={BarChartIcon}
           title="Persistence"

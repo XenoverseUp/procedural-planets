@@ -1,11 +1,10 @@
-import { VECTOR_ZERO } from "@/util/vector";
+import { VECTOR_ZERO } from "@/lib/vector";
 import { Vector3 } from "three";
 
 type VectorValueProps = {
   title: string;
   icon?: any;
   value: Vector3;
-  defaultValue?: Vector3;
   onValueChange?: (value: Vector3) => void;
   step?: number;
 };
@@ -16,7 +15,6 @@ const VectorValue = ({
   step = 1,
   onValueChange,
   value,
-  defaultValue = VECTOR_ZERO,
 }: VectorValueProps) => {
   return (
     <div className="flex flex-col gap-2">
@@ -29,7 +27,6 @@ const VectorValue = ({
           <label htmlFor="x">X:</label>
           <input
             id="x"
-            defaultValue={defaultValue.x}
             value={value.x}
             step={step}
             onFocus={(e) => e.target.select()}
@@ -50,7 +47,6 @@ const VectorValue = ({
           <label htmlFor="y">Y:</label>
           <input
             id="y"
-            defaultValue={defaultValue.y}
             value={value.y}
             step={step}
             onFocus={(e) => e.target.select()}
@@ -71,7 +67,6 @@ const VectorValue = ({
           <label htmlFor="z">Z:</label>
           <input
             id="z"
-            defaultValue={defaultValue.z}
             value={value.z}
             step={step}
             onFocus={(e) => e.target.select()}
