@@ -11,6 +11,8 @@ import {
 import { useAtomValue } from "jotai";
 import { noiseFiltersAtom } from "@/atoms/settings";
 import generateTerrain from "./mesh-generation";
+import vs from "@/glsl/terrain.vs?raw";
+import fs from "@/glsl/terrain.fs?raw";
 
 type TerrainFaceProps = {
   resolution: number;
@@ -68,6 +70,15 @@ const TerrainFace = ({
   return (
     <mesh ref={meshRef}>
       <bufferGeometry />
+      {/* <shaderMaterial
+        vertexShader={vs}
+        fragmentShader={fs}
+        uniforms={{
+          radius: {
+            value: radius,
+          },
+        }}
+      /> */}
       <meshPhongMaterial
         specular="white"
         color="#fd6899"
@@ -75,6 +86,7 @@ const TerrainFace = ({
         {...{ wireframe }}
         side={renderBackface ? DoubleSide : FrontSide}
       />
+      {/* <meshPhysicalMaterial color="#fd6899" specularIntensity={20} /> */}
       {/* <meshToonMaterial color="lightblue" /> */}
       {/* <meshNormalMaterial
         {...{ wireframe }}
