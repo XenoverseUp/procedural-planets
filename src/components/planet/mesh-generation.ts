@@ -1,16 +1,16 @@
+import MinMax from "@/lib/min-max";
 import { NoiseFilter, SimpleNoiseFilter } from "@/lib/noise";
 import { Vector2, Vector3 } from "three";
 
 type generateTerrainParams = {
   resolution: number;
-  radius: number;
   localUp: Vector3;
   noiseFilters: NoiseFilter[];
 };
 
 const generateTerrain = ({
   resolution,
-  radius,
+
   localUp,
   noiseFilters,
 }: generateTerrainParams) => {
@@ -18,6 +18,8 @@ const generateTerrain = ({
   let indices: Uint32Array = new Uint32Array((resolution - 1) ** 2 * 6);
   const axisA = new Vector3(localUp.y, localUp.z, localUp.x);
   const axisB = new Vector3().crossVectors(axisA, localUp);
+
+  const elevationMinMax = new MinMax();
 
   let index = 0;
   let triangleIndex = 0;
@@ -41,9 +43,8 @@ const generateTerrain = ({
         elevation += noiseFilters.at(i)?.evaluate(pointOnUnitSphere) ?? 0;
       }
 
-      const pointOnPlanet = pointOnUnitSphere
-        .multiplyScalar(radius)
-        .multiplyScalar(1 + elevation);
+      const pointOnPlanet = pointOnUnitSphere.multiplyScalar(1 + elevation);
+      elevationMinMax.add(pointOnPlanet.length());
 
       vertices[index] = pointOnPlanet.x;
       vertices[index + 1] = pointOnPlanet.y;
@@ -66,6 +67,7 @@ const generateTerrain = ({
   return {
     vertices,
     indices,
+    elevationMinMax,
   };
 };
 
