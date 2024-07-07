@@ -20,7 +20,7 @@ export const noiseFiltersAtom = atom<NoiseFilter[]>([
   }),
   new RidgidNoiseFilter({
     enabled: true,
-    strength: 0.2,
+    strength: 0.1,
     roughness: 2.25,
     baseRoughness: 0.7,
     center: VECTOR_ZERO,

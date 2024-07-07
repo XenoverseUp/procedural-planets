@@ -11,16 +11,16 @@ function App() {
         <Toolbar className="absolute bottom-2 left-2 z-10" />
         <Canvas>
           <ambientLight intensity={0.75} />
-          <directionalLight color="white" position={[5, -5, 5]} />
-          <directionalLight color="white" position={[-2, 5, -5]} />
+          <directionalLight color="white" position={[0, 5, 5]} />
           <OrbitControls />
-          {/* <Float
+          <Float
             speed={5}
             rotationIntensity={0.5}
             floatIntensity={1}
             floatingRange={[-0.02, 0.02]}
-          ></Float> */}
-          <Planet />
+          >
+            <Planet />
+          </Float>
           <Stats />
         </Canvas>
       </div>

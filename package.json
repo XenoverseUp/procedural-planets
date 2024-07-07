@@ -25,7 +25,8 @@
     "simplex-noise": "^4.0.1",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-radix": "^3.0.3",
-    "three": "^0.166.1"
+    "three": "^0.166.1",
+    "three-custom-shader-material": "^5.4.0"
   },
   "devDependencies": {
     "@types/node": "^20.14.9",

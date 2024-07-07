@@ -16,6 +16,7 @@ import {
 } from "@/atoms/settings";
 
 import WireFace from "./wire-face";
+import { useState } from "react";
 
 const directions = [
   VECTOR_UP,

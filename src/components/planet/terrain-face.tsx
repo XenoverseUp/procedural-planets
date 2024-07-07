@@ -5,17 +5,27 @@ import {
   DoubleSide,
   FrontSide,
   Mesh,
+  MeshPhongMaterial,
+  MeshPhysicalMaterial,
+  MeshStandardMaterial,
   ShaderMaterial,
+  UniformsLib,
+  UniformsUtils,
   Vector2,
   Vector3,
 } from "three";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { noiseFiltersAtom } from "@/atoms/settings";
 import generateTerrain from "./mesh-generation";
+import CustomShaderMaterial from "three-custom-shader-material";
 
 import vs from "@/glsl/planet.vs?raw";
 import fs from "@/glsl/planet.fs?raw";
 import MinMax from "@/lib/min-max";
+import { extend } from "@react-three/fiber";
+import { maximumAtom, minimumAtom } from "@/atoms/minMax";
+
+extend({ CustomShaderMaterial });
 
 type TerrainFaceProps = {
   resolution: number;
@@ -35,7 +45,9 @@ const TerrainFace = ({
   const meshRef = useRef<Mesh>(null);
   const shaderRef = useRef<ShaderMaterial>(null);
   const noiseFilters = useAtomValue(noiseFiltersAtom);
-  const [elevation, setElevation] = useState<MinMax>();
+
+  const [minimum, setMinimum] = useAtom(minimumAtom);
+  const [maximum, setMaximum] = useAtom(maximumAtom);
 
   useLayoutEffect(() => {
     if (!shaderRef.current) return;
@@ -43,12 +55,10 @@ const TerrainFace = ({
       value: radius,
     };
 
-    if (elevation) {
-      shaderRef.current.uniforms.uMinMax = {
-        value: [elevation.max, elevation.min],
-      };
-    }
-  }, [radius, elevation]);
+    shaderRef.current.uniforms.uMinMax = {
+      value: [minimum, maximum],
+    };
+  }, [radius, minimum, maximum]);
 
   useLayoutEffect(() => {
     if (!meshRef.current) return;
@@ -59,7 +69,8 @@ const TerrainFace = ({
       noiseFilters,
     });
 
-    setElevation(elevationMinMax);
+    setMinimum(elevationMinMax.min);
+    setMaximum(elevationMinMax.max);
 
     meshRef.current.clear();
 
@@ -85,7 +96,23 @@ const TerrainFace = ({
   return (
     <mesh ref={meshRef}>
       <bufferGeometry />
-      <shaderMaterial ref={shaderRef} vertexShader={vs} fragmentShader={fs} />
+      {/* <shaderMaterial
+        {...{ wireframe }}
+        lights
+        uniforms={UniformsUtils.merge([UniformsLib["lights"]])}
+        ref={shaderRef}
+        vertexShader={vs}
+        fragmentShader={fs}
+      /> */}
+
+      <CustomShaderMaterial
+        ref={shaderRef}
+        vertexShader={vs}
+        fragmentShader={fs}
+        {...{ wireframe }}
+        baseMaterial={MeshPhongMaterial}
+        shininess={200}
+      />
       {/* <meshPhongMaterial
         specular="white"
         color="#fd6899"
