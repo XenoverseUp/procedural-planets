@@ -16,6 +16,11 @@ import { noiseFiltersAtom } from "@/atoms/settings";
 import NumericValue from "@/components/ui/numeric-value";
 import VectorValue from "../ui/vector-value";
 import { Vector3 } from "three";
+import * as ToggleGroup from "@radix-ui/react-toggle-group";
+import { ArrowsClockwise, WaveSawtooth, WaveSine } from "@phosphor-icons/react";
+import cn from "@/lib/cn";
+import { RidgidNoiseFilter, SimpleNoiseFilter } from "@/lib/noise";
+import { VECTOR_ZERO } from "@/lib/vector";
 
 type NoiseLayerDetailProps = {
   title: string;
@@ -29,9 +34,48 @@ const NoiseLayerDetail = ({ title, index }: NoiseLayerDetailProps) => {
     <Collapsible.Root className="w-full rounded-xl border bg-slate-100">
       <Collapsible.Trigger asChild>
         <div className="flex cursor-pointer select-none items-center justify-between px-4 py-3">
-          <h4 className="flex items-center gap-2 text-sm font-medium">
-            <span>{title}</span>
-          </h4>
+          <header className="flex items-center gap-3">
+            <h4 className="text-sm font-medium">
+              <span>{title}</span>
+            </h4>
+            <span
+              onClick={(e) => {
+                e.stopPropagation();
+                setNoiseFilters((noiseFilters) => {
+                  const updated = [...noiseFilters];
+                  updated[index] =
+                    noiseFilters.at(index) instanceof RidgidNoiseFilter
+                      ? new SimpleNoiseFilter({
+                          enabled: noiseFilters.at(index)!.enabled,
+                          strength: noiseFilters.at(index)!.strength,
+                          roughness: noiseFilters.at(index)!.roughness,
+                          baseRoughness: noiseFilters.at(index)!.baseRoughness,
+                          center: noiseFilters.at(index)!.center,
+                          persistence: noiseFilters.at(index)!.persistence,
+                          minValue: noiseFilters.at(index)!.minValue,
+                          layerCount: noiseFilters.at(index)!.layerCount,
+                        })
+                      : new RidgidNoiseFilter({
+                          enabled: noiseFilters.at(index)!.enabled,
+                          strength: noiseFilters.at(index)!.strength,
+                          roughness: noiseFilters.at(index)!.roughness,
+                          baseRoughness: noiseFilters.at(index)!.baseRoughness,
+                          center: noiseFilters.at(index)!.center,
+                          persistence: noiseFilters.at(index)!.persistence,
+                          minValue: noiseFilters.at(index)!.minValue,
+                          layerCount: noiseFilters.at(index)!.layerCount,
+                        });
+
+                  return updated;
+                });
+              }}
+              className="flex items-center gap-1 rounded-full border bg-white px-2 py-0.5 text-xs font-light text-slate-600"
+            >
+              {noiseFilters.at(index) instanceof RidgidNoiseFilter
+                ? "Ridge"
+                : "Simple"}
+            </span>
+          </header>
 
           <div className="flex items-center gap-2">
             <Checkbox.Root
@@ -54,7 +98,11 @@ const NoiseLayerDetail = ({ title, index }: NoiseLayerDetailProps) => {
           </div>
         </div>
       </Collapsible.Trigger>
-      <Collapsible.Content className="space-y-2 pb-4 pl-4 pr-4">
+      <Collapsible.Content
+        className={cn("space-y-2 pb-4 pl-4 pr-4 transition-opacity", {
+          "pointer-events-none opacity-60": !noiseFilters.at(index)?.enabled,
+        })}
+      >
         <NumericValue
           value={noiseFilters.at(index)!.strength}
           onValueChange={(value) => {

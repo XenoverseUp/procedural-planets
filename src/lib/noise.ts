@@ -8,6 +8,13 @@ type float = number;
 export interface NoiseFilter {
   enabled: boolean;
   evaluate: (p: Vector3) => float;
+  strength: float;
+  roughness: float;
+  center: Vector3;
+  baseRoughness: float;
+  persistence: float;
+  minValue: float;
+  layerCount: int;
 }
 
 type SimpleNoiseFilterParameters = {

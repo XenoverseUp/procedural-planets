@@ -10,6 +10,7 @@ import NoiseSettingsDetail from "@/components/composed/noise-settings-detail";
 import SliderInput from "@/components/ui/slider-input";
 import { SimpleNoiseFilter } from "@/lib/noise";
 import { VECTOR_ZERO } from "@/lib/vector";
+import GradientInput from "../ui/gradient-input";
 
 const Sidebar = () => {
   const [meshResolution, setMeshResolution] = useAtom(meshResolutionAtom);
@@ -80,6 +81,13 @@ const Sidebar = () => {
               />
             ))}
           </div>
+        </section>
+
+        <section>
+          <GradientInput
+            label="Elevation Gradient"
+            description="Assigns different colors to different elevations on the planet. 0,0 means the lowest vertex and 1,0 means the highest vertex."
+          />
         </section>
       </div>
     </aside>

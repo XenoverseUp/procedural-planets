@@ -96,15 +96,6 @@ const TerrainFace = ({
   return (
     <mesh ref={meshRef}>
       <bufferGeometry />
-      {/* <shaderMaterial
-        {...{ wireframe }}
-        lights
-        uniforms={UniformsUtils.merge([UniformsLib["lights"]])}
-        ref={shaderRef}
-        vertexShader={vs}
-        fragmentShader={fs}
-      /> */}
-
       <CustomShaderMaterial
         ref={shaderRef}
         vertexShader={vs}
@@ -112,20 +103,8 @@ const TerrainFace = ({
         {...{ wireframe }}
         baseMaterial={MeshPhongMaterial}
         shininess={200}
+        side={renderBackface ? DoubleSide : FrontSide}
       />
-      {/* <meshPhongMaterial
-        specular="white"
-        color="#fd6899"
-        shininess={3}
-        {...{ wireframe }}
-        side={renderBackface ? DoubleSide : FrontSide}
-      /> */}
-      {/* <meshPhysicalMaterial color="#fd6899" specularIntensity={20} /> */}
-      {/* <meshToonMaterial color="lightblue" /> */}
-      {/* <meshNormalMaterial
-        {...{ wireframe }}
-        side={renderBackface ? DoubleSide : FrontSide}
-      /> */}
     </mesh>
   );
 };

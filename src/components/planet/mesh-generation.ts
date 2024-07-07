@@ -36,13 +36,11 @@ const generateTerrain = ({
 
       const pointOnUnitSphere = pointOnCube.normalize();
 
-      let mask = noiseFilters.at(0)?.evaluate(pointOnUnitSphere) ?? 0;
-      let elevation = mask;
+      let elevation = 0;
 
-      for (let i = 1; i < noiseFilters.length; i++) {
+      for (let i = 0; i < noiseFilters.length; i++) {
         if (!noiseFilters.at(i)?.enabled) continue;
-        elevation +=
-          noiseFilters.at(i)!.evaluate(pointOnUnitSphere) * mask ?? 0;
+        elevation += noiseFilters.at(i)?.evaluate(pointOnUnitSphere) ?? 0;
       }
 
       const pointOnPlanet = pointOnUnitSphere.multiplyScalar(1 + elevation);

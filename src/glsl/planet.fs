@@ -16,11 +16,12 @@ gradient[6] colorStops = gradient[6](
     gradient(0.06, vec4(0.639, 0.678, 0.237, 1)),
     gradient(0.126, vec4(0.235, 0.718, 0.0306, 1)),
     gradient(0.57, vec4(0.569, 0.357, 0.169, 1)),
-    gradient(0.87, vec4(0.49, 0.318, 0.184, 1)),
+    gradient(0.9, vec4(0.49, 0.318, 0.184, 1)),
     gradient(1.0, vec4(1, 1, 1, 1))
 );
 
 float inverseLerp(float minimum, float maximum, float value) {
+    if (minimum == maximum) return 0.0;
     return (value - minimum) / (maximum - minimum);
 }
 

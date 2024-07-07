@@ -13,14 +13,13 @@ function App() {
           <ambientLight intensity={0.75} />
           <directionalLight color="white" position={[0, 5, 5]} />
           <OrbitControls />
-          <Float
+          {/* <Float
             speed={5}
             rotationIntensity={0.5}
             floatIntensity={1}
             floatingRange={[-0.02, 0.02]}
-          >
-            <Planet />
-          </Float>
+          ></Float> */}
+          <Planet />
           <Stats />
         </Canvas>
       </div>
