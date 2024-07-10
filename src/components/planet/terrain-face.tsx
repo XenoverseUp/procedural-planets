@@ -13,11 +13,7 @@ import {
   Vector4,
 } from "three";
 import { useAtom, useAtomValue } from "jotai";
-import {
-  elevationGradientAtom,
-  ElevationGradientStop,
-  noiseFiltersAtom,
-} from "@/atoms/settings";
+import { elevationGradientAtom, noiseFiltersAtom } from "@/atoms/settings";
 import MeshGenerator from "./mesh-generation";
 import CustomShaderMaterial from "three-custom-shader-material";
 
