@@ -6,26 +6,29 @@ import {
   FrontSide,
   Mesh,
   MeshPhongMaterial,
-  MeshPhysicalMaterial,
-  MeshStandardMaterial,
   ShaderMaterial,
-  UniformsLib,
-  UniformsUtils,
+  Uniform,
   Vector2,
   Vector3,
+  Vector4,
 } from "three";
 import { useAtom, useAtomValue } from "jotai";
-import { noiseFiltersAtom } from "@/atoms/settings";
-import generateTerrain from "./mesh-generation";
+import {
+  elevationGradientAtom,
+  ElevationGradientStop,
+  noiseFiltersAtom,
+} from "@/atoms/settings";
+import MeshGenerator from "./mesh-generation";
 import CustomShaderMaterial from "three-custom-shader-material";
 
 import vs from "@/glsl/planet.vs?raw";
 import fs from "@/glsl/planet.fs?raw";
-import MinMax from "@/lib/min-max";
-import { extend } from "@react-three/fiber";
+import { extend, useFrame } from "@react-three/fiber";
 import { maximumAtom, minimumAtom } from "@/atoms/minMax";
 
 extend({ CustomShaderMaterial });
+
+const MAX_GRADIENT_SIZE: GLuint = 10;
 
 type TerrainFaceProps = {
   resolution: number;
@@ -45,38 +48,59 @@ const TerrainFace = ({
   const meshRef = useRef<Mesh>(null);
   const shaderRef = useRef<ShaderMaterial>(null);
   const noiseFilters = useAtomValue(noiseFiltersAtom);
+  const elevationGradient = useAtomValue(elevationGradientAtom);
 
   const [minimum, setMinimum] = useAtom(minimumAtom);
   const [maximum, setMaximum] = useAtom(maximumAtom);
 
+  const meshGenerator = useRef(
+    new MeshGenerator({
+      resolution,
+      localUp,
+      noiseFilters,
+    }),
+  );
+
   useLayoutEffect(() => {
     if (!shaderRef.current) return;
-    shaderRef.current.uniforms.uRadius = {
-      value: radius,
-    };
+    shaderRef.current.uniforms.uRadius = new Uniform(radius);
 
-    shaderRef.current.uniforms.uMinMax = {
-      value: [minimum, maximum],
-    };
-  }, [radius, minimum, maximum]);
+    shaderRef.current.uniforms.uMinMax = new Uniform(
+      new Vector2(minimum, maximum),
+    );
+
+    shaderRef.current.uniforms.uGradientSize = new Uniform(
+      elevationGradient.length,
+    );
+
+    shaderRef.current.uniforms.uGradient = new Uniform(elevationGradient);
+
+    // console.log(shaderRef.current.uniforms);
+  }, [radius, minimum, maximum, elevationGradient]);
 
   useLayoutEffect(() => {
     if (!meshRef.current) return;
 
-    const { vertices, indices, elevationMinMax } = generateTerrain({
-      resolution,
-      localUp,
-      noiseFilters,
-    });
+    meshGenerator.current.resolution = resolution;
+    meshGenerator.current.localUp = localUp;
+    meshGenerator.current.noiseFilters = noiseFilters;
 
-    setMinimum(elevationMinMax.min);
-    setMaximum(elevationMinMax.max);
+    const geometry = new BufferGeometry();
+
+    const { vertices, indices, elevationMinMax, uv } =
+      meshGenerator.current.generateTerrain();
+
+    setMinimum((value) => Math.min(value, elevationMinMax.min));
+    setMaximum((value) => Math.max(value, elevationMinMax.max));
 
     meshRef.current.clear();
 
-    const geometry = new BufferGeometry();
+    geometry.setAttribute("uv", new BufferAttribute(uv, 2));
     geometry.setAttribute("position", new BufferAttribute(vertices, 3));
     geometry.setIndex(new BufferAttribute(indices, 1));
+
+    geometry.attributes.uv.needsUpdate = true;
+    geometry.attributes.position.needsUpdate = true;
 
     geometry.computeVertexNormals();
     geometry.computeBoundingSphere();

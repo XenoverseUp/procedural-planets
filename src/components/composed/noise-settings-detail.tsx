@@ -6,6 +6,8 @@ import {
   Crosshair1Icon,
   CrumpledPaperIcon,
   LayersIcon,
+  MaskOffIcon,
+  MaskOnIcon,
   ResetIcon,
   ShadowIcon,
   TargetIcon,
@@ -21,6 +23,7 @@ import { ArrowsClockwise, WaveSawtooth, WaveSine } from "@phosphor-icons/react";
 import cn from "@/lib/cn";
 import { RidgidNoiseFilter, SimpleNoiseFilter } from "@/lib/noise";
 import { VECTOR_ZERO } from "@/lib/vector";
+import ToggleValue from "../ui/toggle-value";
 
 type NoiseLayerDetailProps = {
   title: string;
@@ -54,6 +57,8 @@ const NoiseLayerDetail = ({ title, index }: NoiseLayerDetailProps) => {
                           persistence: noiseFilters.at(index)!.persistence,
                           minValue: noiseFilters.at(index)!.minValue,
                           layerCount: noiseFilters.at(index)!.layerCount,
+                          useFirstLayerAsMask:
+                            noiseFilters.at(index)!.useFirstLayerAsMask,
                         })
                       : new RidgidNoiseFilter({
                           enabled: noiseFilters.at(index)!.enabled,
@@ -64,6 +69,8 @@ const NoiseLayerDetail = ({ title, index }: NoiseLayerDetailProps) => {
                           persistence: noiseFilters.at(index)!.persistence,
                           minValue: noiseFilters.at(index)!.minValue,
                           layerCount: noiseFilters.at(index)!.layerCount,
+                          useFirstLayerAsMask:
+                            noiseFilters.at(index)!.useFirstLayerAsMask,
                         });
 
                   return updated;
@@ -198,6 +205,30 @@ const NoiseLayerDetail = ({ title, index }: NoiseLayerDetailProps) => {
           type="int"
         />
         <div className="h-0.5" aria-hidden></div>
+
+        {index !== 0 && (
+          <>
+            <ToggleValue
+              title="First Layer As Mask?"
+              value={noiseFilters.at(index)?.useFirstLayerAsMask}
+              onValueChange={(value) => {
+                setNoiseFilters((noiseFilters) => {
+                  const updated = [...noiseFilters];
+                  updated[index].useFirstLayerAsMask = value;
+
+                  return updated;
+                });
+              }}
+              labels={{
+                on: "On",
+                off: "Off",
+              }}
+              icon={MaskOffIcon}
+            />
+            <div className="h-0.5" aria-hidden></div>
+          </>
+        )}
+
         <VectorValue
           title="Noise Center"
           value={noiseFilters.at(index)?.center as Vector3}

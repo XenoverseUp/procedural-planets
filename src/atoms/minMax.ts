@@ -1,4 +1,4 @@
 import { atom } from "jotai";
 
-export const minimumAtom = atom(0);
-export const maximumAtom = atom(0);
+export const minimumAtom = atom(Number.MAX_VALUE);
+export const maximumAtom = atom(Number.MIN_VALUE);

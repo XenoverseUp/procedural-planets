@@ -16,7 +16,8 @@ import {
 } from "@/atoms/settings";
 
 import WireFace from "./wire-face";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import MeshGenerator from "./mesh-generation";
 
 const directions = [
   VECTOR_UP,

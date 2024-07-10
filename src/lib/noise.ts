@@ -2,52 +2,55 @@ import { createNoise3D, NoiseFunction3D } from "simplex-noise";
 import { Vector3 } from "three";
 import { VECTOR_ZERO } from "./vector";
 
-type int = number;
-type float = number;
+type GLint = number;
 
 export interface NoiseFilter {
   enabled: boolean;
-  evaluate: (p: Vector3) => float;
-  strength: float;
-  roughness: float;
+  evaluate: (p: Vector3) => GLfloat;
+  strength: GLfloat;
+  roughness: GLfloat;
   center: Vector3;
-  baseRoughness: float;
-  persistence: float;
-  minValue: float;
-  layerCount: int;
+  baseRoughness: GLfloat;
+  persistence: GLfloat;
+  minValue: GLfloat;
+  layerCount: GLint;
+  useFirstLayerAsMask: boolean;
 }
 
 type SimpleNoiseFilterParameters = {
   enabled: boolean;
-  strength?: float;
-  roughness?: float;
+  strength?: GLfloat;
+  roughness?: GLfloat;
   center?: Vector3;
-  baseRoughness?: float;
-  persistence?: float;
-  minValue?: float;
-  layerCount?: int;
+  baseRoughness?: GLfloat;
+  persistence?: GLfloat;
+  minValue?: GLfloat;
+  layerCount?: GLint;
+  useFirstLayerAsMask?: boolean;
 };
 
 type RidgidNoiseFilterParameters = {
   enabled: boolean;
-  strength?: float;
-  roughness?: float;
+  strength?: GLfloat;
+  roughness?: GLfloat;
   center?: Vector3;
-  baseRoughness?: float;
-  persistence?: float;
-  minValue?: float;
-  layerCount?: int;
+  baseRoughness?: GLfloat;
+  persistence?: GLfloat;
+  minValue?: GLfloat;
+  layerCount?: GLint;
+  useFirstLayerAsMask?: boolean;
 };
 
 export class RidgidNoiseFilter implements NoiseFilter {
-  strength: float;
-  roughness: float;
+  strength: GLfloat;
+  roughness: GLfloat;
   center: Vector3;
-  persistence: float;
-  baseRoughness: float;
-  minValue: float;
-  layerCount: int;
+  persistence: GLfloat;
+  baseRoughness: GLfloat;
+  minValue: GLfloat;
+  layerCount: GLint;
   enabled: boolean;
+  useFirstLayerAsMask: boolean;
 
   #noise: NoiseFunction3D;
 
@@ -60,6 +63,7 @@ export class RidgidNoiseFilter implements NoiseFilter {
     minValue = 1.22,
     layerCount = 1,
     enabled = true,
+    useFirstLayerAsMask = true,
   }: RidgidNoiseFilterParameters) {
     this.strength = strength;
     this.roughness = roughness;
@@ -69,12 +73,13 @@ export class RidgidNoiseFilter implements NoiseFilter {
     this.minValue = minValue;
     this.layerCount = layerCount;
     this.enabled = enabled;
+    this.useFirstLayerAsMask = useFirstLayerAsMask;
 
     this.#noise = createNoise3D();
   }
 
-  #ridgidNoise = (point: Vector3): float => {
-    let v: float = this.#noise(...point.toArray());
+  #ridgidNoise = (point: Vector3): GLfloat => {
+    let v: GLfloat = this.#noise(...point.toArray());
     v = Math.abs(v);
     v = 1 - v;
     v = v ** 2;
@@ -82,11 +87,11 @@ export class RidgidNoiseFilter implements NoiseFilter {
     return v;
   };
 
-  evaluate = (point: Vector3): float => {
-    let noise: float = 0;
-    let frequency: float = this.baseRoughness;
-    let amplitude: float = 1;
-    let weight: float = 1;
+  evaluate = (point: Vector3): GLfloat => {
+    let noise: GLfloat = 0;
+    let frequency: GLfloat = this.baseRoughness;
+    let amplitude: GLfloat = 1;
+    let weight: GLfloat = 1;
 
     for (let i = 0; i < this.layerCount; i++) {
       const processedPoint = point
@@ -94,7 +99,7 @@ export class RidgidNoiseFilter implements NoiseFilter {
         .multiplyScalar(frequency)
         .add(this.center);
 
-      let v: float = this.#ridgidNoise(processedPoint);
+      let v: GLfloat = this.#ridgidNoise(processedPoint);
 
       v *= weight;
       weight = v;
@@ -111,14 +116,15 @@ export class RidgidNoiseFilter implements NoiseFilter {
 }
 
 export class SimpleNoiseFilter implements NoiseFilter {
-  strength: float;
-  roughness: float;
+  strength: GLfloat;
+  roughness: GLfloat;
   center: Vector3;
-  persistence: float;
-  baseRoughness: float;
-  minValue: float;
-  layerCount: int;
+  persistence: GLfloat;
+  baseRoughness: GLfloat;
+  minValue: GLfloat;
+  layerCount: GLint;
   enabled: boolean;
+  useFirstLayerAsMask: boolean;
 
   #noise: NoiseFunction3D;
 
@@ -131,6 +137,7 @@ export class SimpleNoiseFilter implements NoiseFilter {
     minValue = 1.22,
     layerCount = 1,
     enabled = true,
+    useFirstLayerAsMask = true,
   }: SimpleNoiseFilterParameters) {
     this.strength = strength;
     this.roughness = roughness;
@@ -140,14 +147,15 @@ export class SimpleNoiseFilter implements NoiseFilter {
     this.minValue = minValue;
     this.layerCount = layerCount;
     this.enabled = enabled;
+    this.useFirstLayerAsMask = useFirstLayerAsMask;
 
     this.#noise = createNoise3D();
   }
 
-  evaluate = (point: Vector3): float => {
-    let noise: float = 0;
-    let frequency: float = this.baseRoughness;
-    let amplitude: float = 1;
+  evaluate = (point: Vector3): GLfloat => {
+    let noise: GLfloat = 0;
+    let frequency: GLfloat = this.baseRoughness;
+    let amplitude: GLfloat = 1;
 
     for (let i = 0; i < this.layerCount; i++) {
       const processedPoint = point

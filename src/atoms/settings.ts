@@ -1,11 +1,26 @@
 import { atom } from "jotai";
 import { SimpleNoiseFilter, NoiseFilter, RidgidNoiseFilter } from "@/lib/noise";
 import { VECTOR_ZERO } from "@/lib/vector";
+import { Vector3, Vector4 } from "three";
 
-export const meshResolutionAtom = atom(72);
+export type ElevationGradientStop = {
+  anchor: number;
+  color: Vector4;
+};
+
+export const meshResolutionAtom = atom(128);
 export const planetRadiusAtom = atom(1.25);
 export const isWireframeAtom = atom(false);
 export const rendersGlobeAtom = atom(true);
+
+export const elevationGradientAtom = atom<ElevationGradientStop[]>([
+  { anchor: 0, color: new Vector4(0.15, 0.15, 1, 1) },
+  { anchor: 0.06, color: new Vector4(0.639, 0.678, 0.237, 1) },
+  { anchor: 0.126, color: new Vector4(0.235, 0.718, 0.0306, 1) },
+  { anchor: 0.57, color: new Vector4(0.569, 0.357, 0.169, 1) },
+  { anchor: 0.9, color: new Vector4(0.47, 0.478, 0.46, 1) },
+  { anchor: 1, color: new Vector4(1, 1, 1, 1) },
+]);
 
 export const noiseFiltersAtom = atom<NoiseFilter[]>([
   new SimpleNoiseFilter({
@@ -16,11 +31,12 @@ export const noiseFiltersAtom = atom<NoiseFilter[]>([
     center: VECTOR_ZERO,
     persistence: 0.5,
     minValue: 1.1,
-    layerCount: 5,
+    layerCount: 10,
+    useFirstLayerAsMask: false,
   }),
   new RidgidNoiseFilter({
     enabled: true,
-    strength: 0.1,
+    strength: 0.2,
     roughness: 2.25,
     baseRoughness: 0.7,
     center: VECTOR_ZERO,

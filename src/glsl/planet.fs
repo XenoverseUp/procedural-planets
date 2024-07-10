@@ -1,24 +1,21 @@
 precision mediump float;
 
-uniform float uRadius;
-uniform vec2 uMinMax;
+const int MAX_GRADIENT_SIZE = 6;
 
-varying vec3 vPosition;
-
-struct gradient {
-    float progress;
+struct gradientStop  {
+    float anchor;
     vec4 color;
 };
 
+uniform float uRadius;
+uniform vec2 uMinMax;
+uniform int uGradientSize;
+uniform gradientStop uGradient[6];
 
-gradient[6] colorStops = gradient[6](
-    gradient(0.0, vec4(0.15, 0.25, 1, 1)),
-    gradient(0.06, vec4(0.639, 0.678, 0.237, 1)),
-    gradient(0.126, vec4(0.235, 0.718, 0.0306, 1)),
-    gradient(0.57, vec4(0.569, 0.357, 0.169, 1)),
-    gradient(0.9, vec4(0.49, 0.318, 0.184, 1)),
-    gradient(1.0, vec4(1, 1, 1, 1))
-);
+
+varying vec3 vPosition;
+varying vec2 vUv;
+
 
 float inverseLerp(float minimum, float maximum, float value) {
     if (minimum == maximum) return 0.0;
@@ -26,11 +23,12 @@ float inverseLerp(float minimum, float maximum, float value) {
 }
 
 vec4 findColor(float elevationRate) {
-    vec4 color = colorStops[5].color;
-    for (int i = 0; i < 5; i++) {
-        if (elevationRate <= colorStops[i + 1].progress) {
-            float t = inverseLerp(colorStops[i].progress, colorStops[i + 1].progress, elevationRate);
-            color = mix(colorStops[i].color, colorStops[i + 1].color, t);
+    vec4 color =  uGradient[0].color;
+
+    for (int i = 0; i < uGradientSize - 1; i++) {
+        if (elevationRate <= uGradient[i + 1].anchor) {
+            float t = smoothstep(uGradient[i].anchor, uGradient[i + 1].anchor, elevationRate);
+            color = mix(uGradient[i].color, uGradient[i + 1].color, t);
             break;
         }
     }
@@ -42,7 +40,6 @@ void main() {
     float elevation = length(vPosition);
     float elevationRate = inverseLerp(uMinMax.x, uMinMax.y, elevation);
 
-
-    vec4 color =  findColor(elevationRate);
+    vec4 color = findColor(elevationRate);
     csm_DiffuseColor = color;
 }
