@@ -75,6 +75,13 @@ const GradientInput = ({ label, description }: GradientInputProps) => {
     document.removeEventListener("mouseup", onMouseUp);
   };
 
+  const onDoubleClick = () => {
+    setElevationGradient((gradient) => gradient.toSpliced(selected, 1));
+    setSelected(null);
+    onMouseUp();
+    document.body.dataset.index = undefined;
+  };
+
   return (
     <div className="flex w-full flex-col">
       <div className="flex items-end justify-between">
@@ -99,12 +106,12 @@ const GradientInput = ({ label, description }: GradientInputProps) => {
               key={`thumb-${i}`}
               tabIndex={0}
               data-index={i}
-              className="absolute grid size-4 -translate-x-1/2 place-items-center rounded-full border border-black shadow"
+              className="absolute grid size-4 -translate-x-1/2 place-items-center rounded-full border border-black ring-2 ring-white"
               style={{
                 left: `${stop.anchor * 100}%`,
                 backgroundColor: stop.toRGB(),
               }}
-              // onClick={() => setSelected(i)}
+              onDoubleClick={onDoubleClick}
               onMouseDown={onMouseDown}
             >
               {selected == i && (

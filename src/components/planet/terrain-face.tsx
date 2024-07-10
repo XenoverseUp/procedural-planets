@@ -69,7 +69,15 @@ const TerrainFace = ({
       elevationGradient.length,
     );
 
-    shaderRef.current.uniforms.uGradient = new Uniform(elevationGradient);
+    shaderRef.current.uniforms.uGradient = new Uniform([
+      ...elevationGradient,
+      ...new Array(MAX_GRADIENT_SIZE - elevationGradient.length)
+        .fill(null)
+        .map(() => ({
+          anchor: 0,
+          color: new Vector4(0),
+        })),
+    ]);
 
     // console.log(shaderRef.current.uniforms);
   }, [radius, minimum, maximum, elevationGradient]);

@@ -1,6 +1,6 @@
 precision mediump float;
 
-const int MAX_GRADIENT_SIZE = 6;
+const int MAX_GRADIENT_SIZE = 10;
 
 struct gradientStop  {
     float anchor;
@@ -10,7 +10,7 @@ struct gradientStop  {
 uniform float uRadius;
 uniform vec2 uMinMax;
 uniform int uGradientSize;
-uniform gradientStop uGradient[6];
+uniform gradientStop uGradient[MAX_GRADIENT_SIZE];
 
 
 varying vec3 vPosition;
