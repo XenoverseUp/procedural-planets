@@ -3,9 +3,8 @@
 import { elevationGradientAtom } from "@/atoms/settings";
 import { useAtom } from "jotai";
 import { MouseEventHandler, useLayoutEffect, useRef, useState } from "react";
-import * as Slider from "@radix-ui/react-slider";
-import { Vector2 } from "three";
 import clamp from "@/lib/clamp";
+import cn from "@/lib/cn";
 
 type GradientInputProps = {
   label: string;
@@ -69,7 +68,6 @@ const GradientInput = ({ label, description }: GradientInputProps) => {
     });
   };
 
-  // @ts-ignore
   const onMouseUp: MouseEventHandler<HTMLDivElement> = () => {
     document.removeEventListener("mousemove", onMouseMove);
     document.removeEventListener("mouseup", onMouseUp);
@@ -106,7 +104,10 @@ const GradientInput = ({ label, description }: GradientInputProps) => {
               key={`thumb-${i}`}
               tabIndex={0}
               data-index={i}
-              className="absolute grid size-4 -translate-x-1/2 place-items-center rounded-full border border-black ring-2 ring-white"
+              className={cn(
+                "absolute grid size-4 -translate-x-1/2 place-items-center rounded-full border border-black ring-2 ring-white",
+                { "z-10": i === selected },
+              )}
               style={{
                 left: `${stop.anchor * 100}%`,
                 backgroundColor: stop.toRGB(),
