@@ -6,6 +6,7 @@ import {
   FrontSide,
   Mesh,
   MeshPhongMaterial,
+  MeshPhysicalMaterial,
   ShaderMaterial,
   Uniform,
   Vector2,
@@ -80,7 +81,7 @@ const TerrainFace = ({
     ]);
 
     // console.log(shaderRef.current.uniforms);
-  }, [radius, minimum, maximum, elevationGradient]);
+  }, [radius, minimum, maximum, elevationGradient, noiseFilters]);
 
   useLayoutEffect(() => {
     if (!meshRef.current) return;
@@ -129,8 +130,7 @@ const TerrainFace = ({
         vertexShader={vs}
         fragmentShader={fs}
         {...{ wireframe }}
-        baseMaterial={MeshPhongMaterial}
-        shininess={200}
+        baseMaterial={MeshPhysicalMaterial}
         side={renderBackface ? DoubleSide : FrontSide}
       />
     </mesh>

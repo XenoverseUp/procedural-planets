@@ -1,5 +1,6 @@
 import MinMax from "@/lib/min-max";
 import { NoiseFilter, SimpleNoiseFilter } from "@/lib/noise";
+import spherize from "@/lib/toSphere";
 import { Vector2, Vector3 } from "three";
 
 type MeshGeneratorParams = {
@@ -44,14 +45,14 @@ class MeshGenerator {
           .addScaledVector(axisA, (percentX - 0.5) * 2)
           .addScaledVector(axisB, (percentY - 0.5) * 2);
 
-        const pointOnUnitSphere = pointOnCube.normalize();
+        const pointOnUnitSphere = spherize(pointOnCube);
 
         const unscaledElevation =
           this.calculateUnscaledElevation(pointOnUnitSphere);
 
         const elevation = this.getScaledElevation(unscaledElevation);
 
-        elevationMinMax.add(elevation + 1);
+        elevationMinMax.add(unscaledElevation + 1);
 
         const pointOnPlanet = pointOnUnitSphere.multiplyScalar(1 + elevation);
 
@@ -59,6 +60,9 @@ class MeshGenerator {
         vertices[index + 1] = pointOnPlanet.y;
         vertices[index + 2] = pointOnPlanet.z;
         index += 3;
+
+        uv[i * 2] = unscaledElevation; // U component stores the elevation
+        uv[i * 2 + 1] = 0;
 
         if (x !== this.resolution - 1 && y !== this.resolution - 1) {
           const i = x + y * this.resolution;
@@ -84,16 +88,22 @@ class MeshGenerator {
   calculateUnscaledElevation = (pointOnUnitSphere: Vector3): GLfloat => {
     let elevation = 0;
     let mask = this.noiseFilters.at(0)?.evaluate(pointOnUnitSphere) ?? 0;
+    mask = Math.max(0, mask);
+
+    let depthCaptured = false;
+    let depth: number;
 
     for (let i = 0; i < this.noiseFilters.length; i++) {
       if (!this.noiseFilters.at(i)?.enabled) continue;
 
       let noiseValue =
-        this.noiseFilters.at(i)?.evaluate(pointOnUnitSphere) ?? 0;
+        this.noiseFilters.at(i)?.evaluateUnscaled(pointOnUnitSphere) ?? 0;
 
-      if (this.noiseFilters.at(i)?.useFirstLayerAsMask) noiseValue *= mask * 5;
+      if (this.noiseFilters.at(i)?.useFirstLayerAsMask) noiseValue *= mask * 10;
 
-      elevation += noiseValue;
+      elevation += depthCaptured ? Math.max(0, noiseValue) : noiseValue;
+
+      if (!depthCaptured) depthCaptured = true;
     }
 
     return elevation;

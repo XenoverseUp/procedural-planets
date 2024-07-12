@@ -12,7 +12,7 @@ export const rendersGlobeAtom = atom(true);
 export const elevationGradientAtom = atom<GradientStop[]>([
   new GradientStop({
     anchor: 0,
-    color: new Vector4(0.15, 0.15, 1, 1),
+    color: new Vector4(0.15, 0.55, 1, 1),
   }),
   new GradientStop({
     anchor: 0.06,

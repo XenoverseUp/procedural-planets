@@ -7,6 +7,7 @@ type GLint = number;
 export interface NoiseFilter {
   enabled: boolean;
   evaluate: (p: Vector3) => GLfloat;
+  evaluateUnscaled: (p: Vector3) => GLfloat;
   strength: GLfloat;
   roughness: GLfloat;
   center: Vector3;
@@ -87,6 +88,33 @@ export class RidgidNoiseFilter implements NoiseFilter {
     return v;
   };
 
+  evaluateUnscaled = (point: Vector3): GLfloat => {
+    let noise: GLfloat = 0;
+    let frequency: GLfloat = this.baseRoughness;
+    let amplitude: GLfloat = 1;
+    let weight: GLfloat = 1;
+
+    for (let i = 0; i < this.layerCount; i++) {
+      const processedPoint = point
+        .clone()
+        .multiplyScalar(frequency)
+        .add(this.center);
+
+      let v: GLfloat = this.#ridgidNoise(processedPoint);
+
+      v *= weight;
+      weight = v;
+
+      noise += v * amplitude;
+      frequency *= this.roughness;
+      amplitude *= this.persistence;
+    }
+
+    noise = noise - this.minValue;
+
+    return noise * this.strength;
+  };
+
   evaluate = (point: Vector3): GLfloat => {
     let noise: GLfloat = 0;
     let frequency: GLfloat = this.baseRoughness;
@@ -151,6 +179,27 @@ export class SimpleNoiseFilter implements NoiseFilter {
 
     this.#noise = createNoise3D();
   }
+
+  evaluateUnscaled = (point: Vector3): GLfloat => {
+    let noise: GLfloat = 0;
+    let frequency: GLfloat = this.baseRoughness;
+    let amplitude: GLfloat = 1;
+
+    for (let i = 0; i < this.layerCount; i++) {
+      const processedPoint = point
+        .clone()
+        .multiplyScalar(frequency)
+        .add(this.center);
+
+      noise += (this.#noise(...processedPoint.toArray()) + 1) * 0.5 * amplitude;
+      frequency *= this.roughness;
+      amplitude *= this.persistence;
+    }
+
+    noise = noise - this.minValue;
+
+    return noise * this.strength;
+  };
 
   evaluate = (point: Vector3): GLfloat => {
     let noise: GLfloat = 0;
