@@ -1,12 +1,11 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useAtom, useAtomValue } from "jotai";
+import { useLayoutEffect, useRef } from "react";
 import {
   BufferAttribute,
   BufferGeometry,
   DoubleSide,
   FrontSide,
   Mesh,
-  MeshNormalMaterial,
-  MeshPhongMaterial,
   MeshPhysicalMaterial,
   ShaderMaterial,
   Uniform,
@@ -14,19 +13,19 @@ import {
   Vector3,
   Vector4,
 } from "three";
-import { useAtom, useAtomValue } from "jotai";
+import CustomShaderMaterial from "three-custom-shader-material";
+
 import {
   depthGradientAtom,
   elevationGradientAtom,
   noiseFiltersAtom,
 } from "@/atoms/settings";
-import MeshGenerator from "./mesh-generation";
-import CustomShaderMaterial from "three-custom-shader-material";
+import MeshGenerator from "@/components/planet/mesh-generation";
 
-import vs from "@/glsl/planet.vs?raw";
-import fs from "@/glsl/planet.fs?raw";
-import { extend, useFrame } from "@react-three/fiber";
 import { maximumAtom, minimumAtom } from "@/atoms/minMax";
+import fs from "@/glsl/planet.fs?raw";
+import vs from "@/glsl/planet.vs?raw";
+import { extend, useFrame } from "@react-three/fiber";
 
 extend({ CustomShaderMaterial });
 
@@ -109,7 +108,15 @@ const TerrainFace = ({
           color: new Vector4(0),
         })),
     ]);
-  }, [radius, elevationGradient, minimum, maximum, noiseFilters, isBlend]);
+  }, [
+    radius,
+    elevationGradient,
+    depthGradient,
+    minimum,
+    maximum,
+    noiseFilters,
+    isBlend,
+  ]);
 
   useLayoutEffect(() => {
     if (!meshRef.current) return;

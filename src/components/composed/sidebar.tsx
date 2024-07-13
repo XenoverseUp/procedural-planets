@@ -12,7 +12,7 @@ import NoiseSettingsDetail from "@/components/composed/noise-settings-detail";
 import SliderInput from "@/components/ui/slider-input";
 import { SimpleNoiseFilter } from "@/lib/noise";
 import { VECTOR_ZERO } from "@/lib/vector";
-import GradientInput from "../ui/gradient-input";
+import GradientInput from "@/components/ui/gradient-input";
 
 const Sidebar = () => {
   const [meshResolution, setMeshResolution] = useAtom(meshResolutionAtom);
@@ -29,7 +29,7 @@ const Sidebar = () => {
           <span>Planet Generator</span>
         </h2>
       </header>
-      <div className="space-y-8 overflow-y-auto overflow-x-hidden p-4">
+      <div className="space-y-8 overflow-y-auto overflow-x-hidden p-4 pb-8">
         <SliderInput
           label="Planet Radius"
           defaultValue={planetRadius}

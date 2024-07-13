@@ -1,7 +1,5 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { BufferAttribute, BufferGeometry, Mesh, Vector2, Vector3 } from "three";
-import { useAtomValue } from "jotai";
-import { noiseFiltersAtom } from "@/atoms/settings";
 
 type WireFaceProps = {
   resolution: number;

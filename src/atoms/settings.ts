@@ -1,10 +1,10 @@
+import { Vector4 } from "three";
 import { atom } from "jotai";
 import { SimpleNoiseFilter, NoiseFilter, RidgidNoiseFilter } from "@/lib/noise";
 import { VECTOR_ZERO } from "@/lib/vector";
-import { Vector4 } from "three";
 import GradientStop from "@/lib/gradient";
 
-export const meshResolutionAtom = atom(168);
+export const meshResolutionAtom = atom(80);
 export const planetRadiusAtom = atom(1.75);
 
 export const isBlendAtom = atom(true);

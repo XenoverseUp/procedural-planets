@@ -64,14 +64,8 @@ vec4 findDepthColor(float depthRate) {
 
     for (int i = 1; i < uDepthGradientSize; i++) {
         if (depthRate <= uDepthGradient[i].anchor) {
-            if (uIsBlend || true) {
-                float t = smoothstep(uDepthGradient[i - 1].anchor, uDepthGradient[i].anchor, depthRate);
-                color = mix(uDepthGradient[i - 1].color, uDepthGradient[i].color, t);
-                break;
-            }
-
-            color = uDepthGradient[i - 1].color;
-            break;
+            float t = smoothstep(uDepthGradient[i - 1].anchor, uDepthGradient[i].anchor, depthRate);
+            color = mix(uDepthGradient[i - 1].color, uDepthGradient[i].color, t);
         }
     }
     return color;

@@ -18,8 +18,6 @@ import { noiseFiltersAtom } from "@/atoms/settings";
 import NumericValue from "@/components/ui/numeric-value";
 import VectorValue from "../ui/vector-value";
 import { Vector3 } from "three";
-import * as ToggleGroup from "@radix-ui/react-toggle-group";
-import { ArrowsClockwise, WaveSawtooth, WaveSine } from "@phosphor-icons/react";
 import cn from "@/lib/cn";
 import { RidgidNoiseFilter, SimpleNoiseFilter } from "@/lib/noise";
 import { VECTOR_ZERO } from "@/lib/vector";

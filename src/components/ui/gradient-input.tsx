@@ -1,6 +1,12 @@
 // @ts-nocheck
 
-import { MouseEventHandler, useCallback, useRef, useState } from "react";
+import {
+  MouseEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import clamp from "@/lib/clamp";
 import cn from "@/lib/cn";
 import GradientStop from "@/lib/gradient";
@@ -22,6 +28,10 @@ const GradientInput = ({
 
   const [selected, setSelected] = useState<number | null>(null);
   const [gradient, setGradient] = gradientState;
+
+  useEffect(() => {
+    console.log({ gradient });
+  });
 
   const onMouseDown: MouseEventHandler<HTMLDivElement> = (e) => {
     const index = parseInt(e.target.dataset.index, 10);

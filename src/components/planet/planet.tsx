@@ -1,4 +1,14 @@
-import TerrainFace from "./terrain-face";
+import { useAtomValue } from "jotai";
+
+import {
+  isBlendAtom,
+  isWireframeAtom,
+  meshResolutionAtom,
+  planetRadiusAtom,
+  rendersGlobeAtom,
+} from "@/atoms/settings";
+import TerrainFace from "@/components/planet/terrain-face";
+import WireFace from "@/components/planet/wire-face";
 import {
   VECTOR_BACK,
   VECTOR_DOWN,
@@ -7,17 +17,6 @@ import {
   VECTOR_RIGHT,
   VECTOR_UP,
 } from "@/lib/vector";
-import { useAtomValue, useSetAtom } from "jotai";
-import {
-  isBlendAtom,
-  isWireframeAtom,
-  meshResolutionAtom,
-  noiseFiltersAtom,
-  planetRadiusAtom,
-  rendersGlobeAtom,
-} from "@/atoms/settings";
-
-import WireFace from "./wire-face";
 
 const directions = [
   VECTOR_UP,

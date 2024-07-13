@@ -1,5 +1,4 @@
 import { MouseEventHandler, useRef, useState } from "react";
-import { start } from "repl";
 import { Vector2 } from "three";
 
 type NumericValueProps = {

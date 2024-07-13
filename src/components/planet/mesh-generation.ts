@@ -1,7 +1,7 @@
 import MinMax from "@/lib/min-max";
-import { NoiseFilter, SimpleNoiseFilter } from "@/lib/noise";
+import { NoiseFilter } from "@/lib/noise";
 import spherize from "@/lib/spherize";
-import { Vector2, Vector3 } from "three";
+import { Vector3 } from "three";
 
 type MeshGeneratorParams = {
   resolution: number;
