@@ -14,7 +14,11 @@ import {
   Vector4,
 } from "three";
 import { useAtom, useAtomValue } from "jotai";
-import { elevationGradientAtom, noiseFiltersAtom } from "@/atoms/settings";
+import {
+  depthGradientAtom,
+  elevationGradientAtom,
+  noiseFiltersAtom,
+} from "@/atoms/settings";
 import MeshGenerator from "./mesh-generation";
 import CustomShaderMaterial from "three-custom-shader-material";
 
@@ -46,6 +50,7 @@ const TerrainFace = ({
   const shaderRef = useRef<ShaderMaterial>(null);
   const noiseFilters = useAtomValue(noiseFiltersAtom);
   const elevationGradient = useAtomValue(elevationGradientAtom);
+  const depthGradient = useAtomValue(depthGradientAtom);
 
   const [minimum, setMinimum] = useAtom(minimumAtom);
   const [maximum, setMaximum] = useAtom(maximumAtom);
@@ -58,6 +63,12 @@ const TerrainFace = ({
     }),
   );
 
+  useFrame(({ clock }) => {
+    if (!shaderRef.current) return;
+
+    shaderRef.current.uniforms.uTime = new Uniform(clock.getElapsedTime());
+  });
+
   useLayoutEffect(() => {
     if (!shaderRef.current) return;
     shaderRef.current.uniforms.uRadius = new Uniform(radius);
@@ -66,11 +77,15 @@ const TerrainFace = ({
       new Vector2(minimum, maximum),
     );
 
-    shaderRef.current.uniforms.uGradientSize = new Uniform(
+    shaderRef.current.uniforms.uElevationGradientSize = new Uniform(
       elevationGradient.length,
     );
 
-    shaderRef.current.uniforms.uGradient = new Uniform([
+    shaderRef.current.uniforms.uDepthGradientSize = new Uniform(
+      depthGradient.length,
+    );
+
+    shaderRef.current.uniforms.uElevationGradient = new Uniform([
       ...elevationGradient,
       ...new Array(MAX_GRADIENT_SIZE - elevationGradient.length)
         .fill(null)
@@ -80,8 +95,16 @@ const TerrainFace = ({
         })),
     ]);
 
-    // console.log(shaderRef.current.uniforms);
-  }, [radius, minimum, maximum, elevationGradient, noiseFilters]);
+    shaderRef.current.uniforms.uDepthGradient = new Uniform([
+      ...depthGradient,
+      ...new Array(MAX_GRADIENT_SIZE - depthGradient.length)
+        .fill(null)
+        .map(() => ({
+          anchor: 0,
+          color: new Vector4(0),
+        })),
+    ]);
+  }, [radius, elevationGradient, minimum, maximum, noiseFilters]);
 
   useLayoutEffect(() => {
     if (!meshRef.current) return;
@@ -119,11 +142,13 @@ const TerrainFace = ({
     return () => {
       geometry.dispose();
       meshRef.current?.geometry.dispose();
+      setMinimum(Number.MAX_VALUE);
+      setMaximum(Number.MIN_VALUE);
     };
   }, [resolution, localUp, noiseFilters]);
 
   return (
-    <mesh ref={meshRef}>
+    <mesh castShadow receiveShadow ref={meshRef}>
       <bufferGeometry />
       <CustomShaderMaterial
         ref={shaderRef}

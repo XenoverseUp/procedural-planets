@@ -48,20 +48,21 @@ const Sidebar = () => {
         <section>
           <StepInput
             label="Noise Settings"
-            description="Defines the level of detail (LOD) for the generated terrain. Max number of layers is 4."
+            description="Defines the level of detail (LOD) for the generated terrain. Max number of layers is 3."
             defaultValue={noiseFilters.length}
             onIncrement={() => {
               setNoiseFilters((filters) => [
                 ...filters,
                 new SimpleNoiseFilter({
+                  enabled: true,
                   strength: 0.2,
                   roughness: 2.25,
                   baseRoughness: 0.7,
                   center: VECTOR_ZERO,
                   persistence: 0.5,
                   minValue: 1.1,
-                  layerCount: 5,
-                  enabled: true,
+                  layerCount: 10,
+                  useFirstLayerAsMask: false,
                 }),
               ]);
             }}

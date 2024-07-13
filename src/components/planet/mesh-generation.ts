@@ -1,6 +1,6 @@
 import MinMax from "@/lib/min-max";
 import { NoiseFilter, SimpleNoiseFilter } from "@/lib/noise";
-import spherize from "@/lib/toSphere";
+import spherize from "@/lib/spherize";
 import { Vector2, Vector3 } from "three";
 
 type MeshGeneratorParams = {
@@ -99,7 +99,7 @@ class MeshGenerator {
       let noiseValue =
         this.noiseFilters.at(i)?.evaluateUnscaled(pointOnUnitSphere) ?? 0;
 
-      if (this.noiseFilters.at(i)?.useFirstLayerAsMask) noiseValue *= mask * 10;
+      if (this.noiseFilters.at(i)?.useFirstLayerAsMask) noiseValue *= mask * 7;
 
       elevation += depthCaptured ? Math.max(0, noiseValue) : noiseValue;
 

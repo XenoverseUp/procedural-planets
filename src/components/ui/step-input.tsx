@@ -25,7 +25,7 @@ const StepInput = ({
   }, [defaultValue]);
 
   const increment = useCallback(() => {
-    if (inputValue < 4) {
+    if (inputValue < 3) {
       setInputValue((value) => value + 1);
       onValueChange?.(inputValue + 1);
       onIncrement?.(inputValue + 1);
@@ -70,7 +70,7 @@ const StepInput = ({
           <button
             className="flex h-full w-8 items-center justify-center border-l bg-neutral-50 hover:bg-neutral-100 active:opacity-60 disabled:opacity-50"
             onClick={increment}
-            disabled={inputValue == 4}
+            disabled={inputValue == 3}
           >
             <PlusIcon width={12} />
           </button>

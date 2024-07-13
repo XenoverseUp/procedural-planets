@@ -9,8 +9,11 @@ struct gradientStop  {
 
 uniform float uRadius;
 uniform vec2 uMinMax;
-uniform int uGradientSize;
-uniform gradientStop uGradient[MAX_GRADIENT_SIZE];
+uniform bool uIsBlend;
+uniform int uElevationGradientSize;
+uniform int uDepthGradientSize;
+uniform gradientStop uElevationGradient[MAX_GRADIENT_SIZE];
+uniform gradientStop uDepthGradient[MAX_GRADIENT_SIZE];
 
 
 varying vec3 vPosition;
@@ -26,12 +29,19 @@ float inverseLerp(float minimum, float maximum, float value) {
 
 // Improve and add fixed and blend gradient.
 vec4 findHeightColor(float elevationRate) {
-    vec4 color =  uGradient[0].color;
+    if (elevationRate >= uElevationGradient[uElevationGradientSize - 1].anchor) return uElevationGradient[uElevationGradientSize - 1].color;
 
-    for (int i = 0; i < uGradientSize - 1; i++) {
-        if (elevationRate <= uGradient[i + 1].anchor) {
-            float t = smoothstep(uGradient[i].anchor, uGradient[i + 1].anchor, elevationRate);
-            color = mix(uGradient[i].color, uGradient[i + 1].color, t);
+    vec4 color = uElevationGradient[0].color;
+
+    for (int i = 1; i < uElevationGradientSize; i++) {
+        if (elevationRate <= uElevationGradient[i].anchor) {
+            if (uIsBlend || true) {
+                float t = smoothstep(uElevationGradient[i - 1].anchor, uElevationGradient[i].anchor, elevationRate);
+                color = mix(uElevationGradient[i - 1].color, uElevationGradient[i].color, t);
+                break;
+            }
+
+            color = uElevationGradient[i - 1].color;
             break;
         }
     }
@@ -39,26 +49,44 @@ vec4 findHeightColor(float elevationRate) {
 }
 
 vec4 findDepthColor(float depthRate) {
-    return mix(vec4(0, 0, 0.4, 1), vec4(0.15, 0.55, 1, 1), depthRate);
+    if (depthRate >= uDepthGradient[uDepthGradientSize - 1].anchor) return uDepthGradient[uDepthGradientSize - 1].color;
+
+    vec4 color = uDepthGradient[0].color;
+
+    for (int i = 1; i < uDepthGradientSize; i++) {
+        if (depthRate <= uDepthGradient[i].anchor) {
+            if (uIsBlend || true) {
+                float t = smoothstep(uDepthGradient[i - 1].anchor, uDepthGradient[i].anchor, depthRate);
+                color = mix(uDepthGradient[i - 1].color, uDepthGradient[i].color, t);
+                break;
+            }
+
+            color = uDepthGradient[i - 1].color;
+            break;
+        }
+    }
+    return color;
 }
 
 
 void main() {
+    const float mixRange = 0.005;
+
     float elevation = 1.0 + vUv.x;
     vec4 color = vec4(0, 0, 1, 1);
 
-    if (elevation > 1.01) {
-        float elevationRate = inverseLerp(1.01, uMinMax.y, elevation);
+    if (elevation > 1.0 + mixRange) {
+        float elevationRate = inverseLerp(1.0 + mixRange, uMinMax.y, elevation);
         color = findHeightColor(elevationRate);
 
         csm_Metalness = 0.0;
         csm_Roughness = 0.4;
 
-    } else if (elevation >= 1.0 && elevation <= 1.01) {
-    float elevationRate = inverseLerp(1.01, uMinMax.y, elevation);
+    } else if (elevation >= 1.0 && elevation <= 1.0 + mixRange) {
+        float elevationRate = inverseLerp(1.0 + mixRange, uMinMax.y, elevation);
         float depthRate = inverseLerp(uMinMax.x, 1.00, elevation);
 
-        float t = smoothstep(1.0, 1.01, elevation);
+        float t = smoothstep(1.0, 1.0 + mixRange, elevation);
 
         csm_Metalness = 0.4 * (1.0 - t);
         csm_Roughness = 0.4 * t;
@@ -71,7 +99,6 @@ void main() {
 
         csm_Roughness = 0.0;
         csm_Metalness = 0.4 * (1.0 - vUv.x);
-
     }
 
 

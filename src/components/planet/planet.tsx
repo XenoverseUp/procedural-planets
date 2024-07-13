@@ -7,17 +7,19 @@ import {
   VECTOR_RIGHT,
   VECTOR_UP,
 } from "@/lib/vector";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import {
   isWireframeAtom,
   meshResolutionAtom,
+  noiseFiltersAtom,
   planetRadiusAtom,
   rendersGlobeAtom,
 } from "@/atoms/settings";
 
 import WireFace from "./wire-face";
-import { useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import MeshGenerator from "./mesh-generation";
+import { maximumAtom, minimumAtom } from "@/atoms/minMax";
 
 const directions = [
   VECTOR_UP,
@@ -44,7 +46,7 @@ const Planet = () => {
               resolution={meshResolution}
               radius={planetRadius}
               localUp={direction}
-              key={`terrain-face-${i}`}
+              key={`terrain-face-${i}-${rendersGlobe ? "globe" : "face"}`}
               renderBackface={!rendersGlobe}
             />
           );

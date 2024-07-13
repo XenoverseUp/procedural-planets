@@ -5,9 +5,20 @@ import { Vector4 } from "three";
 import GradientStop from "@/lib/gradient";
 
 export const meshResolutionAtom = atom(168);
-export const planetRadiusAtom = atom(1.25);
+export const planetRadiusAtom = atom(1.75);
 export const isWireframeAtom = atom(false);
 export const rendersGlobeAtom = atom(true);
+
+export const depthGradientAtom = atom<GradientStop[]>([
+  new GradientStop({
+    anchor: 0,
+    color: new Vector4(0, 0, 0.6, 1),
+  }),
+  new GradientStop({
+    anchor: 1,
+    color: new Vector4(0.15, 0.55, 1, 1),
+  }),
+]);
 
 export const elevationGradientAtom = atom<GradientStop[]>([
   new GradientStop({

@@ -14,6 +14,11 @@ class MinMax {
   get max() {
     return this.#max;
   }
+
+  reset() {
+    this.#min = Number.POSITIVE_INFINITY;
+    this.#max = Number.NEGATIVE_INFINITY;
+  }
 }
 
 export default MinMax;

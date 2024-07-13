@@ -3,6 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import Sidebar from "@/components/composed/sidebar";
 import Planet from "@/components/planet/planet";
 import Toolbar from "@/components/composed/toolbar";
+import Lights from "./components/composed/lights";
 
 function App() {
   return (
@@ -10,17 +11,17 @@ function App() {
       <div className="aaa relative h-full flex-grow items-center overflow-hidden rounded-lg bg-blue-50">
         <Toolbar className="absolute bottom-2 left-2 z-10" />
         <Canvas>
-          <ambientLight intensity={0.75} />
-          <directionalLight color="white" position={[0, 5, 5]} />
+          <Lights />
           <OrbitControls />
+          <Stats />
           {/* <Float
-            speed={5}
+            speed={3}
             rotationIntensity={0.5}
             floatIntensity={1}
             floatingRange={[-0.02, 0.02]}
-          ></Float> */}
+          >
+          </Float> */}
           <Planet />
-          <Stats />
         </Canvas>
       </div>
       <Sidebar />
