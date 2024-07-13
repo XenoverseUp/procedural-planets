@@ -15,10 +15,16 @@ uniform int uDepthGradientSize;
 uniform gradientStop uElevationGradient[MAX_GRADIENT_SIZE];
 uniform gradientStop uDepthGradient[MAX_GRADIENT_SIZE];
 
-
 varying vec3 vPosition;
 varying vec2 vUv;
 
+
+float harshstep(float min, float max, float value) {
+    float avg = (min + max) / 2.0;
+
+    if (value >= avg) return 1.0;
+    else return 0.0;
+}
 
 float inverseLerp(float minimum, float maximum, float value) {
     if (minimum == maximum) return 1.0;
@@ -35,13 +41,16 @@ vec4 findHeightColor(float elevationRate) {
 
     for (int i = 1; i < uElevationGradientSize; i++) {
         if (elevationRate <= uElevationGradient[i].anchor) {
-            if (uIsBlend || true) {
+
+            if (uIsBlend) {
                 float t = smoothstep(uElevationGradient[i - 1].anchor, uElevationGradient[i].anchor, elevationRate);
                 color = mix(uElevationGradient[i - 1].color, uElevationGradient[i].color, t);
                 break;
             }
 
-            color = uElevationGradient[i - 1].color;
+            float t = harshstep(uElevationGradient[i - 1].anchor, uElevationGradient[i].anchor, elevationRate);
+            color = mix(uElevationGradient[i - 1].color, uElevationGradient[i].color, t);
+
             break;
         }
     }

@@ -2,6 +2,8 @@ import { MixerHorizontalIcon } from "@radix-ui/react-icons";
 import StepInput from "@/components/ui/step-input";
 import { useAtom } from "jotai";
 import {
+  depthGradientAtom,
+  elevationGradientAtom,
   meshResolutionAtom,
   noiseFiltersAtom,
   planetRadiusAtom,
@@ -16,6 +18,8 @@ const Sidebar = () => {
   const [meshResolution, setMeshResolution] = useAtom(meshResolutionAtom);
   const [planetRadius, setPlanetRadius] = useAtom(planetRadiusAtom);
   const [noiseFilters, setNoiseFilters] = useAtom(noiseFiltersAtom);
+  const elevationGradientState = useAtom(elevationGradientAtom);
+  const depthGradientState = useAtom(depthGradientAtom);
 
   return (
     <aside className="flex h-full w-96 flex-shrink-0 flex-col overflow-hidden rounded-lg bg-white">
@@ -84,12 +88,19 @@ const Sidebar = () => {
           </div>
         </section>
 
-        <section>
-          <GradientInput
-            label="Elevation Gradient"
-            description="Assigns different colors to different elevations on the planet. 0,0 means the lowest vertex and 1,0 means the highest vertex."
-          />
-        </section>
+        <GradientInput
+          label="Elevation"
+          description="Assigns different colors to different elevations on the planet. 0,0 means the lowest vertex and 1,0 means the highest vertex."
+          datasetKey="elevationThumb"
+          gradientState={elevationGradientState}
+        />
+
+        <GradientInput
+          label="Depth"
+          description="Assigns different colors to different depths in the sea. 0,0 means the lowest vertex and 1,0 means the highest vertex in the sea."
+          datasetKey="depthThumb"
+          gradientState={depthGradientState}
+        />
       </div>
     </aside>
   );

@@ -9,6 +9,7 @@ import {
 } from "@/lib/vector";
 import { useAtomValue, useSetAtom } from "jotai";
 import {
+  isBlendAtom,
   isWireframeAtom,
   meshResolutionAtom,
   noiseFiltersAtom,
@@ -17,9 +18,6 @@ import {
 } from "@/atoms/settings";
 
 import WireFace from "./wire-face";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import MeshGenerator from "./mesh-generation";
-import { maximumAtom, minimumAtom } from "@/atoms/minMax";
 
 const directions = [
   VECTOR_UP,
@@ -31,10 +29,11 @@ const directions = [
 ];
 
 const Planet = () => {
-  const meshResolution = useAtomValue(meshResolutionAtom);
-  const isWireframe = useAtomValue(isWireframeAtom);
-  const planetRadius = useAtomValue(planetRadiusAtom);
+  const resolution = useAtomValue(meshResolutionAtom);
+  const wireframe = useAtomValue(isWireframeAtom);
+  const radius = useAtomValue(planetRadiusAtom);
   const rendersGlobe = useAtomValue(rendersGlobeAtom);
+  const isBlend = useAtomValue(isBlendAtom);
 
   return (
     <mesh>
@@ -42,19 +41,20 @@ const Planet = () => {
         if (rendersGlobe || direction === VECTOR_FRONT)
           return (
             <TerrainFace
-              wireframe={isWireframe}
-              resolution={meshResolution}
-              radius={planetRadius}
+              wireframe={wireframe}
+              resolution={resolution}
+              radius={radius}
               localUp={direction}
               key={`terrain-face-${i}-${rendersGlobe ? "globe" : "face"}`}
               renderBackface={!rendersGlobe}
+              isBlend={isBlend}
             />
           );
 
         return (
           <WireFace
             resolution={10}
-            radius={planetRadius}
+            radius={radius}
             localUp={direction}
             key={`wire-face-${i}`}
           />

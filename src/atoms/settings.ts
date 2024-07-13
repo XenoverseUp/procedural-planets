@@ -6,6 +6,9 @@ import GradientStop from "@/lib/gradient";
 
 export const meshResolutionAtom = atom(168);
 export const planetRadiusAtom = atom(1.75);
+
+export const isBlendAtom = atom(true);
+
 export const isWireframeAtom = atom(false);
 export const rendersGlobeAtom = atom(true);
 

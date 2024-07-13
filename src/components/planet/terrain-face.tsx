@@ -5,6 +5,7 @@ import {
   DoubleSide,
   FrontSide,
   Mesh,
+  MeshNormalMaterial,
   MeshPhongMaterial,
   MeshPhysicalMaterial,
   ShaderMaterial,
@@ -37,6 +38,7 @@ type TerrainFaceProps = {
   wireframe?: boolean;
   radius?: number;
   renderBackface?: boolean;
+  isBlend?: boolean;
 };
 
 const TerrainFace = ({
@@ -44,6 +46,7 @@ const TerrainFace = ({
   localUp,
   wireframe,
   radius = 1,
+  isBlend = false,
   renderBackface = false,
 }: TerrainFaceProps) => {
   const meshRef = useRef<Mesh>(null);
@@ -72,6 +75,8 @@ const TerrainFace = ({
   useLayoutEffect(() => {
     if (!shaderRef.current) return;
     shaderRef.current.uniforms.uRadius = new Uniform(radius);
+
+    shaderRef.current.uniforms.uIsBlend = new Uniform(isBlend);
 
     shaderRef.current.uniforms.uMinMax = new Uniform(
       new Vector2(minimum, maximum),
@@ -104,7 +109,7 @@ const TerrainFace = ({
           color: new Vector4(0),
         })),
     ]);
-  }, [radius, elevationGradient, minimum, maximum, noiseFilters]);
+  }, [radius, elevationGradient, minimum, maximum, noiseFilters, isBlend]);
 
   useLayoutEffect(() => {
     if (!meshRef.current) return;
@@ -154,8 +159,8 @@ const TerrainFace = ({
         ref={shaderRef}
         vertexShader={vs}
         fragmentShader={fs}
-        {...{ wireframe }}
         baseMaterial={MeshPhysicalMaterial}
+        {...{ wireframe }}
         side={renderBackface ? DoubleSide : FrontSide}
       />
     </mesh>

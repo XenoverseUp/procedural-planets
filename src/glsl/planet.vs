@@ -11,6 +11,7 @@ varying vec2 vUv;
 void main() {
     vPosition = position;
     vUv = uv;
+    vNormal = normal;
 
     vec3 newPosition = position;
 
