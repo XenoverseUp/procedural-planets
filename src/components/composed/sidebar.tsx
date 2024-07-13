@@ -1,6 +1,3 @@
-import { MixerHorizontalIcon } from "@radix-ui/react-icons";
-import StepInput from "@/components/ui/step-input";
-import { useAtom } from "jotai";
 import {
   depthGradientAtom,
   elevationGradientAtom,
@@ -9,10 +6,13 @@ import {
   planetRadiusAtom,
 } from "@/atoms/settings";
 import NoiseSettingsDetail from "@/components/composed/noise-settings-detail";
+import GradientInput from "@/components/ui/gradient-input";
 import SliderInput from "@/components/ui/slider-input";
+import StepInput from "@/components/ui/step-input";
 import { SimpleNoiseFilter } from "@/lib/noise";
 import { VECTOR_ZERO } from "@/lib/vector";
-import GradientInput from "@/components/ui/gradient-input";
+import { MixerHorizontalIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
+import { useAtom } from "jotai";
 
 const Sidebar = () => {
   const [meshResolution, setMeshResolution] = useAtom(meshResolutionAtom);
@@ -26,7 +26,7 @@ const Sidebar = () => {
       <header className="border-b px-4 py-3">
         <h2 className="flex items-center gap-2 text-sm font-medium">
           <MixerHorizontalIcon />
-          <span>Planet Generator</span>
+          <span>Control Panel</span>
         </h2>
       </header>
       <div className="space-y-8 overflow-y-auto overflow-x-hidden p-4 pb-8">

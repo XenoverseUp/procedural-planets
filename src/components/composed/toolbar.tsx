@@ -1,13 +1,13 @@
-import * as Toggle from "@radix-ui/react-toggle";
-import { ColorWheelIcon, GlobeIcon, ShadowIcon } from "@radix-ui/react-icons";
-import { ClassValue } from "clsx";
-import cn from "@/lib/cn";
-import { useAtom } from "jotai";
 import {
   isBlendAtom,
   isWireframeAtom,
   rendersGlobeAtom,
 } from "@/atoms/settings";
+import cn from "@/lib/cn";
+import { ColorWheelIcon, GlobeIcon, ShadowIcon } from "@radix-ui/react-icons";
+import * as Toggle from "@radix-ui/react-toggle";
+import { ClassValue } from "clsx";
+import { useAtom } from "jotai";
 
 const Toolbar = ({ className }: { className?: ClassValue }) => {
   const [isWireframe, setIsWireframe] = useAtom(isWireframeAtom);
