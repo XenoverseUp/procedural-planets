@@ -1,5 +1,5 @@
 import * as Slider from "@radix-ui/react-slider";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 type SliderInputProps = {
   label: string;

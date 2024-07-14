@@ -1,5 +1,5 @@
 import { useAtom, useAtomValue } from "jotai";
-import { useLayoutEffect, useRef } from "react";
+import { startTransition, useLayoutEffect, useRef } from "react";
 import {
   BufferAttribute,
   BufferGeometry,
