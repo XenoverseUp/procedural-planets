@@ -29,9 +29,9 @@ const GradientInput = ({
   const [selected, setSelected] = useState<number | null>(null);
   const [gradient, setGradient] = gradientState;
 
-  useEffect(() => {
-    console.log({ gradient });
-  });
+  // useEffect(() => {
+  //   console.log({ gradient });
+  // });
 
   const onMouseDown: MouseEventHandler<HTMLDivElement> = (e) => {
     const index = parseInt(e.target.dataset.index, 10);

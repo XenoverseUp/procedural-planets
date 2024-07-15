@@ -2,6 +2,7 @@ import Lights from "@/components/composed/lights";
 import Sidebar from "@/components/composed/sidebar";
 import Toolbar from "@/components/composed/toolbar";
 import Planet from "@/components/planet/planet";
+import PlanetGPU from "@/components/planet-gpu/planet";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
@@ -14,7 +15,7 @@ function App() {
         <Toolbar className="absolute left-2 top-2 z-10" />
         <Canvas>
           <Lights />
-          <OrbitControls enableZoom={false} enablePan={false} />
+          <OrbitControls enableZoom={true} enablePan={false} />
           {/* <Stats /> */}
           {/* <Float
             speed={3}
@@ -23,7 +24,8 @@ function App() {
             floatingRange={[-0.02, 0.02]}
           >
           </Float> */}
-          <Planet />
+          {/* <Planet /> */}
+          <PlanetGPU />
         </Canvas>
 
         <Link

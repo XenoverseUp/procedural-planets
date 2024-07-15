@@ -1,12 +1,15 @@
 import { useAtom, useAtomValue } from "jotai";
-import { startTransition, useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import {
   BufferAttribute,
   BufferGeometry,
+  Camera,
   DoubleSide,
   FrontSide,
   Mesh,
   MeshPhysicalMaterial,
+  PlaneGeometry,
+  Scene,
   ShaderMaterial,
   Uniform,
   Vector2,
@@ -20,13 +23,20 @@ import {
   elevationGradientAtom,
   noiseFiltersAtom,
 } from "@/atoms/settings";
-import MeshGenerator from "@/components/planet/mesh-generation";
 
 import { maximumAtom, minimumAtom } from "@/atoms/minMax";
 import { extend, useFrame, useThree } from "@react-three/fiber";
 
 import planetFragment from "@/glsl/planet/planet.fs?raw";
 import planetVertex from "@/glsl/planet/planet.vs?raw";
+
+import vertexComputeShader from "@/glsl/compute/vertex-compute.fs?raw";
+
+import {
+  createComputeMaterial,
+  createRenderTarget,
+  readData,
+} from "@/lib/gpu-compute";
 
 extend({ CustomShaderMaterial });
 
@@ -58,14 +68,6 @@ const TerrainFace = ({
 
   const [minimum, setMinimum] = useAtom(minimumAtom);
   const [maximum, setMaximum] = useAtom(maximumAtom);
-
-  const meshGenerator = useRef(
-    new MeshGenerator({
-      resolution,
-      localUp,
-      noiseFilters,
-    }),
-  );
 
   useFrame(({ clock }) => {
     if (!shaderRef.current) return;
@@ -120,28 +122,51 @@ const TerrainFace = ({
     isBlend,
   ]);
 
+  const { gl } = useThree();
+
   useLayoutEffect(() => {
     if (!meshRef.current) return;
 
-    meshGenerator.current.resolution = resolution;
-    meshGenerator.current.localUp = localUp;
-    meshGenerator.current.noiseFilters = noiseFilters;
+    const vertexRenderTarget = createRenderTarget(resolution);
+
+    const vertexMaterial = createComputeMaterial(
+      vertexComputeShader,
+      Math.floor(resolution),
+      localUp,
+    );
+    const quad = new Mesh(new PlaneGeometry(2, 2), vertexMaterial);
+    const scene = new Scene();
+    scene.add(quad);
+
+    const camera = new Camera();
+    gl.setRenderTarget(vertexRenderTarget);
+    gl.render(scene, camera);
+    gl.setRenderTarget(null);
+
+    const vertexData = readData(gl, vertexRenderTarget, resolution, 4);
+
+    const positions = new Float32Array(resolution ** 2 * 3);
+    for (let i = 0; i < resolution ** 2; i++) {
+      positions[i * 3 + 0] = vertexData[i * 4 + 0];
+      positions[i * 3 + 1] = vertexData[i * 4 + 1];
+      positions[i * 3 + 2] = vertexData[i * 4 + 2];
+    }
+
+    const indices = [];
+    for (let y = 0; y < resolution - 1; y++) {
+      for (let x = 0; x < resolution - 1; x++) {
+        const i = x + y * resolution;
+        indices.push(i, i + 1, i + resolution + 1);
+        indices.push(i, i + resolution + 1, i + resolution);
+      }
+    }
 
     const geometry = new BufferGeometry();
-
-    const { vertices, indices, elevationMinMax, uv } =
-      meshGenerator.current.generateTerrain();
-
-    setMinimum((value) => Math.min(value, elevationMinMax.min));
-    setMaximum((value) => Math.max(value, elevationMinMax.max));
+    geometry.setAttribute("position", new BufferAttribute(positions, 3));
+    geometry.setIndex(indices);
 
     meshRef.current.clear();
 
-    geometry.setAttribute("uv", new BufferAttribute(uv, 2));
-    geometry.setAttribute("position", new BufferAttribute(vertices, 3));
-    geometry.setIndex(new BufferAttribute(indices, 1));
-
-    geometry.attributes.uv.needsUpdate = true;
     geometry.attributes.position.needsUpdate = true;
 
     geometry.computeVertexNormals();
@@ -155,10 +180,8 @@ const TerrainFace = ({
     return () => {
       geometry.dispose();
       meshRef.current?.geometry.dispose();
-      setMinimum(Number.MAX_VALUE);
-      setMaximum(Number.MIN_VALUE);
     };
-  }, [resolution, localUp, noiseFilters]);
+  }, [resolution, localUp]);
 
   return (
     <>

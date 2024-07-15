@@ -47,22 +47,22 @@ class MeshGenerator {
 
         const pointOnUnitSphere = spherize(pointOnCube);
 
-        const unscaledElevation =
-          this.calculateUnscaledElevation(pointOnUnitSphere);
+        // const unscaledElevation =
+        //   this.calculateUnscaledElevation(pointOnUnitSphere);
 
-        const elevation = this.getScaledElevation(unscaledElevation);
+        // const elevation = this.getScaledElevation(unscaledElevation);
 
-        elevationMinMax.add(unscaledElevation + 1);
+        // elevationMinMax.add(unscaledElevation + 1);
 
-        const pointOnPlanet = pointOnUnitSphere.multiplyScalar(1 + elevation);
+        const pointOnPlanet = pointOnUnitSphere; //.multiplyScalar(1 + elevation);
 
         vertices[index] = pointOnPlanet.x;
         vertices[index + 1] = pointOnPlanet.y;
         vertices[index + 2] = pointOnPlanet.z;
         index += 3;
 
-        uv[i * 2] = unscaledElevation; // U component stores the elevation
-        uv[i * 2 + 1] = 0;
+        // uv[i * 2] = unscaledElevation; // U component stores the elevation
+        // uv[i * 2 + 1] = 0;
 
         if (x !== this.resolution - 1 && y !== this.resolution - 1) {
           const i = x + y * this.resolution;
