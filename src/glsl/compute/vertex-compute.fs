@@ -1,9 +1,56 @@
-precision highp float;
+#ifndef GL_FRAGMENT_PRECISION_HIGH
+	precision mediump float;
+#else
+	precision highp float;
+#endif
+
+const int MAX_FILTER_COUNT = 3;
+
+
+struct noiseFilter {
+    bool  enabled;
+    float strength;
+    float roughness;
+    vec3  center;
+    float baseRoughness;
+    float persistence;
+    float minValue;
+    int   layerCount;
+    bool  useFirstLayerAsMask;
+    int   filterType;
+};
 
 uniform int uResolution;
 uniform vec3 uLocalUp;
+uniform noiseFilter filters[MAX_FILTER_COUNT];
 
-varying vec3 vPosition;
+
+float mod289(float x){ return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec4 mod289(vec4 x){ return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec4 perm(vec4 x){ return mod289(((x * 34.0) + 1.0) * x); }
+
+float noise(vec3 p){
+    vec3 a = floor(p);
+    vec3 d = p - a;
+    d = d * d * (3.0 - 2.0 * d);
+
+    vec4 b = a.xxyy + vec4(0.0, 1.0, 0.0, 1.0);
+    vec4 k1 = perm(b.xyxy);
+    vec4 k2 = perm(k1.xyxy + b.zzww);
+
+    vec4 c = k2 + a.zzzz;
+    vec4 k3 = perm(c);
+    vec4 k4 = perm(c + 1.0);
+
+    vec4 o1 = fract(k3 * (1.0 / 41.0));
+    vec4 o2 = fract(k4 * (1.0 / 41.0));
+
+    vec4 o3 = o2 * d.z + o1 * (1.0 - d.z);
+    vec2 o4 = o3.yw * d.x + o3.xz * (1.0 - d.x);
+
+    return o4.y * d.y + o4.x * (1.0 - d.y);
+}
+
 
 void main() {
     float resolution = float(uResolution);
@@ -11,13 +58,14 @@ void main() {
     vec3 axisB = cross(uLocalUp, axisA);
 
     vec2 uv = (gl_FragCoord.xy) / resolution ;
-    float x = floor(uv.x * (resolution - 1.0));
-    float y = floor(uv.y * (resolution - 1.0));
 
     vec3 pointOnCube = uLocalUp * (1.0 - 1.0 / resolution) + axisA * (uv.x - 0.5) * 2.0 + axisB * (uv.y - 0.5) * 2.0;
     vec3 pointOnUnitSphere = normalize(pointOnCube);
 
-    // Apply noise filters here if needed
+    float elevation = noise(pointOnUnitSphere);
 
-    gl_FragColor = vec4(pointOnUnitSphere, 1.0);
+    float unscaledElevation = elevation;
+
+
+    gl_FragColor = vec4(pointOnUnitSphere * (1.0 + elevation), unscaledElevation);
 }
