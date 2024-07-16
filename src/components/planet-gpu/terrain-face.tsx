@@ -37,6 +37,7 @@ import {
   createRenderTarget,
   readData,
 } from "@/lib/gpu-compute";
+import MinMax from "@/lib/min-max";
 
 extend({ CustomShaderMaterial });
 
@@ -145,25 +146,46 @@ const TerrainFace = ({
 
     const vertexData = readData(gl, vertexRenderTarget, resolution, 4);
 
-    const positions = new Float32Array(resolution ** 2 * 3);
+    const vertices = new Float32Array(resolution ** 2 * 3);
+    const uv = new Float32Array(resolution ** 2 * 2);
+
+    const minmax = new MinMax();
+
     for (let i = 0; i < resolution ** 2; i++) {
-      positions[i * 3 + 0] = vertexData[i * 4 + 0];
-      positions[i * 3 + 1] = vertexData[i * 4 + 1];
-      positions[i * 3 + 2] = vertexData[i * 4 + 2];
+      vertices[i * 3 + 0] = vertexData[i * 4 + 0];
+      vertices[i * 3 + 1] = vertexData[i * 4 + 1];
+      vertices[i * 3 + 2] = vertexData[i * 4 + 2];
+
+      const unscaledElevation = vertexData[i * 4 + 3];
+
+      uv[i * 2 + 0] = unscaledElevation;
+      uv[i * 2 + 1] = 0;
+
+      minmax.add(unscaledElevation);
     }
 
-    const indices = [];
+    setMinimum((value) => Math.min(value, minmax.min));
+    setMaximum((value) => Math.max(value, minmax.max));
+
+    const indices = new Uint32Array((resolution - 1) ** 2 * 6);
+    let triangleIndex = 0;
     for (let y = 0; y < resolution - 1; y++) {
       for (let x = 0; x < resolution - 1; x++) {
         const i = x + y * resolution;
-        indices.push(i, i + 1, i + resolution + 1);
-        indices.push(i, i + resolution + 1, i + resolution);
+
+        indices[triangleIndex++] = i;
+        indices[triangleIndex++] = i + 1;
+        indices[triangleIndex++] = i + 1 + resolution;
+        indices[triangleIndex++] = i;
+        indices[triangleIndex++] = i + 1 + resolution;
+        indices[triangleIndex++] = i + resolution;
       }
     }
 
     const geometry = new BufferGeometry();
-    geometry.setAttribute("position", new BufferAttribute(positions, 3));
-    geometry.setIndex(indices);
+    geometry.setAttribute("uv", new BufferAttribute(uv, 2));
+    geometry.setAttribute("position", new BufferAttribute(vertices, 3));
+    geometry.setIndex(new BufferAttribute(indices, 1));
 
     meshRef.current.clear();
 
@@ -180,6 +202,8 @@ const TerrainFace = ({
     return () => {
       geometry.dispose();
       meshRef.current?.geometry.dispose();
+      setMinimum(Number.MAX_VALUE);
+      setMaximum(Number.MIN_VALUE);
     };
   }, [resolution, localUp]);
 

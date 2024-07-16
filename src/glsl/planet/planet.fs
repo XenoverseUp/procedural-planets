@@ -75,7 +75,7 @@ vec4 findDepthColor(float depthRate) {
 void main() {
     const float mixRange = 0.005;
 
-    float elevation = 1.0 + vUv.x;
+    float elevation = vUv.x;
     vec4 color = vec4(0, 0, 1, 1);
 
     if (elevation > 1.0 + mixRange) {
@@ -101,7 +101,7 @@ void main() {
         color = findDepthColor(depthRate);
 
         csm_Roughness = 0.0;
-        csm_Metalness = 0.4 * (1.0 - vUv.x);
+        csm_Metalness = 0.4 * (2.0 - vUv.x);
     }
 
 
