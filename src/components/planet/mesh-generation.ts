@@ -91,7 +91,6 @@ class MeshGenerator {
     mask = Math.max(0, mask);
 
     let depthCaptured = false;
-    let depth: number;
 
     for (let i = 0; i < this.noiseFilters.length; i++) {
       if (!this.noiseFilters.at(i)?.enabled) continue;

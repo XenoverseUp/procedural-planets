@@ -132,9 +132,14 @@ const TerrainFace = ({
 
     const vertexMaterial = createComputeMaterial(
       vertexComputeShader,
-      Math.floor(resolution),
-      localUp,
+      resolution,
+      {
+        uLocalUp: new Uniform(localUp),
+        uFilterLength: new Uniform(noiseFilters.length),
+        uFilters: new Uniform(noiseFilters),
+      },
     );
+
     const quad = new Mesh(new PlaneGeometry(2, 2), vertexMaterial);
     const scene = new Scene();
     scene.add(quad);
@@ -205,11 +210,11 @@ const TerrainFace = ({
       setMinimum(Number.MAX_VALUE);
       setMaximum(Number.MIN_VALUE);
     };
-  }, [resolution, localUp]);
+  }, [resolution, localUp, noiseFilters]);
 
   return (
     <>
-      <mesh castShadow receiveShadow ref={meshRef}>
+      <mesh ref={meshRef}>
         <bufferGeometry />
         <CustomShaderMaterial
           ref={shaderRef}

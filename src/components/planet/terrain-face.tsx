@@ -162,7 +162,7 @@ const TerrainFace = ({
 
   return (
     <>
-      <mesh castShadow receiveShadow ref={meshRef}>
+      <mesh ref={meshRef}>
         <bufferGeometry />
         <CustomShaderMaterial
           ref={shaderRef}

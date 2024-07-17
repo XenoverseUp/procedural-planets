@@ -4,7 +4,7 @@ import Toolbar from "@/components/composed/toolbar";
 import Planet from "@/components/planet/planet";
 import PlanetGPU from "@/components/planet-gpu/planet";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
-import { OrbitControls } from "@react-three/drei";
+import { Float, OrbitControls, Stats } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Link } from "react-router-dom";
 
@@ -12,11 +12,11 @@ function App() {
   return (
     <main className="flex h-screen w-full select-none gap-2 bg-blue-200 p-2">
       <div className="dotted relative h-full flex-grow items-center overflow-hidden rounded-lg bg-blue-50">
-        <Toolbar className="absolute left-2 top-2 z-10" />
+        <Toolbar className="absolute bottom-2 left-2 z-10" />
         <Canvas>
           <Lights />
           <OrbitControls enableZoom={true} enablePan={false} />
-          {/* <Stats /> */}
+          <Stats />
           {/* <Float
             speed={3}
             rotationIntensity={0.5}
@@ -24,8 +24,8 @@ function App() {
             floatingRange={[-0.02, 0.02]}
           >
           </Float> */}
-          {/* <Planet /> */}
           <PlanetGPU />
+          {/* <Planet /> */}
         </Canvas>
 
         <Link

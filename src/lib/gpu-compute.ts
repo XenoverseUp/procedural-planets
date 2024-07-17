@@ -14,12 +14,12 @@ import bufferVertex from "@/glsl/compute/buffer.vs?raw";
 export const createComputeMaterial = (
   fragmentShader: string,
   resolution: GLuint,
-  localUp: Vector3,
+  uniforms?: Record<string, Uniform>,
 ) =>
   new ShaderMaterial({
     uniforms: {
       uResolution: new Uniform(resolution),
-      uLocalUp: new Uniform(localUp),
+      ...uniforms,
     },
     vertexShader: bufferVertex,
     fragmentShader,

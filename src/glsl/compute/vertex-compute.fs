@@ -1,6 +1,6 @@
 precision highp float;
 
-const int MAX_FILTER_COUNT = 3;
+const int MAX_FILTER_COUNT = 2;
 
 struct noiseFilter {
     bool  enabled;
@@ -17,7 +17,8 @@ struct noiseFilter {
 
 uniform int uResolution;
 uniform vec3 uLocalUp;
-uniform noiseFilter filters[MAX_FILTER_COUNT];
+uniform noiseFilter uFilters[MAX_FILTER_COUNT];
+uniform int uFilterLength;
 
 vec4 permute(vec4 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
 vec4 taylorInvSqrt(vec4 r){ return 1.79284291400159 - 0.85373472095314 * r; }
@@ -92,6 +93,67 @@ float cnoise(vec3 P) {
   return 2.2 * n_xyz;
 }
 
+float evaluateNoiseFilter(vec3 point, noiseFilter nfilter) {
+    float noiseValue = 0.0;
+    float frequency = nfilter.baseRoughness;
+    float amplitude = 1.0;
+
+    for (int i = 0; i < nfilter.layerCount; i++) {
+        vec3 pp = point * frequency + nfilter.center;
+        noiseValue += (cnoise(pp) + 1.) * 0.5 * amplitude;
+        frequency *= nfilter.roughness;
+        amplitude *= nfilter.persistence;
+    }
+
+    noiseValue = max(0.0, noiseValue - nfilter.minValue);
+
+    return noiseValue * nfilter.strength;
+}
+
+float evaluateUnscaledNoiseFilter(vec3 point, noiseFilter nfilter) {
+    float noiseValue = 0.0;
+    float frequency = nfilter.baseRoughness;
+    float amplitude = 1.0;
+
+    for (int i = 0; i < nfilter.layerCount; i++) {
+        vec3 pp = point * frequency + nfilter.center;
+        noiseValue += (cnoise(pp) + 1.) * 0.5 * amplitude;
+        frequency *= nfilter.roughness;
+        amplitude *= nfilter.persistence;
+    }
+
+    noiseValue -= nfilter.minValue;
+
+    return noiseValue * nfilter.strength;
+}
+
+float calculateUnscaledElevation(vec3 point) {
+    float elevation = 0.0;
+    float mask = max(0.0, evaluateNoiseFilter(point, uFilters[0]));
+
+    bool depthCaptured = false;
+
+    for (int i = 0; i < uFilterLength; i++) {
+        noiseFilter nfilter = uFilters[i];
+
+        if (!nfilter.enabled) continue;
+
+        float noiseValue = evaluateUnscaledNoiseFilter(point, nfilter);
+
+        if (nfilter.useFirstLayerAsMask) noiseValue *= mask * 7.0;
+
+        elevation += depthCaptured ? max(0.0, noiseValue): noiseValue;
+
+        if (!depthCaptured) depthCaptured = true;
+    }
+
+    return elevation;
+}
+
+float getScaledElevation(float unscaledElevation) {
+    return max(0.0, unscaledElevation);
+}
+
 void main() {
     float resolution = float(uResolution);
     vec3 axisA = uLocalUp.yzx;
@@ -102,10 +164,10 @@ void main() {
     vec3 pointOnCube = uLocalUp * (1.0 - 1.0 / resolution) + axisA * (uv.x - 0.5) * 2.0 + axisB * (uv.y - 0.5) * 2.0;
     vec3 pointOnUnitSphere = normalize(pointOnCube);
 
-    float elevation = (cnoise(pointOnUnitSphere * 5.) + 1.) / 2.;
-    elevation /= 5.;
 
-    float unscaledElevation = 1. + elevation;
 
-    gl_FragColor = vec4(pointOnUnitSphere * (1. + elevation), unscaledElevation);
+    float unscaledElevation = calculateUnscaledElevation(pointOnUnitSphere);
+    float elevation = getScaledElevation(unscaledElevation);
+
+    gl_FragColor = vec4(pointOnUnitSphere * (1.0 + elevation), 1.0 + unscaledElevation);
 }
