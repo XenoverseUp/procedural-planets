@@ -4,7 +4,7 @@ import { SimpleNoiseFilter, NoiseFilter, RidgidNoiseFilter } from "@/lib/noise";
 import { VECTOR_ZERO } from "@/lib/vector";
 import GradientStop from "@/lib/gradient";
 
-export const meshResolutionAtom = atom(80);
+export const meshResolutionAtom = atom(256);
 export const planetRadiusAtom = atom(1.75);
 
 export const isBlendAtom = atom(true);
@@ -54,8 +54,8 @@ export const noiseFiltersAtom = atom<NoiseFilter[]>([
   new SimpleNoiseFilter({
     enabled: true,
     strength: 0.2,
-    roughness: 2.25,
-    baseRoughness: 0.7,
+    roughness: 2.5,
+    baseRoughness: 1.2,
     center: VECTOR_ZERO,
     persistence: 0.5,
     minValue: 1.1,
@@ -64,12 +64,12 @@ export const noiseFiltersAtom = atom<NoiseFilter[]>([
   }),
   new RidgidNoiseFilter({
     enabled: true,
-    strength: 0.2,
-    roughness: 2.25,
-    baseRoughness: 0.7,
+    strength: 0.1,
+    roughness: 2.5,
+    baseRoughness: 0.95,
     center: VECTOR_ZERO,
     persistence: 0.5,
-    minValue: 1.1,
+    minValue: 1.9,
     layerCount: 5,
   }),
 ]);

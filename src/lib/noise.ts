@@ -4,6 +4,11 @@ import { VECTOR_ZERO } from "./vector";
 
 type GLint = number;
 
+enum NoiseType {
+  Simple = 0,
+  Ridgid = 1,
+}
+
 export interface NoiseFilter {
   enabled: boolean;
   evaluate: (p: Vector3) => GLfloat;
@@ -16,6 +21,7 @@ export interface NoiseFilter {
   minValue: GLfloat;
   layerCount: GLint;
   useFirstLayerAsMask: boolean;
+  filterType: NoiseType;
 }
 
 type SimpleNoiseFilterParameters = {
@@ -52,6 +58,7 @@ export class RidgidNoiseFilter implements NoiseFilter {
   layerCount: GLint;
   enabled: boolean;
   useFirstLayerAsMask: boolean;
+  filterType: NoiseType = NoiseType.Ridgid;
 
   #noise: NoiseFunction3D;
 
@@ -153,6 +160,7 @@ export class SimpleNoiseFilter implements NoiseFilter {
   layerCount: GLint;
   enabled: boolean;
   useFirstLayerAsMask: boolean;
+  filterType: NoiseType = NoiseType.Simple;
 
   #noise: NoiseFunction3D;
 

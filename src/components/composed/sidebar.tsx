@@ -44,9 +44,9 @@ const Sidebar = () => {
           description="Defines the level resolution of the planet mesh. The higher this value, the more room for detail. The lower this value, the higher performance."
           defaultValue={meshResolution}
           onValueChange={setMeshResolution}
-          labels={["8", "768"]}
+          labels={["8", "512"]}
           min={8}
-          max={768}
+          max={512}
           step={2}
         />
         <section>

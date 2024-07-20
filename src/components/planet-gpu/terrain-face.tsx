@@ -11,6 +11,7 @@ import {
   PlaneGeometry,
   Scene,
   ShaderMaterial,
+  TextureLoader,
   Uniform,
   Vector2,
   Vector3,
@@ -50,6 +51,7 @@ type TerrainFaceProps = {
   radius?: number;
   renderBackface?: boolean;
   isBlend?: boolean;
+  seed?: number;
 };
 
 const TerrainFace = ({
@@ -59,6 +61,7 @@ const TerrainFace = ({
   radius = 1,
   isBlend = false,
   renderBackface = false,
+  seed = 0,
 }: TerrainFaceProps) => {
   const meshRef = useRef<Mesh>(null);
   const shaderRef = useRef<ShaderMaterial>(null);
@@ -137,6 +140,7 @@ const TerrainFace = ({
         uLocalUp: new Uniform(localUp),
         uFilterLength: new Uniform(noiseFilters.length),
         uFilters: new Uniform(noiseFilters),
+        uSeed: new Uniform(seed),
       },
     );
 
@@ -210,7 +214,7 @@ const TerrainFace = ({
       setMinimum(Number.MAX_VALUE);
       setMaximum(Number.MIN_VALUE);
     };
-  }, [resolution, localUp, noiseFilters]);
+  }, [resolution, localUp, noiseFilters, seed]);
 
   return (
     <>

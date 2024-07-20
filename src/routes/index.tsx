@@ -2,7 +2,7 @@ import Lights from "@/components/composed/lights";
 import Sidebar from "@/components/composed/sidebar";
 import Toolbar from "@/components/composed/toolbar";
 import Planet from "@/components/planet/planet";
-import PlanetGPU from "@/components/planet-gpu/planet";
+import PlanetGPU from "@/components/planet-gpu/planet-gpu";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import { Float, OrbitControls, Stats } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";

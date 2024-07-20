@@ -17,6 +17,7 @@ import {
   VECTOR_RIGHT,
   VECTOR_UP,
 } from "@/lib/vector";
+import { useRef } from "react";
 
 const directions = [
   VECTOR_UP,
@@ -27,12 +28,13 @@ const directions = [
   VECTOR_BACK,
 ];
 
-const Planet = () => {
+const PlanetGPU = () => {
   const resolution = useAtomValue(meshResolutionAtom);
   const wireframe = useAtomValue(isWireframeAtom);
   const radius = useAtomValue(planetRadiusAtom);
   const rendersGlobe = useAtomValue(rendersGlobeAtom);
   const isBlend = useAtomValue(isBlendAtom);
+  const seed = useRef(Math.random() * 500);
 
   return (
     <mesh>
@@ -47,6 +49,7 @@ const Planet = () => {
               key={`terrain-face-${i}-${rendersGlobe ? "globe" : "face"}`}
               renderBackface={!rendersGlobe}
               isBlend={isBlend}
+              seed={seed.current}
             />
           );
 
@@ -63,4 +66,4 @@ const Planet = () => {
   );
 };
 
-export default Planet;
+export default PlanetGPU;
