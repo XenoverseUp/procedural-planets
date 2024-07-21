@@ -6,6 +6,7 @@ uniform float uTime;
 
 varying vec3 vPosition;
 varying vec2 vUv;
+varying vec3 vNormal;
 
 
 void main() {
@@ -13,5 +14,5 @@ void main() {
     vUv = uv;
     vNormal = normal;
 
-    csm_Position = position * uRadius;
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position * uRadius * 1.25, 1);
 }

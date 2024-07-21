@@ -8,6 +8,7 @@ import { ColorWheelIcon, GlobeIcon, ShadowIcon } from "@radix-ui/react-icons";
 import * as Toggle from "@radix-ui/react-toggle";
 import { ClassValue } from "clsx";
 import { useAtom } from "jotai";
+import { motion } from "framer-motion";
 
 const Toolbar = ({ className }: { className?: ClassValue }) => {
   const [isWireframe, setIsWireframe] = useAtom(isWireframeAtom);
@@ -15,7 +16,17 @@ const Toolbar = ({ className }: { className?: ClassValue }) => {
   const [isBlend, setIsBlend] = useAtom(isBlendAtom);
 
   return (
-    <div className={cn(className, "flex gap-2")}>
+    <motion.div
+      exit={{
+        translateY: "200%",
+        scale: 0.75,
+        opacity: 0.5,
+      }}
+      transition={{
+        mass: 10,
+      }}
+      className={cn(className, "flex gap-2")}
+    >
       <Toggle.Root
         pressed={isWireframe}
         onPressedChange={(pressed) => setIsWireframe(pressed)}
@@ -44,7 +55,7 @@ const Toolbar = ({ className }: { className?: ClassValue }) => {
           {rendersGlobe ? "Globe" : "Front Face"}
         </p>
       </Toggle.Root>
-    </div>
+    </motion.div>
   );
 };
 

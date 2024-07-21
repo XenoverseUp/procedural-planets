@@ -17,7 +17,9 @@ import {
   VECTOR_RIGHT,
   VECTOR_UP,
 } from "@/lib/vector";
-import { useRef } from "react";
+import { forwardRef, useRef } from "react";
+import { Mesh } from "three";
+import { OrbitControls } from "@react-three/drei";
 
 const directions = [
   VECTOR_UP,
@@ -28,7 +30,7 @@ const directions = [
   VECTOR_BACK,
 ];
 
-const PlanetGPU = () => {
+const PlanetGPU = forwardRef<Mesh>((_, ref) => {
   const resolution = useAtomValue(meshResolutionAtom);
   const wireframe = useAtomValue(isWireframeAtom);
   const radius = useAtomValue(planetRadiusAtom);
@@ -37,7 +39,7 @@ const PlanetGPU = () => {
   const seed = useRef(Math.random() * 500);
 
   return (
-    <mesh>
+    <mesh ref={ref}>
       {directions.map((direction, i) => {
         if (rendersGlobe || direction === VECTOR_FRONT)
           return (
@@ -64,6 +66,5 @@ const PlanetGPU = () => {
       })}
     </mesh>
   );
-};
-
+});
 export default PlanetGPU;
