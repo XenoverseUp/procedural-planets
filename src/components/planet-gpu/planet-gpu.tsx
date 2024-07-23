@@ -1,5 +1,6 @@
 import { useAtomValue } from "jotai";
-
+import { motion } from "framer-motion-3d";
+import { useMotionValue } from "framer-motion";
 import {
   isBlendAtom,
   isWireframeAtom,
@@ -17,9 +18,10 @@ import {
   VECTOR_RIGHT,
   VECTOR_UP,
 } from "@/lib/vector";
-import { forwardRef, useRef } from "react";
-import { Mesh } from "three";
-import { OrbitControls } from "@react-three/drei";
+import { forwardRef, useEffect, useRef, useState } from "react";
+import { worldVariants } from "@/lib/animation-variants";
+import { useThree } from "@react-three/fiber";
+import { Vector2 } from "three";
 
 const directions = [
   VECTOR_UP,
@@ -30,7 +32,7 @@ const directions = [
   VECTOR_BACK,
 ];
 
-const PlanetGPU = forwardRef<Mesh>((_, ref) => {
+const PlanetGPU = ({ showcase }: { showcase: boolean }) => {
   const resolution = useAtomValue(meshResolutionAtom);
   const wireframe = useAtomValue(isWireframeAtom);
   const radius = useAtomValue(planetRadiusAtom);
@@ -38,8 +40,34 @@ const PlanetGPU = forwardRef<Mesh>((_, ref) => {
   const isBlend = useAtomValue(isBlendAtom);
   const seed = useRef(Math.random() * 500);
 
+  const three = useThree();
+
+  const onCanvasDown = (e: PointerEvent) => {};
+
+  const onCanvasMove = (e: PointerEvent) => {};
+
+  const onCanvasUp = () => {};
+
+  useEffect(() => {
+    const canvas = three.gl.domElement;
+
+    canvas.addEventListener("pointerdown", onCanvasDown);
+    canvas.addEventListener("pointermove", onCanvasMove);
+    canvas.addEventListener("pointerup", onCanvasUp);
+
+    return () => {
+      canvas.removeEventListener("pointerdown", onCanvasDown);
+      canvas.removeEventListener("pointermove", onCanvasMove);
+      canvas.removeEventListener("pointerup", onCanvasUp);
+    };
+  }, []);
+
   return (
-    <mesh ref={ref}>
+    <motion.mesh
+      variants={worldVariants}
+      initial="initial"
+      animate={showcase ? "showcase" : "editor"}
+    >
       {directions.map((direction, i) => {
         if (rendersGlobe || direction === VECTOR_FRONT)
           return (
@@ -64,7 +92,8 @@ const PlanetGPU = forwardRef<Mesh>((_, ref) => {
           />
         );
       })}
-    </mesh>
+    </motion.mesh>
   );
-});
+};
+
 export default PlanetGPU;
