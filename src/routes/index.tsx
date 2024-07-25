@@ -38,7 +38,7 @@ function App() {
               <Toolbar className="absolute bottom-2 left-2 z-10" />
             )}
           </AnimatePresence>
-          <Canvas>
+          <Canvas className="cursor-grab active:cursor-grabbing">
             <Scene />
           </Canvas>
           <AnimatePresence>
