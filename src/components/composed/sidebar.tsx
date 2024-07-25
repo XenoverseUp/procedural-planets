@@ -27,10 +27,13 @@ const Sidebar = () => {
       exit={{
         width: 0,
         opacity: 0,
+        transition: {
+          type: "spring",
+        },
       }}
-      className="overflow-hidden"
+      className="flex-shrink-0 overflow-hidden"
     >
-      <aside className="mr-2 flex h-full w-96 flex-shrink-0 flex-col overflow-hidden rounded-lg bg-white">
+      <aside className="mr-2 flex h-full w-96 flex-col overflow-hidden rounded-lg bg-white">
         <header className="border-b px-4 py-3">
           <h2 className="flex items-center gap-2 text-sm font-medium">
             <MixerHorizontalIcon />

@@ -1,19 +1,12 @@
 import Sidebar from "@/components/composed/sidebar";
-import Toolbar from "@/components/composed/toolbar";
-import { PaperPlaneIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import cn from "@/lib/cn";
-import Scene from "@/components/composed/scene";
-import { Canvas } from "@react-three/fiber";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { isShowcaseAtom } from "@/atoms/showcase";
-import { isWireframeAtom, rendersGlobeAtom } from "@/atoms/settings";
+import RenderingCanvas from "@/components/composed/rendering-canvas";
 
 function App() {
-  const [isShowcase, setIsShowcase] = useAtom(isShowcaseAtom);
-  const setIsWireframe = useSetAtom(isWireframeAtom);
-  const setRendersGlobe = useSetAtom(rendersGlobeAtom);
+  const isShowcase = useAtomValue(isShowcaseAtom);
 
   return (
     <main
@@ -24,48 +17,7 @@ function App() {
         },
       )}
     >
-      <div
-        className={cn(
-          "dotted relative mr-2 h-full flex-grow rounded-lg bg-blue-50 transition-colors",
-          {
-            "dotted-dark bg-transparent": isShowcase,
-          },
-        )}
-      >
-        <div className="mx-auto h-full w-[calc(100vw_-_26rem)] overflow-hidden">
-          <AnimatePresence>
-            {!isShowcase && (
-              <Toolbar className="absolute bottom-2 left-2 z-10" />
-            )}
-          </AnimatePresence>
-          <Canvas className="cursor-grab active:cursor-grabbing">
-            <Scene />
-          </Canvas>
-          <AnimatePresence>
-            {!isShowcase && (
-              <motion.button
-                exit={{
-                  scale: 0.75,
-                  opacity: 0,
-                }}
-                transition={{
-                  mass: 10,
-                }}
-                onClick={() => {
-                  setIsShowcase((state) => !state);
-                  setIsWireframe(false);
-                  setRendersGlobe(true);
-                }}
-                className="absolute bottom-4 right-4 flex items-center gap-1 rounded-full bg-blue-200 px-4 py-1 text-sm text-blue-900 hover:brightness-95"
-              >
-                <span>Finish</span>
-                <PaperPlaneIcon />
-              </motion.button>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-
+      <RenderingCanvas />
       <AnimatePresence>{!isShowcase && <Sidebar />}</AnimatePresence>
     </main>
   );

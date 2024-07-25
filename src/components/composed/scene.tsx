@@ -14,10 +14,9 @@ const Scene = () => {
     <>
       <Lights />
       <PlanetGPU showcase={isShowcase} />
-      <Atmosphere />
+      {isShowcase && <Atmosphere />}
 
       {/* <Planet /> */}
-
       {/* <Stats /> */}
     </>
   );

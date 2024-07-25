@@ -32,9 +32,6 @@
 }
 
 .dotted-dark {
-  background-image: radial-gradient(
-    rgba(255 255 255 / 0.25) 1px,
-    transparent 0
-  );
+  background-image: radial-gradient(rgba(255 255 255 / 0.2) 1px, transparent 0);
   background-size: 25px 25px;
 }

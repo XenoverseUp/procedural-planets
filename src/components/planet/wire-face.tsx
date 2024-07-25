@@ -82,8 +82,6 @@ const WireFace = ({ resolution, localUp, radius = 1 }: WireFaceProps) => {
   return (
     <mesh ref={meshRef}>
       <bufferGeometry />
-      {/* <meshPhongMaterial specular="white" color="white" {...{ wireframe }} /> */}
-      {/* <meshToonMaterial color="lightblue" /> */}
       <meshBasicMaterial color="lightblue" wireframe />
     </mesh>
   );
