@@ -1,7 +1,7 @@
 import { useAtomValue } from "jotai";
 import { useMotionValue, useSpring } from "framer-motion";
 import { motion } from "framer-motion-3d";
-import { useEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import { useThree } from "@react-three/fiber";
 import {
   isBlendAtom,
@@ -33,7 +33,7 @@ const directions = [
 
 const GRAB_SPEED = 0.01;
 
-const PlanetGPU = ({ showcase }: { showcase: boolean }) => {
+const PlanetGPU = forwardRef(({ showcase }: { showcase: boolean }, ref) => {
   const resolution = useAtomValue(meshResolutionAtom);
   const wireframe = useAtomValue(isWireframeAtom);
   const radius = useAtomValue(planetRadiusAtom);
@@ -63,6 +63,10 @@ const PlanetGPU = ({ showcase }: { showcase: boolean }) => {
   };
 
   useEffect(() => {
+    if (showcase) rotationX.set(0.25);
+  }, [showcase]);
+
+  useEffect(() => {
     const canvas = three.gl.domElement;
 
     canvas.addEventListener("pointermove", onCanvasMove);
@@ -79,6 +83,8 @@ const PlanetGPU = ({ showcase }: { showcase: boolean }) => {
   return (
     <motion.group rotation-x={springRotationX} rotation-y={springRotationY}>
       <motion.mesh
+        // @ts-ignore
+        ref={ref}
         variants={worldVariants}
         initial="initial"
         animate={showcase ? "showcase" : "editor"}
@@ -107,6 +113,6 @@ const PlanetGPU = ({ showcase }: { showcase: boolean }) => {
       </motion.mesh>
     </motion.group>
   );
-};
+});
 
 export default PlanetGPU;

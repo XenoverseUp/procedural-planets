@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Sud";
+  src: url("./assets/font/Sud.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 @layer base {
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {

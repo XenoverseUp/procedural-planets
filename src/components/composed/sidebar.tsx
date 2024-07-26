@@ -17,7 +17,6 @@ import { motion } from "framer-motion";
 
 const Sidebar = () => {
   const [meshResolution, setMeshResolution] = useAtom(meshResolutionAtom);
-  const [planetRadius, setPlanetRadius] = useAtom(planetRadiusAtom);
   const [noiseFilters, setNoiseFilters] = useAtom(noiseFiltersAtom);
   const elevationGradientState = useAtom(elevationGradientAtom);
   const depthGradientState = useAtom(depthGradientAtom);
@@ -41,15 +40,6 @@ const Sidebar = () => {
           </h2>
         </header>
         <div className="space-y-8 overflow-y-auto overflow-x-hidden p-4 pb-8">
-          <SliderInput
-            label="Planet Radius"
-            defaultValue={planetRadius}
-            onValueChange={setPlanetRadius}
-            labels={["1", "2"]}
-            min={1}
-            max={2}
-            step={0.05}
-          />
           <SliderInput
             label="Resolution"
             description="Defines the level resolution of the planet mesh. The higher this value, the more room for detail. The lower this value, the higher performance."

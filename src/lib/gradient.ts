@@ -22,4 +22,8 @@ class GradientStop implements ElevationGradientStop {
   };
 }
 
+export const gradientToString = (gradient: GradientStop[]) => {
+  return gradient.map((stop) => stop.toRGB()).join(",");
+};
+
 export default GradientStop;
