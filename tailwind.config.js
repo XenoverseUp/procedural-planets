@@ -8,5 +8,8 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-radix")()],
+  plugins: [
+    require("tailwindcss-radix")(),
+    require("@xpd/tailwind-3dtransforms"),
+  ],
 };

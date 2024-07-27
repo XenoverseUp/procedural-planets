@@ -3,7 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import cn from "@/lib/cn";
 import { useAtomValue } from "jotai";
 import { isShowcaseAtom } from "@/atoms/showcase";
-import RenderingCanvas from "@/components/composed/rendering-canvas";
+import Editor from "@/components/composed/editor";
 
 function App() {
   const isShowcase = useAtomValue(isShowcaseAtom);
@@ -17,7 +17,7 @@ function App() {
         },
       )}
     >
-      <RenderingCanvas />
+      <Editor />
       <AnimatePresence>{!isShowcase && <Sidebar />}</AnimatePresence>
     </main>
   );

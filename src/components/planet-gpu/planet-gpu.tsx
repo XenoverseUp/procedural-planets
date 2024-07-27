@@ -11,7 +11,7 @@ import {
   rendersGlobeAtom,
 } from "@/atoms/settings";
 import TerrainFace from "@/components/planet-gpu/terrain-face";
-import WireFace from "@/components/planet/wire-face";
+import WireFace from "@/components/wire-face/wire-face";
 import {
   VECTOR_BACK,
   VECTOR_DOWN,

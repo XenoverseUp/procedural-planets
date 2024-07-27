@@ -234,8 +234,6 @@ void main() {
     vec3 pointOnCube = uLocalUp * (1.0 - 1.0 / resolution) + axisA * (uv.x - 0.5) * 2.0 + axisB * (uv.y - 0.5) * 2.0;
     vec3 pointOnUnitSphere = normalize(pointOnCube);
 
-
-
     float unscaledElevation = calculateUnscaledElevation(pointOnUnitSphere, uSeed);
     float elevation = getScaledElevation(unscaledElevation);
 

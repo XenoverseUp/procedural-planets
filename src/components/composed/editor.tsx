@@ -1,7 +1,7 @@
 import cn from "@/lib/cn";
 import { motion, AnimatePresence } from "framer-motion";
 import { Canvas } from "@react-three/fiber";
-import Scene from "./scene";
+import Renderer from "./renderer";
 import { useAtomValue } from "jotai";
 import { isShowcaseAtom } from "@/atoms/showcase";
 import EditorHUD from "./editor-hud";
@@ -13,7 +13,7 @@ import {
 import ShowcaseHUD from "./showcase-hud";
 import { Mesh } from "three";
 
-const RenderingCanvas = () => {
+const Editor = () => {
   const isShowcase = useAtomValue(isShowcaseAtom);
   const planetRef = useRef<Mesh>(null);
 
@@ -31,7 +31,7 @@ const RenderingCanvas = () => {
       </AnimatePresence>
       <div className="mx-auto h-full w-[calc(100vw_-_26rem)] overflow-hidden">
         <Canvas className="cursor-grab active:cursor-grabbing">
-          <Scene ref={planetRef} />
+          <Renderer ref={planetRef} />
         </Canvas>
       </div>
       <AnimatePresence>{!isShowcase && <EditorHUD />}</AnimatePresence>
@@ -39,4 +39,4 @@ const RenderingCanvas = () => {
   );
 };
 
-export default RenderingCanvas;
+export default Editor;
