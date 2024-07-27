@@ -1,20 +1,31 @@
-import { Mesh } from "three";
-import { OBJExporter } from "three/examples/jsm/exporters/OBJExporter";
+import { BufferGeometry } from "three";
 
-export const exportMeshToOBJ = (mesh: Mesh) => {
-  const exporter = new OBJExporter();
-  const objData = exporter.parse(mesh);
-  console.log(objData);
+export function exportGeometryToOBJ(geometry: BufferGeometry): void {
+  const worker = new Worker(
+    new URL("../web-workers/mesh-export.worker.ts", import.meta.url),
+    {
+      type: "module",
+    },
+  );
 
-  // Create a Blob from the OBJ data
-  const blob = new Blob([objData], { type: "text/plain" });
-  const url = URL.createObjectURL(blob);
+  worker.onmessage = (event: MessageEvent<string>) => {
+    const objData = event.data;
 
-  // Create a temporary link element to trigger the download
-  // const link = document.createElement("a");
-  // link.href = url;
-  // link.download = "mesh.obj";
-  // document.body.appendChild(link);
-  // link.click();
-  // document.body.removeChild(link);
-};
+    const blob = new Blob([objData], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "mesh.obj";
+    a.click();
+    URL.revokeObjectURL(url);
+
+    worker.terminate();
+  };
+
+  const geometryData = {
+    attributes: geometry.attributes,
+    indices: geometry.index,
+  };
+
+  worker.postMessage({ geometryData });
+}

@@ -11,9 +11,11 @@ import {
   generatePlanetName,
 } from "@/lib/generate-planet-name";
 import ShowcaseHUD from "./showcase-hud";
+import { Mesh } from "three";
 
 const RenderingCanvas = () => {
   const isShowcase = useAtomValue(isShowcaseAtom);
+  const planetRef = useRef<Mesh>(null);
 
   return (
     <div
@@ -24,10 +26,12 @@ const RenderingCanvas = () => {
         },
       )}
     >
-      <AnimatePresence>{isShowcase && <ShowcaseHUD />}</AnimatePresence>
+      <AnimatePresence>
+        {isShowcase && <ShowcaseHUD planetRef={planetRef.current} />}
+      </AnimatePresence>
       <div className="mx-auto h-full w-[calc(100vw_-_26rem)] overflow-hidden">
         <Canvas className="cursor-grab active:cursor-grabbing">
-          <Scene />
+          <Scene ref={planetRef} />
         </Canvas>
       </div>
       <AnimatePresence>{!isShowcase && <EditorHUD />}</AnimatePresence>
