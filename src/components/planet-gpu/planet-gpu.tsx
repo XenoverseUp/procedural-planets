@@ -21,7 +21,6 @@ import {
   VECTOR_UP,
 } from "@/lib/vector";
 import { worldVariants } from "@/lib/animation-variants";
-import { exportMeshToOBJ } from "@/lib/export-mesh";
 
 const directions = [
   VECTOR_UP,

@@ -27,7 +27,7 @@ const RenderingCanvas = () => {
       )}
     >
       <AnimatePresence>
-        {isShowcase && <ShowcaseHUD planetRef={planetRef.current} />}
+        {isShowcase && <ShowcaseHUD planetRef={planetRef.current!} />}
       </AnimatePresence>
       <div className="mx-auto h-full w-[calc(100vw_-_26rem)] overflow-hidden">
         <Canvas className="cursor-grab active:cursor-grabbing">
