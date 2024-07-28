@@ -11,6 +11,7 @@ import { Mesh } from "three";
 import { exportGeometryToOBJ } from "@/lib/export-mesh";
 import Polaroid, { PolaroidImage } from "./polariod";
 import { polaroidContainerVariants } from "@/lib/animation-variants";
+import PolaroidStage from "./polaroid-stage";
 
 const ShowcaseHUD = ({ planetRef }: { planetRef: Mesh }) => {
   const planetName = useRef(generatePlanetName());
@@ -76,6 +77,7 @@ const ShowcaseHUD = ({ planetRef }: { planetRef: Mesh }) => {
         <PolaroidImage />
         <PolaroidImage />
       </Polaroid>
+      <PolaroidStage />
 
       {/* <div
         onClick={mergeAndExport}

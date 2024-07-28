@@ -3,6 +3,8 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 import img from "@/assets/img/ss.png";
 import { useState, cloneElement, Children, ReactElement } from "react";
 import cn from "@/lib/cn";
+import { useAtom } from "jotai";
+import { polaroidAtom } from "@/atoms/showcase";
 
 const Polaroid = ({ children }: { children: ReactElement[] }) => {
   const angle = useMotionValue(-5);
@@ -11,7 +13,7 @@ const Polaroid = ({ children }: { children: ReactElement[] }) => {
     damping: 20,
   });
 
-  const [selected, setSelected] = useState<number | null>(null);
+  const [hovered, setHovered] = useState<number | null>(null);
 
   return (
     <motion.div
@@ -30,7 +32,7 @@ const Polaroid = ({ children }: { children: ReactElement[] }) => {
         angle.set((progress - 1) * 10);
       }}
       onMouseLeave={() => angle.set(-5)}
-      className="fixed -bottom-5 right-10 z-30 flex origin-bottom rounded-t bg-blue-300 perspective-1600"
+      className="fixed -bottom-5 right-10 z-30 flex origin-bottom rounded-t bg-blue-300 shadow-2xl shadow-blue-300/50 perspective-1600"
     >
       <div
         aria-hidden
@@ -47,13 +49,13 @@ const Polaroid = ({ children }: { children: ReactElement[] }) => {
         {Children.map(children, (child, i) =>
           cloneElement(child, {
             i,
-            selected,
-            setSelected,
+            hovered,
+            setHovered,
           }),
         )}
         <div
           className={cn("h-12 w-full bg-black transition-opacity", {
-            "opacity-80": selected !== null,
+            "opacity-80": hovered !== null,
           })}
         ></div>
       </div>
@@ -74,29 +76,28 @@ const Polaroid = ({ children }: { children: ReactElement[] }) => {
 
 type PolaroidImageProps = {
   i?: number;
-  selected?: number;
-  setSelected?: (v: number | null) => void;
+  hovered?: number;
+  setHovered?: (v: number | null) => void;
 };
 
 export const PolaroidImage = ({
   i,
-  selected,
-  setSelected,
+  hovered,
+  setHovered,
 }: PolaroidImageProps) => {
+  const [polaroid, setPolaroid] = useAtom(polaroidAtom);
+
   return (
     <motion.div
       animate={
-        i === selected || selected === null ? { opacity: 1 } : { opacity: 0.8 }
+        i === hovered || hovered === null ? { opacity: 1 } : { opacity: 0.8 }
       }
-      className="group cursor-pointer space-y-1 rounded-md bg-neutral-800 shadow-lg"
+      className="size-32 cursor-pointer overflow-hidden rounded bg-neutral-800 shadow-lg"
+      onMouseOver={() => setHovered?.(i!)}
+      onMouseOut={() => setHovered?.(null)}
+      onClick={() => setPolaroid(`polaroid-${i}`)}
     >
-      <div
-        onMouseOver={() => setSelected?.(i!)}
-        onMouseOut={() => setSelected?.(null)}
-        className="size-32 overflow-hidden rounded bg-white/5"
-      >
-        <img src={img} className="object-cover" />
-      </div>
+      <img src={img} className="object-cover" />
     </motion.div>
   );
 };
