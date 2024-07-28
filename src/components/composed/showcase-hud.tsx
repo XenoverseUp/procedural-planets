@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { useRef } from "react";
 import { Mesh } from "three";
 import { exportGeometryToOBJ } from "@/lib/export-mesh";
-import Polaroid from "./polariod";
+import Polaroid, { PolaroidImage } from "./polariod";
 import { polaroidContainerVariants } from "@/lib/animation-variants";
 
 const ShowcaseHUD = ({ planetRef }: { planetRef: Mesh }) => {
@@ -71,29 +71,11 @@ const ShowcaseHUD = ({ planetRef }: { planetRef: Mesh }) => {
           {planetFact.current}
         </p>
       </motion.div>
-      <motion.div
-        variants={polaroidContainerVariants}
-        initial="initial"
-        animate="animate"
-        className="fixed -bottom-5 right-6 flex rounded-t bg-blue-300 perspective-1600"
-      >
-        <div className="flex flex-col justify-center gap-2 overflow-hidden px-1.5 py-1">
-          {new Array(23).fill(null).map(() => (
-            <span className="size-3 rounded bg-black" />
-          ))}
-        </div>
-        <div className="space-y-1 pb-2 pt-3">
-          <Polaroid i={0} />
-          <Polaroid i={1} />
-          <Polaroid i={2} />
-          <div className="h-8 w-full bg-black"></div>
-        </div>
-        <div className="flex flex-col justify-center gap-2 overflow-hidden px-1.5 py-1">
-          {new Array(23).fill(null).map(() => (
-            <span className="size-3 rounded bg-black" />
-          ))}
-        </div>
-      </motion.div>
+      <Polaroid>
+        <PolaroidImage />
+        <PolaroidImage />
+        <PolaroidImage />
+      </Polaroid>
 
       {/* <div
         onClick={mergeAndExport}

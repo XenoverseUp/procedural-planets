@@ -3,24 +3,17 @@ import { Variants } from "framer-motion";
 export const polaroidContainerVariants: Variants = {
   initial: {
     y: "100%",
+    x: 20,
   },
   animate: {
-    y: 1,
+    y: 10,
+    x: 0,
     transition: {
       delay: 1,
       type: "spring",
       stiffness: 100,
       damping: 20,
     },
-  },
-};
-
-export const polaroidVariants: Variants = {
-  initial: {
-    scale: 0,
-  },
-  animate: {
-    scale: 1,
   },
 };
 
