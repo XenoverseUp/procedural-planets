@@ -31,9 +31,7 @@ const VectorValue = ({
             step={step}
             onFocus={(e) => e.target.select()}
             onChange={(e) => {
-              const currentValue = parseFloat(
-                e.target.value || defaultValue.toString(),
-              );
+              const currentValue = parseFloat(e.target.value);
 
               onValueChange?.(new Vector3(currentValue, value.y, value.z));
 
@@ -51,9 +49,7 @@ const VectorValue = ({
             step={step}
             onFocus={(e) => e.target.select()}
             onChange={(e) => {
-              const currentValue = parseFloat(
-                e.target.value || defaultValue.toString(),
-              );
+              const currentValue = parseFloat(e.target.value);
 
               onValueChange?.(new Vector3(value.x, currentValue, value.z));
 
@@ -71,9 +67,7 @@ const VectorValue = ({
             step={step}
             onFocus={(e) => e.target.select()}
             onChange={(e) => {
-              const currentValue = parseFloat(
-                e.target.value || defaultValue.toString(),
-              );
+              const currentValue = parseFloat(e.target.value);
 
               onValueChange?.(new Vector3(value.x, value.y, currentValue));
 

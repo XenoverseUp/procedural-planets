@@ -20,7 +20,7 @@ import {
   elevationGradientAtom,
   noiseFiltersAtom,
 } from "@/atoms/settings";
-import MeshGenerator from "@/components/planet/mesh-generation";
+import MeshGenerator from "@/components/planet-cpu/mesh-generation";
 
 import { maximumAtom, minimumAtom } from "@/atoms/minMax";
 import { extend, useFrame, useThree } from "@react-three/fiber";
