@@ -6,16 +6,22 @@ import {
   generatePlanetName,
 } from "@/lib/generate-planet-name";
 import { motion } from "framer-motion";
-import { useRef } from "react";
-import { Mesh } from "three";
+import { useEffect, useRef, useState } from "react";
+import { Mesh, Vector3 } from "three";
 import { exportGeometryToOBJ } from "@/lib/export-mesh";
 import Polaroid, { PolaroidImage } from "./polariod";
 import { polaroidContainerVariants } from "@/lib/animation-variants";
 import PolaroidStage from "./polaroid-stage";
 
-const ShowcaseHUD = ({ planetRef }: { planetRef: Mesh }) => {
+type ShowcaseHUDProps = {
+  capture: ((position?: Vector3 | undefined) => Promise<string>) | undefined;
+  planetRef: Mesh;
+};
+
+const ShowcaseHUD = ({ planetRef, capture }: ShowcaseHUDProps) => {
   const planetName = useRef(generatePlanetName());
   const planetFact = useRef(generatePlanetFact(planetName.current));
+  const [images, setImages] = useState<string[]>([]);
 
   const mergeAndExport = () => {
     if (!planetRef) return;
@@ -27,6 +33,13 @@ const ShowcaseHUD = ({ planetRef }: { planetRef: Mesh }) => {
 
     exportGeometryToOBJ(mergedGeometry);
   };
+
+  useEffect(() => {
+    (async () => {
+      const img: string = (await capture?.()) ?? "";
+      setImages([img, img, img]);
+    })();
+  }, []);
 
   return (
     <>
@@ -73,9 +86,9 @@ const ShowcaseHUD = ({ planetRef }: { planetRef: Mesh }) => {
         </p>
       </motion.div>
       <Polaroid>
-        <PolaroidImage />
-        <PolaroidImage />
-        <PolaroidImage />
+        <PolaroidImage src={images.at(0) as string} />
+        <PolaroidImage src={images.at(0) as string} />
+        <PolaroidImage src={images.at(0) as string} />
       </Polaroid>
       <PolaroidStage />
 

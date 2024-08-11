@@ -1,5 +1,22 @@
 import { Variants } from "framer-motion";
 
+export const showcasePolaroidVariants: Variants = {
+  initial: {
+    y: 50,
+    scale: 0.8,
+    opacity: 0,
+  },
+  animate: {
+    y: 0,
+    scale: 1,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      bounce: 0.5,
+    },
+  },
+};
+
 export const overlayVariants: Variants = {
   initial: {
     opacity: 0,

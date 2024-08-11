@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useAtom, useSetAtom } from "jotai";
 import { isWireframeAtom, rendersGlobeAtom } from "@/atoms/settings";
 import { isShowcaseAtom } from "@/atoms/showcase";
+import { Vector3 } from "three";
 
 const EditorHUD = () => {
   const [isShowcase, setIsShowcase] = useAtom(isShowcaseAtom);

@@ -36,7 +36,7 @@ const Sidebar = () => {
         <header className="border-b px-4 py-3">
           <h2 className="flex items-center gap-2 text-sm font-medium">
             <MixerHorizontalIcon />
-            <span>Control Panel</span>
+            <span>Control Panel </span>
           </h2>
         </header>
         <div className="space-y-8 overflow-y-auto overflow-x-hidden p-4 pb-8">

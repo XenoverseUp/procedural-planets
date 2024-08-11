@@ -6,6 +6,9 @@ import { isShowcaseAtom } from "@/atoms/showcase";
 import { useAtomValue } from "jotai";
 import Atmosphere from "../atmosphere/atmosphere";
 
+import { useRef } from "react";
+import { useEffect } from "react";
+
 const Renderer = forwardRef((_, ref) => {
   const isShowcase = useAtomValue(isShowcaseAtom);
 
@@ -14,17 +17,19 @@ const Renderer = forwardRef((_, ref) => {
       <Lights />
       <PlanetGPU ref={ref} showcase={isShowcase} />
       {isShowcase && <Atmosphere />}
-      <StatsGl
-        {...{
-          logsPerSecond: 15,
-          samplesLog: 100,
-          samplesGraph: 10,
-          precision: 2,
-          horizontal: true,
-          minimal: false,
-          mode: 0,
-        }}
-      />
+      {
+        //  <StatsGl
+        //   {...{
+        //     logsPerSecond: 15,
+        //     samplesLog: 100,
+        //     samplesGraph: 10,
+        //     precision: 2,
+        //     horizontal: true,
+        //     minimal: false,
+        //     mode: 0,
+        //   }}
+        // />
+      }
     </>
   );
 });

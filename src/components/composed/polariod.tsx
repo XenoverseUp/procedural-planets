@@ -1,6 +1,5 @@
 import { polaroidContainerVariants } from "@/lib/animation-variants";
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import img from "@/assets/img/ss.png";
 import { useState, cloneElement, Children, ReactElement } from "react";
 import cn from "@/lib/cn";
 import { useAtom } from "jotai";
@@ -78,12 +77,14 @@ type PolaroidImageProps = {
   i?: number;
   hovered?: number;
   setHovered?: (v: number | null) => void;
+  src: string;
 };
 
 export const PolaroidImage = ({
   i,
   hovered,
   setHovered,
+  src,
 }: PolaroidImageProps) => {
   const [polaroid, setPolaroid] = useAtom(polaroidAtom);
 
@@ -92,12 +93,18 @@ export const PolaroidImage = ({
       animate={
         i === hovered || hovered === null ? { opacity: 1 } : { opacity: 0.8 }
       }
-      className="size-32 cursor-pointer overflow-hidden rounded bg-neutral-800 shadow-lg"
+      className="relative size-32 cursor-pointer overflow-hidden rounded bg-black shadow-lg"
       onMouseOver={() => setHovered?.(i!)}
       onMouseOut={() => setHovered?.(null)}
       onClick={() => setPolaroid(`polaroid-${i}`)}
     >
-      <img src={img} className="object-cover" />
+      <span
+        aria-hidden
+        className="absolute left-2 top-2 text-xs text-blue-200 opacity-40"
+      >
+        0{i}
+      </span>
+      <img src={src} className="h-full w-full object-cover" />
     </motion.div>
   );
 };
