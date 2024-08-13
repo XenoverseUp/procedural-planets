@@ -14,7 +14,10 @@ import { polaroidContainerVariants } from "@/lib/animation-variants";
 import PolaroidStage from "./polaroid-stage";
 
 type ShowcaseHUDProps = {
-  capture: ((position?: Vector3 | undefined) => Promise<string>) | undefined;
+  capture: (
+    position?: Vector3,
+    lookAt?: Vector3,
+  ) => Promise<string> | undefined;
   planetRef: Mesh;
 };
 
@@ -36,8 +39,12 @@ const ShowcaseHUD = ({ planetRef, capture }: ShowcaseHUDProps) => {
 
   useEffect(() => {
     (async () => {
-      const img: string = (await capture?.()) ?? "";
-      setImages([img, img, img]);
+      const images = await Promise.all([
+        capture?.(new Vector3(2.5, 2.5, 2.5)) ?? "",
+        capture?.(new Vector3(-1.5, 2, 2), new Vector3(3, 0, 0)) ?? "",
+        capture?.(new Vector3(2, -1, 2), new Vector3(0, 2.5, 0)) ?? "",
+      ]);
+      setImages(images);
     })();
   }, []);
 
@@ -85,19 +92,21 @@ const ShowcaseHUD = ({ planetRef, capture }: ShowcaseHUDProps) => {
           {planetFact.current}
         </p>
       </motion.div>
+
       <Polaroid>
         <PolaroidImage src={images.at(0) as string} />
-        <PolaroidImage src={images.at(0) as string} />
-        <PolaroidImage src={images.at(0) as string} />
+        <PolaroidImage src={images.at(1) as string} />
+        <PolaroidImage src={images.at(2) as string} />
       </Polaroid>
-      <PolaroidStage />
 
-      {/* <div
+      <PolaroidStage planetName={planetName.current} images={images} />
+
+      <div
         onClick={mergeAndExport}
         className="fixed bottom-2 left-2 z-30 flex h-8 cursor-pointer items-center justify-center rounded bg-neutral-800 px-4 text-white"
       >
         Download
-      </div> */}
+      </div>
     </>
   );
 };

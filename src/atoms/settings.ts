@@ -25,11 +25,7 @@ export const depthGradientAtom = atom<GradientStop[]>([
 
 export const elevationGradientAtom = atom<GradientStop[]>([
   new GradientStop({
-    anchor: 0,
-    color: new Vector4(0.15, 0.55, 1, 1),
-  }),
-  new GradientStop({
-    anchor: 0.06,
+    anchor: 0.0,
     color: new Vector4(0.639, 0.678, 0.237, 1),
   }),
   new GradientStop({

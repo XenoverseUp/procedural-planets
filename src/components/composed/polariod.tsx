@@ -4,6 +4,8 @@ import { useState, cloneElement, Children, ReactElement } from "react";
 import cn from "@/lib/cn";
 import { useAtom } from "jotai";
 import { polaroidAtom } from "@/atoms/showcase";
+import starfield from "@/assets/img/starfield.png";
+import pad from "@/lib/pad";
 
 const Polaroid = ({ children }: { children: ReactElement[] }) => {
   const angle = useMotionValue(-5);
@@ -81,12 +83,12 @@ type PolaroidImageProps = {
 };
 
 export const PolaroidImage = ({
-  i,
+  i = 0,
   hovered,
   setHovered,
   src,
 }: PolaroidImageProps) => {
-  const [polaroid, setPolaroid] = useAtom(polaroidAtom);
+  const [_, setPolaroid] = useAtom(polaroidAtom);
 
   return (
     <motion.div
@@ -96,15 +98,23 @@ export const PolaroidImage = ({
       className="relative size-32 cursor-pointer overflow-hidden rounded bg-black shadow-lg"
       onMouseOver={() => setHovered?.(i!)}
       onMouseOut={() => setHovered?.(null)}
-      onClick={() => setPolaroid(`polaroid-${i}`)}
+      onClick={() => setPolaroid(i)}
     >
+      <img
+        src={starfield}
+        className="absolute inset-0 h-full w-full object-cover"
+      />
       <span
         aria-hidden
-        className="absolute left-2 top-2 text-xs text-blue-200 opacity-40"
+        className="absolute left-2 top-2 text-xs font-medium text-blue-200 opacity-40"
       >
-        0{i}
+        {pad(i, "0", 2)}
       </span>
-      <img src={src} className="h-full w-full object-cover" />
+      <img
+        src={src}
+        className="absolute inset-0 h-full w-full object-cover opacity-60 blur-lg"
+      />
+      <img src={src} className="absolute inset-0 h-full w-full object-cover" />
     </motion.div>
   );
 };

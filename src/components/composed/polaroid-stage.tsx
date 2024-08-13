@@ -13,9 +13,21 @@ import {
 import { useAtom } from "jotai";
 import { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import starfield from "@/assets/img/starfield.png";
+import paper from "@/assets/img/paper.jpg";
+import { Cross2Icon, Share1Icon, Share2Icon } from "@radix-ui/react-icons";
+import pad from "@/lib/pad";
 
-const PolaroidStage = () => {
+const PolaroidStage = ({
+  images,
+  planetName,
+}: {
+  images: string[];
+  planetName: string;
+}) => {
   const [polaroid, setPolaroid] = useAtom(polaroidAtom);
+  const time = useRef(new Date()).current;
+  const distance = useRef(Math.floor(Math.random() * 27 + 1)).current;
 
   return createPortal(
     <AnimatePresence>
@@ -26,9 +38,22 @@ const PolaroidStage = () => {
           animate="animate"
           exit="exit"
           onClick={() => setPolaroid(null)}
-          className="fixed inset-0 z-40 grid place-items-center bg-black/50 backdrop-blur-3xl"
+          className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-6 bg-black/50 backdrop-blur-3xl"
         >
-          <Polaroid />
+          <Polaroid
+            {...{ time, distance }}
+            name={planetName}
+            src={images.at(polaroid) as string}
+          />
+          <div className="-z-10 flex items-center justify-center gap-2">
+            <button className="flex h-8 items-center gap-2 rounded-full border border-white/40 bg-black/40 px-3 text-sm font-light text-white opacity-80 transition-transform hover:scale-105 hover:bg-white/10">
+              <Share2Icon />
+              Share
+            </button>
+            <button className="grid size-8 place-items-center rounded-full border border-white/40 bg-black/40 font-medium text-white transition-transform hover:scale-105 hover:bg-white/10">
+              <Cross2Icon />
+            </button>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>,
@@ -36,74 +61,53 @@ const PolaroidStage = () => {
   );
 };
 
-const Polaroid = () => {
-  const [hover, setHover] = useState(false);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const mouseXSpring = useSpring(mouseX, { stiffness: 100, damping: 20 });
-  const mouseYSpring = useSpring(mouseY, { stiffness: 100, damping: 20 });
-
-  const card = useRef<HTMLDivElement>(null);
-
-  const onMouseMove: MouseEventHandler<HTMLDivElement> = (e) => {
-    if (!card.current) return;
-
-    const rect = card.current.getBoundingClientRect();
-
-    const progressX = e.clientX - rect.left - 32;
-    const progressY = e.clientY - rect.top - 32;
-    mouseX.set(progressX);
-    mouseY.set(progressY);
-  };
-
-  useEffect(() => {
-    // @ts-ignore
-    document.addEventListener("pointermove", onMouseMove);
-
-    return () => {
-      // @ts-ignore
-      document.removeEventListener("pointermove", onMouseMove);
-    };
-  }, []);
-
+const Polaroid = ({
+  src,
+  name,
+  time,
+  distance,
+}: {
+  src: string;
+  name: string;
+  time: Date;
+  distance: number;
+}) => {
   return (
     <motion.div
-      ref={card}
       variants={showcasePolaroidVariants}
       initial="initial"
       animate="animate"
-      onPointerEnter={() => setHover(true)}
-      onPointerLeave={() => setHover(false)}
       onClick={(e) => e.stopPropagation()}
-      className="relative cursor-none rounded bg-black p-4"
+      className="relative isolate bg-blue-100 p-4"
     >
-      <AnimatePresence>
-        {hover && (
-          <motion.button
-            style={{
-              x: mouseX,
-              y: mouseY,
-            }}
-            initial={{
-              scale: 0.6,
-              opacity: 0,
-            }}
-            animate={{
-              scale: 1,
-              opacity: 1,
-            }}
-            exit={{
-              scale: 0,
-              opacity: 0,
-            }}
-            className="pointer-events-none absolute left-0 top-0 size-16 rounded-full bg-white"
-          >
-            share
-          </motion.button>
-        )}
-      </AnimatePresence>
-      <div className="size-72 bg-neutral-900"></div>
-      <header className="h-20"></header>
+      <div className="relative size-72 overflow-hidden bg-black">
+        <img
+          src={starfield}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <img
+          {...{ src }}
+          alt="planet landscape"
+          className="absolute inset-0 h-full w-full object-cover opacity-60 blur-2xl saturate-200"
+        />
+        <img
+          {...{ src }}
+          alt="planet landscape"
+          className="absolute inset-0 h-full w-full object-cover shadow-inner"
+        />
+      </div>
+      <header className="flex justify-between px-1 pt-2">
+        <div>
+          <h3 className="text-xl font-medium">{name}</h3>
+          <p className="text-sm opacity-80">
+            <span className="font-medium">{distance} million</span> light years
+            away
+          </p>
+        </div>
+        <span className="mr-1 mt-1 text-xs opacity-50">
+          {pad(time.getHours(), "0", 2)}:{pad(time.getMinutes(), "0", 2)}
+        </span>
+      </header>
     </motion.div>
   );
 };

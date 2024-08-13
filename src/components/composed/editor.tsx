@@ -29,7 +29,7 @@ const Editor = () => {
       <AnimatePresence>
         {isShowcase && (
           <ShowcaseHUD
-            capture={captureRef.current?.capture}
+            capture={captureRef.current?.capture!}
             planetRef={planetRef.current!}
           />
         )}
