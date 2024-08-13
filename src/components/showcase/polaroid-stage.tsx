@@ -47,12 +47,12 @@ const PolaroidStage = ({
               onClick={(e) => {
                 e.stopPropagation();
               }}
-              className="flex h-8 items-center gap-2 rounded-full border border-white/40 bg-black/40 px-3 text-sm font-light text-white opacity-80 hover:bg-white/10"
+              className="flex h-8 items-center gap-2 rounded-full border border-white/40 bg-black/40 px-3 text-sm font-light text-white opacity-80 hover:bg-white/10 active:bg-white/15"
             >
               <DownloadIcon />
               Get Polaroid
             </button>
-            <button className="grid size-8 place-items-center rounded-full border border-white/40 bg-black/40 font-medium text-white hover:bg-white/10">
+            <button className="grid size-8 place-items-center rounded-full border border-white/40 bg-black/40 font-medium text-white hover:bg-white/10 active:bg-white/15">
               <Cross2Icon />
             </button>
           </motion.div>
