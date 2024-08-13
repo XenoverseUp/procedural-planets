@@ -1,9 +1,9 @@
-import Sidebar from "@/components/composed/sidebar";
+import Sidebar from "@/components/ui/sidebar";
 import { AnimatePresence } from "framer-motion";
 import cn from "@/lib/cn";
 import { useAtomValue } from "jotai";
 import { isShowcaseAtom } from "@/atoms/showcase";
-import Editor from "@/components/composed/editor";
+import Editor from "@/components/editor/editor";
 
 function App() {
   const isShowcase = useAtomValue(isShowcaseAtom);

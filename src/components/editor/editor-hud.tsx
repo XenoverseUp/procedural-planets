@@ -1,11 +1,9 @@
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
-import { AnimatePresence } from "framer-motion";
-import Toolbar from "./toolbar";
 import { motion } from "framer-motion";
 import { useAtom, useSetAtom } from "jotai";
 import { isWireframeAtom, rendersGlobeAtom } from "@/atoms/settings";
 import { isShowcaseAtom } from "@/atoms/showcase";
-import { Vector3 } from "three";
+import Toolbar from "@/components/editor/toolbar";
 
 const EditorHUD = () => {
   const [isShowcase, setIsShowcase] = useAtom(isShowcaseAtom);

@@ -9,9 +9,12 @@ import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { Mesh, Vector3 } from "three";
 import { exportGeometryToOBJ } from "@/lib/export-mesh";
-import Polaroid, { PolaroidImage } from "./polariod";
-import { polaroidContainerVariants } from "@/lib/animation-variants";
-import PolaroidStage from "./polaroid-stage";
+
+import Film, { FilmImage } from "@/components/showcase/film";
+import PolaroidStage from "@/components/showcase/polaroid-stage";
+import { showcaseTitleVariants } from "@/lib/animation-variants";
+import { useSetAtom } from "jotai";
+import { isShowcaseAtom, polaroidAtom } from "@/atoms/showcase";
 
 type ShowcaseHUDProps = {
   capture: (
@@ -24,6 +27,7 @@ type ShowcaseHUDProps = {
 const ShowcaseHUD = ({ planetRef, capture }: ShowcaseHUDProps) => {
   const planetName = useRef(generatePlanetName());
   const planetFact = useRef(generatePlanetFact(planetName.current));
+  const setPolaroid = useSetAtom(polaroidAtom);
   const [images, setImages] = useState<string[]>([]);
 
   const mergeAndExport = () => {
@@ -37,37 +41,31 @@ const ShowcaseHUD = ({ planetRef, capture }: ShowcaseHUDProps) => {
     exportGeometryToOBJ(mergedGeometry);
   };
 
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Escape") setPolaroid(null);
+  };
+
   useEffect(() => {
     (async () => {
       const images = await Promise.all([
         capture?.(new Vector3(2.5, 2.5, 2.5)) ?? "",
         capture?.(new Vector3(-1.5, 2, 2), new Vector3(3, 0, 0)) ?? "",
-        capture?.(new Vector3(2, -1, 2), new Vector3(0, 2.5, 0)) ?? "",
+        capture?.(new Vector3(2, -1, 1.5), new Vector3(0, 2.5, 0)) ?? "",
       ]);
       setImages(images);
     })();
+
+    document.addEventListener("keyup", onKeyDown);
+
+    return () => document.removeEventListener("keyup", onKeyDown);
   }, []);
 
   return (
     <>
       <motion.h1
-        initial={{
-          opacity: 0,
-          y: -30,
-          scale: 0.9,
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-          scale: 1,
-
-          transition: {
-            type: "spring",
-            bounce: 0.25,
-            duration: 1.5,
-            delay: 0.5,
-          },
-        }}
+        variants={showcaseTitleVariants}
+        initial="initial"
+        animate="animate"
         className={cn(
           "fixed left-0 right-0 top-28 mx-auto inline-block h-32 w-fit text-center font-sud text-8xl text-blue-200",
         )}
@@ -93,11 +91,11 @@ const ShowcaseHUD = ({ planetRef, capture }: ShowcaseHUDProps) => {
         </p>
       </motion.div>
 
-      <Polaroid>
-        <PolaroidImage src={images.at(0) as string} />
-        <PolaroidImage src={images.at(1) as string} />
-        <PolaroidImage src={images.at(2) as string} />
-      </Polaroid>
+      <Film>
+        <FilmImage src={images.at(0) as string} />
+        <FilmImage src={images.at(1) as string} />
+        <FilmImage src={images.at(2) as string} />
+      </Film>
 
       <PolaroidStage planetName={planetName.current} images={images} />
 

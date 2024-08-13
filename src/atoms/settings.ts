@@ -11,6 +11,7 @@ export const isBlendAtom = atom(true);
 
 export const isWireframeAtom = atom(false);
 export const rendersGlobeAtom = atom(true);
+export const showsPerformanceAtom = atom(false);
 
 export const depthGradientAtom = atom<GradientStop[]>([
   new GradientStop({

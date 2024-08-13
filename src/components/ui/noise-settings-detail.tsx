@@ -7,8 +7,6 @@ import {
   CrumpledPaperIcon,
   LayersIcon,
   MaskOffIcon,
-  MaskOnIcon,
-  ResetIcon,
   ShadowIcon,
   TargetIcon,
   TextAlignBottomIcon,
@@ -16,12 +14,11 @@ import {
 import { useAtom } from "jotai";
 import { noiseFiltersAtom } from "@/atoms/settings";
 import NumericValue from "@/components/ui/numeric-value";
-import VectorValue from "../ui/vector-value";
+import VectorValue from "@/components/ui/vector-value";
 import { Vector3 } from "three";
 import cn from "@/lib/cn";
 import { RidgidNoiseFilter, SimpleNoiseFilter } from "@/lib/noise";
-import { VECTOR_ZERO } from "@/lib/vector";
-import ToggleValue from "../ui/toggle-value";
+import ToggleValue from "@/components/ui/toggle-value";
 
 type NoiseLayerDetailProps = {
   title: string;

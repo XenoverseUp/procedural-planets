@@ -7,7 +7,7 @@ import { polaroidAtom } from "@/atoms/showcase";
 import starfield from "@/assets/img/starfield.png";
 import pad from "@/lib/pad";
 
-const Polaroid = ({ children }: { children: ReactElement[] }) => {
+const Film = ({ children }: { children: ReactElement[] }) => {
   const angle = useMotionValue(-5);
   const angleSpring = useSpring(angle, {
     stiffness: 100,
@@ -75,19 +75,19 @@ const Polaroid = ({ children }: { children: ReactElement[] }) => {
   );
 };
 
-type PolaroidImageProps = {
+type FilmImageProps = {
   i?: number;
   hovered?: number;
   setHovered?: (v: number | null) => void;
   src: string;
 };
 
-export const PolaroidImage = ({
+export const FilmImage = ({
   i = 0,
   hovered,
   setHovered,
   src,
-}: PolaroidImageProps) => {
+}: FilmImageProps) => {
   const [_, setPolaroid] = useAtom(polaroidAtom);
 
   return (
@@ -108,7 +108,7 @@ export const PolaroidImage = ({
         aria-hidden
         className="absolute left-2 top-2 text-xs font-medium text-blue-200 opacity-40"
       >
-        {pad(i, "0", 2)}
+        #{i}
       </span>
       <img
         src={src}
@@ -119,4 +119,4 @@ export const PolaroidImage = ({
   );
 };
 
-export default Polaroid;
+export default Film;

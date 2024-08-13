@@ -3,19 +3,12 @@ import {
   overlayVariants,
   showcasePolaroidVariants,
 } from "@/lib/animation-variants";
-import {
-  motion,
-  animate,
-  AnimatePresence,
-  useMotionValue,
-  useSpring,
-} from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAtom } from "jotai";
-import { MouseEventHandler, useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { createPortal } from "react-dom";
 import starfield from "@/assets/img/starfield.png";
-import paper from "@/assets/img/paper.jpg";
-import { Cross2Icon, Share1Icon, Share2Icon } from "@radix-ui/react-icons";
+import { Cross2Icon, DownloadIcon } from "@radix-ui/react-icons";
 import pad from "@/lib/pad";
 
 const PolaroidStage = ({
@@ -44,16 +37,20 @@ const PolaroidStage = ({
             {...{ time, distance }}
             name={planetName}
             src={images.at(polaroid) as string}
+            id={polaroid}
           />
-          <div className="-z-10 flex items-center justify-center gap-2">
+          <motion.div
+            animate={{ opacity: 1, transition: { delay: 0.5 } }}
+            className="-z-10 flex items-center justify-center gap-2 opacity-0"
+          >
             <button className="flex h-8 items-center gap-2 rounded-full border border-white/40 bg-black/40 px-3 text-sm font-light text-white opacity-80 transition-transform hover:scale-105 hover:bg-white/10">
-              <Share2Icon />
-              Share
+              <DownloadIcon />
+              Get Polaroid
             </button>
             <button className="grid size-8 place-items-center rounded-full border border-white/40 bg-black/40 font-medium text-white transition-transform hover:scale-105 hover:bg-white/10">
               <Cross2Icon />
             </button>
-          </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>,
@@ -66,11 +63,13 @@ const Polaroid = ({
   name,
   time,
   distance,
+  id,
 }: {
   src: string;
   name: string;
   time: Date;
   distance: number;
+  id: number;
 }) => {
   return (
     <motion.div
@@ -78,9 +77,9 @@ const Polaroid = ({
       initial="initial"
       animate="animate"
       onClick={(e) => e.stopPropagation()}
-      className="relative isolate bg-blue-100 p-4"
+      className="relative isolate bg-blue-100 p-5"
     >
-      <div className="relative size-72 overflow-hidden bg-black">
+      <div className="relative size-96 overflow-hidden bg-black">
         <img
           src={starfield}
           className="absolute inset-0 h-full w-full object-cover"
@@ -95,16 +94,22 @@ const Polaroid = ({
           alt="planet landscape"
           className="absolute inset-0 h-full w-full object-cover shadow-inner"
         />
+        <span
+          aria-hidden
+          className="absolute left-4 top-3 font-medium text-blue-200 opacity-40"
+        >
+          #{id}
+        </span>
       </div>
-      <header className="flex justify-between px-1 pt-2">
+      <header className="flex justify-between px-2 pb-2 pt-4">
         <div>
-          <h3 className="text-xl font-medium">{name}</h3>
-          <p className="text-sm opacity-80">
+          <h3 className="text-2xl font-medium">{name}</h3>
+          <p className="opacity-70">
             <span className="font-medium">{distance} million</span> light years
             away
           </p>
         </div>
-        <span className="mr-1 mt-1 text-xs opacity-50">
+        <span className="mr-1 mt-1 text-sm opacity-50">
           {pad(time.getHours(), "0", 2)}:{pad(time.getMinutes(), "0", 2)}
         </span>
       </header>

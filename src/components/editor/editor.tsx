@@ -1,21 +1,22 @@
 import cn from "@/lib/cn";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { Canvas } from "@react-three/fiber";
-import Renderer from "./renderer";
 import { useAtomValue } from "jotai";
 import { isShowcaseAtom } from "@/atoms/showcase";
-import EditorHUD from "./editor-hud";
-import { useEffect, useRef } from "react";
-
-import ShowcaseHUD from "./showcase-hud";
-import { Mesh, Vector3 } from "three";
-import { useState } from "react";
+import { useRef } from "react";
+import { Mesh } from "three";
+import { Perf } from "r3f-perf";
 import Capture, { CaptureRef } from "../util/capture";
+import ShowcaseHUD from "@/components/showcase/showcase-hud";
+import Renderer from "@/components/editor/renderer";
+import EditorHUD from "@/components/editor/editor-hud";
+import { showsPerformanceAtom } from "@/atoms/settings";
 
 const Editor = () => {
   const isShowcase = useAtomValue(isShowcaseAtom);
   const planetRef = useRef<Mesh>(null);
   const captureRef = useRef<CaptureRef>(null);
+  const showsPerformance = useAtomValue(showsPerformanceAtom);
 
   return (
     <div
@@ -38,6 +39,7 @@ const Editor = () => {
         <Canvas className="cursor-grab active:cursor-grabbing">
           <Renderer ref={planetRef} />
           <Capture ref={captureRef} />
+          {showsPerformance && <Perf position="top-left" />}
         </Canvas>
       </div>
       <AnimatePresence>{!isShowcase && <EditorHUD />}</AnimatePresence>

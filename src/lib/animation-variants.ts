@@ -1,9 +1,29 @@
 import { Variants } from "framer-motion";
 
+export const showcaseTitleVariants: Variants = {
+  initial: {
+    opacity: 0,
+    y: -30,
+    scale: 0.9,
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+
+    transition: {
+      type: "spring",
+      bounce: 0.25,
+      duration: 1.5,
+      delay: 0.5,
+    },
+  },
+};
+
 export const showcasePolaroidVariants: Variants = {
   initial: {
     y: 50,
-    scale: 0.8,
+    scale: 1,
     opacity: 0,
   },
   animate: {
@@ -12,7 +32,7 @@ export const showcasePolaroidVariants: Variants = {
     opacity: 1,
     transition: {
       type: "spring",
-      bounce: 0.5,
+      bounce: 0.4,
     },
   },
 };

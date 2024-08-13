@@ -3,15 +3,14 @@ import {
   elevationGradientAtom,
   meshResolutionAtom,
   noiseFiltersAtom,
-  planetRadiusAtom,
 } from "@/atoms/settings";
-import NoiseSettingsDetail from "@/components/composed/noise-settings-detail";
+import NoiseSettingsDetail from "@/components/ui/noise-settings-detail";
 import GradientInput from "@/components/ui/gradient-input";
 import SliderInput from "@/components/ui/slider-input";
 import StepInput from "@/components/ui/step-input";
 import { SimpleNoiseFilter } from "@/lib/noise";
 import { VECTOR_ZERO } from "@/lib/vector";
-import { MixerHorizontalIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
+import { MixerHorizontalIcon } from "@radix-ui/react-icons";
 import { useAtom } from "jotai";
 import { motion } from "framer-motion";
 
