@@ -10,7 +10,12 @@ import SliderInput from "@/components/ui/slider-input";
 import StepInput from "@/components/ui/step-input";
 import { SimpleNoiseFilter } from "@/lib/noise";
 import { VECTOR_ZERO } from "@/lib/vector";
-import { MixerHorizontalIcon } from "@radix-ui/react-icons";
+import {
+  BookmarkFilledIcon,
+  GitHubLogoIcon,
+  MixerHorizontalIcon,
+  ReaderIcon,
+} from "@radix-ui/react-icons";
 import { useAtom } from "jotai";
 import { motion } from "framer-motion";
 
@@ -32,11 +37,19 @@ const Sidebar = () => {
       className="flex-shrink-0 overflow-hidden"
     >
       <aside className="mr-2 flex h-full w-96 flex-col overflow-hidden rounded-lg bg-white">
-        <header className="border-b px-4 py-3">
+        <header className="flex items-center justify-between border-b px-4 py-3">
           <h2 className="flex items-center gap-2 text-sm font-medium">
             <MixerHorizontalIcon />
             <span>Control Panel </span>
           </h2>
+
+          <a
+            className="rounded-full bg-transparent p-2 transition-colors hover:bg-neutral-100 active:bg-neutral-200 active:transition-none"
+            href="https://github.com/XenoverseUp/procedural-planets"
+            target="_blank"
+          >
+            <GitHubLogoIcon />
+          </a>
         </header>
         <div className="space-y-8 overflow-y-auto overflow-x-hidden p-4 pb-8">
           <SliderInput
