@@ -18,8 +18,10 @@
     "@react-three/drei": "^9.108.1",
     "@react-three/fiber": "^8.16.8",
     "clsx": "^2.1.1",
+    "dom-to-image": "^2.6.0",
     "framer-motion": "^11.3.8",
     "framer-motion-3d": "^11.2.0",
+    "html2canvas": "^1.4.1",
     "jotai": "^2.8.4",
     "react": "^18.2.0",
     "react-colorful": "^5.6.1",
@@ -32,6 +34,7 @@
     "three-custom-shader-material": "^5.4.0"
   },
   "devDependencies": {
+    "@types/dom-to-image": "^2.6.7",
     "@types/node": "^20.14.9",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
