@@ -15,6 +15,7 @@ import PolaroidStage from "@/components/showcase/polaroid-stage";
 import { showcaseTitleVariants } from "@/lib/animation-variants";
 import { useSetAtom } from "jotai";
 import { isShowcaseAtom, polaroidAtom } from "@/atoms/showcase";
+import { DownloadIcon } from "@radix-ui/react-icons";
 
 type ShowcaseHUDProps = {
   capture: (
@@ -99,12 +100,13 @@ const ShowcaseHUD = ({ planetRef, capture }: ShowcaseHUDProps) => {
 
       <PolaroidStage planetName={planetName.current} images={images} />
 
-      <div
+      <button
         onClick={mergeAndExport}
-        className="fixed bottom-2 left-2 z-30 flex h-8 cursor-pointer items-center justify-center rounded bg-neutral-800 px-4 text-white"
+        className="fixed bottom-4 left-4 flex h-8 items-center justify-center gap-2 rounded-full border border-white/40 bg-black/40 px-3 text-sm font-light text-white opacity-80 backdrop-blur hover:bg-white/10 active:bg-white/15"
       >
+        <DownloadIcon />
         Download
-      </div>
+      </button>
     </>
   );
 };

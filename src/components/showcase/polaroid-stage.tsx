@@ -36,7 +36,7 @@ const PolaroidStage = ({
           animate="animate"
           exit="exit"
           onClick={() => setPolaroid(null)}
-          className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-6 bg-black/50 backdrop-blur-3xl"
+          className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-6 bg-black/50 backdrop-blur-xl"
         >
           <Polaroid
             {...{ time, distance }}
@@ -47,7 +47,7 @@ const PolaroidStage = ({
           />
           <motion.div
             animate={{ opacity: 1, transition: { delay: 0.4 } }}
-            className="-z-10 flex items-center justify-center gap-2 opacity-0"
+            className="-z-10 flex items-center justify-center gap-2 rounded-full opacity-0"
           >
             <button
               onClick={async (e) => {

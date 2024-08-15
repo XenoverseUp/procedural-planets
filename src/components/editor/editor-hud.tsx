@@ -26,10 +26,10 @@ const EditorHUD = () => {
           setIsWireframe(false);
           setRendersGlobe(true);
         }}
-        className="absolute bottom-4 right-4 flex items-center gap-1 rounded-full bg-blue-200 px-4 py-1 text-sm text-blue-900 hover:brightness-95"
+        className="absolute bottom-4 right-4 flex h-8 items-center gap-2 rounded-full border border-blue-300 bg-blue-100/60 px-4 text-sm text-sky-700 backdrop-blur hover:bg-blue-100"
       >
-        <span>Finish</span>
         <PaperPlaneIcon />
+        <span>Finish</span>
       </motion.button>
     </>
   );
