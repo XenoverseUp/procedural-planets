@@ -55,10 +55,19 @@ const Film = ({ children }: { children: ReactElement[] }) => {
           }),
         )}
         <div
-          className={cn("h-12 w-full bg-black transition-opacity", {
-            "opacity-80": hovered !== null,
-          })}
-        ></div>
+          className={cn(
+            "relative h-12 w-32 overflow-hidden rounded transition-opacity",
+            {
+              "opacity-80": hovered !== null,
+            },
+          )}
+        >
+          <img
+            src={starfield}
+            alt="starfield"
+            className="inset-0 h-full w-full object-cover"
+          />
+        </div>
       </div>
       <div
         aria-hidden

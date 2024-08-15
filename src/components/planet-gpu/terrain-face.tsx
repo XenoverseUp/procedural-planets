@@ -39,10 +39,12 @@ import {
   readData,
 } from "@/lib/gpu-compute";
 import MinMax from "@/lib/min-max";
+import { SimpleNoiseFilter } from "@/lib/noise";
 
 extend({ CustomShaderMaterial });
 
 const MAX_GRADIENT_SIZE: GLuint = 10;
+const MAX_FILTER_COUNT: GLuint = 3;
 
 type TerrainFaceProps = {
   resolution: number;
@@ -139,7 +141,12 @@ const TerrainFace = ({
       {
         uLocalUp: new Uniform(localUp),
         uFilterLength: new Uniform(noiseFilters.length),
-        uFilters: new Uniform(noiseFilters),
+        uFilters: new Uniform([
+          ...noiseFilters,
+          ...new Array(MAX_FILTER_COUNT - noiseFilters.length)
+            .fill(null)
+            .map(() => new SimpleNoiseFilter({})),
+        ]),
         uSeed: new Uniform(seed),
       },
     );

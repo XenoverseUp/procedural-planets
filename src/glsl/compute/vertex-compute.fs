@@ -1,6 +1,6 @@
 precision highp float;
 
-const int MAX_FILTER_COUNT = 2;
+const int MAX_FILTER_COUNT = 3;
 
 struct noiseFilter {
     bool  enabled;

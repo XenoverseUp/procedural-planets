@@ -13,9 +13,10 @@ import { exportGeometryToOBJ } from "@/lib/export-mesh";
 import Film, { FilmImage } from "@/components/showcase/film";
 import PolaroidStage from "@/components/showcase/polaroid-stage";
 import { showcaseTitleVariants } from "@/lib/animation-variants";
-import { useSetAtom } from "jotai";
-import { isShowcaseAtom, polaroidAtom } from "@/atoms/showcase";
-import { DownloadIcon } from "@radix-ui/react-icons";
+import { useAtomValue, useSetAtom } from "jotai";
+import { isShowcaseAtom } from "@/atoms/showcase";
+import { polaroidAtom } from "@/atoms/showcase";
+import { DownloadIcon, ResetIcon } from "@radix-ui/react-icons";
 
 type ShowcaseHUDProps = {
   capture: (
@@ -30,6 +31,7 @@ const ShowcaseHUD = ({ planetRef, capture }: ShowcaseHUDProps) => {
   const planetFact = useRef(generatePlanetFact(planetName.current));
   const setPolaroid = useSetAtom(polaroidAtom);
   const [images, setImages] = useState<string[]>([]);
+  const setIsShowcase = useSetAtom(isShowcaseAtom);
 
   const mergeAndExport = () => {
     if (!planetRef) return;
@@ -100,13 +102,23 @@ const ShowcaseHUD = ({ planetRef, capture }: ShowcaseHUDProps) => {
 
       <PolaroidStage planetName={planetName.current} images={images} />
 
-      <button
-        onClick={mergeAndExport}
-        className="fixed bottom-4 left-4 flex h-8 items-center justify-center gap-2 rounded-full border border-white/40 bg-black/40 px-3 text-sm font-light text-white opacity-80 backdrop-blur hover:bg-white/10 active:bg-white/15"
-      >
-        <DownloadIcon />
-        Download
-      </button>
+      <div className="fixed bottom-4 left-4 flex items-center justify-center gap-3">
+        <button
+          onClick={() => window.location.reload()}
+          aria-label="Reset"
+          className="flex h-8 items-center justify-center gap-2 rounded-full border border-white/40 bg-black/40 px-3 text-sm font-light text-white opacity-80 backdrop-blur hover:bg-white/10 active:bg-white/15"
+        >
+          <ResetIcon />
+          {/* Reset */}
+        </button>
+        <button
+          onClick={mergeAndExport}
+          className="flex h-8 items-center justify-center gap-2 rounded-full border border-white/40 bg-black/40 px-3 text-sm font-light text-white opacity-80 backdrop-blur hover:bg-white/10 active:bg-white/15"
+        >
+          <DownloadIcon />
+          Download
+        </button>
+      </div>
     </>
   );
 };

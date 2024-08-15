@@ -18,6 +18,7 @@ import {
 } from "@radix-ui/react-icons";
 import { useAtom } from "jotai";
 import { motion } from "framer-motion";
+import { Vector3 } from "three";
 
 const Sidebar = () => {
   const [meshResolution, setMeshResolution] = useAtom(meshResolutionAtom);
@@ -44,11 +45,12 @@ const Sidebar = () => {
           </h2>
 
           <a
-            className="rounded-full bg-transparent p-2 transition-colors hover:bg-neutral-100 active:bg-neutral-200 active:transition-none"
+            className="flex items-center justify-center gap-2 rounded-full border bg-transparent px-3 py-2 text-xs transition-colors hover:bg-neutral-100 active:bg-neutral-200 active:transition-none"
             href="https://github.com/XenoverseUp/procedural-planets"
             target="_blank"
           >
             <GitHubLogoIcon />
+            Star on Github
           </a>
         </header>
         <div className="space-y-8 overflow-y-auto overflow-x-hidden p-4 pb-8">
@@ -73,9 +75,13 @@ const Sidebar = () => {
                   new SimpleNoiseFilter({
                     enabled: true,
                     strength: 0.2,
-                    roughness: 2.25,
-                    baseRoughness: 0.7,
-                    center: VECTOR_ZERO,
+                    roughness: 2.5,
+                    baseRoughness: 1.2,
+                    center: new Vector3(
+                      Math.round(Math.random() * 1000),
+                      Math.round(Math.random() * 1000),
+                      Math.round(Math.random() * 1000),
+                    ),
                     persistence: 0.5,
                     minValue: 1.1,
                     layerCount: 10,

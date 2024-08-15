@@ -10,6 +10,9 @@ import {
 import clamp from "@/lib/clamp";
 import cn from "@/lib/cn";
 import GradientStop from "@/lib/gradient";
+import { Vector4 } from "three";
+import lerp from "@/lib/lerp";
+import map from "@/lib/map";
 
 type GradientInputProps = {
   label: string;
@@ -29,21 +32,17 @@ const GradientInput = ({
   const [selected, setSelected] = useState<number | null>(null);
   const [gradient, setGradient] = gradientState;
 
-  // useEffect(() => {
-  //   console.log({ gradient });
-  // });
-
-  const onMouseDown: MouseEventHandler<HTMLDivElement> = (e) => {
+  const onThumbMouseDown: MouseEventHandler<HTMLDivElement> = (e) => {
     const index = parseInt(e.target.dataset.index, 10);
 
     setSelected(index);
     document.body.dataset[datasetKey] = e.target.dataset.index;
 
-    document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
+    document.addEventListener("mousemove", onThumbMouseMove);
+    document.addEventListener("mouseup", onThumbMouseUp);
   };
 
-  const onMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
+  const onThumbMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       const { width, left } = trackRef.current!.getBoundingClientRect();
       const index = parseInt(document.body.dataset[datasetKey], 10);
@@ -78,18 +77,67 @@ const GradientInput = ({
     [trackRef, setGradient],
   );
 
-  const onMouseUp = () => {
-    document.removeEventListener("mousemove", onMouseMove);
-    document.removeEventListener("mouseup", onMouseUp);
+  const onThumbMouseUp = () => {
+    document.removeEventListener("mousemove", onThumbMouseMove);
+    document.removeEventListener("mouseup", onThumbMouseUp);
   };
 
-  const onDoubleClick = () => {
+  const onThumbDoubleClick = () => {
     if (gradient.length <= 2) return;
 
     setGradient((gradient) => gradient.toSpliced(selected, 1));
     setSelected(null);
-    onMouseUp();
+    onThumbMouseUp();
     document.body.dataset[datasetKey] = undefined;
+  };
+
+  const onSliderClick: MouseEventHandler<HTMLDivElement> = (e) => {
+    if (gradient.length >= 10) return;
+
+    const slider = e.target as HTMLDivElement;
+    const rect = slider.getBoundingClientRect();
+
+    const margin = 0.05 * rect.width;
+    const width = rect.width - 2 * margin;
+    const sliderLeft = rect.left + margin;
+
+    const progress = clamp(
+      0,
+      1,
+      map(sliderLeft, sliderLeft + width, e.clientX),
+    );
+
+    const isValid = (gradient as GradientStop[]).every(
+      (stop) => Math.abs(stop.anchor - progress) > 0.04,
+    );
+
+    if (!isValid) return;
+
+    const afterStopIndex = (gradient as GradientStop[]).findIndex(
+      (stop) => stop.anchor > progress,
+    );
+    const beforeStopIndex = afterStopIndex - 1;
+
+    const afterStop: GradientStop = gradient.at(afterStopIndex);
+    const beforeStop: GradientStop = gradient.at(beforeStopIndex);
+    const amount = map(beforeStop.anchor, afterStop.anchor, progress);
+
+    const color = new Vector4(
+      lerp(beforeStop.color.x, afterStop.color.x, amount),
+      lerp(beforeStop.color.y, afterStop.color.y, amount),
+      lerp(beforeStop.color.z, afterStop.color.z, amount),
+      1,
+    );
+
+    const stop: GradientStop = new GradientStop({
+      anchor: progress,
+      color,
+    });
+
+    const updated = [...gradient, stop];
+    updated.sort((a, b) => a.anchor - b.anchor);
+
+    setGradient(updated);
   };
 
   return (
@@ -105,6 +153,7 @@ const GradientInput = ({
 
       <div className="mt-3 w-full">
         <div
+          onClick={onSliderClick}
           className="h-12 w-full rounded-full border border-black"
           style={{
             background: `linear-gradient(to right, ${gradient.map((stop) => `rgb(${stop.color.x * 255}, ${stop.color.y * 255}, ${stop.color.z * 255}) ${(stop.anchor * 0.9 + 0.05) * 100}%`).join(",")})`,
@@ -124,11 +173,11 @@ const GradientInput = ({
                 left: `${stop.anchor * 100}%`,
                 backgroundColor: stop.toRGB(),
               }}
-              onDoubleClick={onDoubleClick}
-              onMouseDown={onMouseDown}
+              onDoubleClick={onThumbDoubleClick}
+              onMouseDown={onThumbMouseDown}
             >
               {selected == i && (
-                <span className="size-1 rounded-full border border-black bg-white" />
+                <span className="pointer-events-none size-1 rounded-full border border-black bg-white" />
               )}
             </div>
           ))}

@@ -77,7 +77,7 @@ const PolaroidStage = ({
                 )}
               >
                 <DownloadIcon />
-                Taking...
+                Generating...
               </span>
             </button>
             <button className="grid size-8 place-items-center rounded-full border border-white/40 bg-black/40 font-medium text-white hover:bg-white/10 active:bg-white/15">
@@ -143,7 +143,7 @@ const Polaroid = forwardRef<HTMLDivElement, PolaroidProps>(
         <header className="flex justify-between px-2 pb-2 pt-4">
           <div>
             <h3 className="text-2xl font-medium">{name}</h3>
-            <p className="opacity-70">
+            <p className="whitespace-nowrap opacity-70">
               <span className="font-medium">{distance} million</span> light
               years away
             </p>
