@@ -24,7 +24,8 @@ const PolaroidStage = ({
   const time = useRef(new Date()).current;
   const distance = useRef(Math.floor(Math.random() * 200 + 1)).current;
 
-  const { elementRef, downloadScreenshot, loading } = useScreenshot();
+  const { elementRef, downloadScreenshot, loading } =
+    useScreenshot<HTMLDivElement>();
 
   return createPortal(
     <AnimatePresence>
@@ -98,8 +99,8 @@ type PolaroidProps = {
   id: number;
 };
 
-const Polaroid = forwardRef(
-  ({ src, name, time, distance, id }: PolaroidProps, ref) => {
+const Polaroid = forwardRef<HTMLDivElement, PolaroidProps>(
+  ({ src, name, time, distance, id }, ref) => {
     return (
       <motion.div
         variants={showcasePolaroidVariants}

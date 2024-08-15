@@ -1,15 +1,17 @@
 import { useRef, useState } from "react";
 import domtoimage from "dom-to-image";
 
-interface UseScreenshotReturn {
-  elementRef: React.RefObject<HTMLElement>;
+interface UseScreenshotReturn<U extends HTMLElement> {
+  elementRef: React.RefObject<U>;
   loading: boolean;
   captureScreenshot: (scale?: number) => Promise<string>;
   downloadScreenshot: (scale?: number, filename?: string) => Promise<void>;
 }
 
-export const useScreenshot = (): UseScreenshotReturn => {
-  const elementRef = useRef<HTMLElement>(null);
+export const useScreenshot = <
+  T extends HTMLElement,
+>(): UseScreenshotReturn<T> => {
+  const elementRef = useRef<T>(null);
   const [loading, setLoading] = useState(false);
 
   const captureScreenshot = async (scale: number = 1): Promise<string> => {
