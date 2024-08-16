@@ -29,7 +29,10 @@ const NoiseLayerDetail = ({ title, index }: NoiseLayerDetailProps) => {
   const [noiseFilters, setNoiseFilters] = useAtom(noiseFiltersAtom);
 
   return (
-    <Collapsible.Root className="w-full rounded-xl border bg-slate-100">
+    <Collapsible.Root
+      className="w-full rounded-xl border bg-slate-100"
+      defaultOpen
+    >
       <Collapsible.Trigger asChild>
         <div className="flex cursor-pointer select-none items-center justify-between px-4 py-3">
           <header className="flex items-center gap-3">
