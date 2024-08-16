@@ -145,7 +145,7 @@ const TerrainFace = ({
           ...noiseFilters,
           ...new Array(MAX_FILTER_COUNT - noiseFilters.length)
             .fill(null)
-            .map(() => new SimpleNoiseFilter({})),
+            .map(() => new SimpleNoiseFilter({ enabled: false })),
         ]),
         uSeed: new Uniform(seed),
       },
