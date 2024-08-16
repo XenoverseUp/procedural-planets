@@ -12,7 +12,10 @@ import { exportGeometryToOBJ } from "@/lib/export-mesh";
 
 import Film, { FilmImage } from "@/components/showcase/film";
 import PolaroidStage from "@/components/showcase/polaroid-stage";
-import { showcaseTitleVariants } from "@/lib/animation-variants";
+import {
+  showcaseFunFactVariants,
+  showcaseTitleVariants,
+} from "@/lib/animation-variants";
 import { useAtomValue, useSetAtom } from "jotai";
 import { isShowcaseAtom } from "@/atoms/showcase";
 import { polaroidAtom } from "@/atoms/showcase";
@@ -77,15 +80,9 @@ const ShowcaseHUD = ({ planetRef, capture }: ShowcaseHUDProps) => {
       </motion.h1>
 
       <motion.div
-        initial={{
-          opacity: 0,
-        }}
-        animate={{
-          opacity: 1,
-          transition: {
-            delay: 0.75,
-          },
-        }}
+        variants={showcaseFunFactVariants}
+        initial="initial"
+        animate="animate"
         className="fixed bottom-12 left-0 right-0 mx-auto flex max-w-[30rem] flex-col place-items-center justify-center gap-2"
       >
         <h2 className="text-center font-sud text-xl text-blue-300">Fun Fact</h2>
@@ -102,11 +99,11 @@ const ShowcaseHUD = ({ planetRef, capture }: ShowcaseHUDProps) => {
 
       <PolaroidStage planetName={planetName.current} images={images} />
 
-      <div className="fixed bottom-4 left-4 flex items-center justify-center gap-3">
+      <div className="fixed bottom-4 left-4 flex items-center justify-center gap-2">
         <button
           onClick={() => window.location.reload()}
           aria-label="Reset"
-          className="flex h-8 items-center justify-center gap-2 rounded-full border border-white/40 bg-black/40 px-3 text-sm font-light text-white opacity-80 backdrop-blur hover:bg-white/10 active:bg-white/15"
+          className="flex size-8 items-center justify-center gap-2 rounded-full border border-white/40 bg-black/40 text-sm font-light text-white opacity-80 backdrop-blur hover:bg-white/10 active:bg-white/15"
         >
           <ResetIcon />
           {/* Reset */}

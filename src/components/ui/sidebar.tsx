@@ -35,7 +35,7 @@ const Sidebar = () => {
           type: "spring",
         },
       }}
-      className="flex-shrink-0 overflow-hidden"
+      className="flex-shrink-0"
     >
       <aside className="mr-2 flex h-full w-96 flex-col overflow-hidden rounded-lg bg-white">
         <header className="flex items-center justify-between border-b px-4 py-3">
@@ -109,7 +109,7 @@ const Sidebar = () => {
 
           <GradientInput
             label="Elevation"
-            description="Assigns different colors to different elevations on the planet. 0,0 means the lowest vertex and 1,0 means the highest vertex."
+            description="Assigns different colors to different elevations on the planet. Click on gradient to add stop or double click on thumbs to delete them."
             datasetKey="elevationThumb"
             gradientState={elevationGradientState}
           />

@@ -1,5 +1,17 @@
 import { Variants } from "framer-motion";
 
+export const showcaseFunFactVariants: Variants = {
+  initial: {
+    opacity: 0,
+  },
+  animate: {
+    opacity: 1,
+    transition: {
+      delay: 0.75,
+    },
+  },
+};
+
 export const showcaseTitleVariants: Variants = {
   initial: {
     opacity: 0,

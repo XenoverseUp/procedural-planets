@@ -13,6 +13,7 @@ import GradientStop from "@/lib/gradient";
 import { Vector4 } from "three";
 import lerp from "@/lib/lerp";
 import map from "@/lib/map";
+import { RgbColorPicker } from "react-colorful";
 
 type GradientInputProps = {
   label: string;
@@ -152,9 +153,14 @@ const GradientInput = ({
       )}
 
       <div className="mt-3 w-full">
+        <div className="mb-2 flex w-full justify-between px-3">
+          <span className="text-xs opacity-60">0,0</span>
+          <span className="text-xs opacity-60">0,5</span>
+          <span className="text-xs opacity-60">1,0</span>
+        </div>
         <div
           onClick={onSliderClick}
-          className="h-12 w-full rounded-full border border-black"
+          className="h-12 w-full rounded-full border-y border-black/10"
           style={{
             background: `linear-gradient(to right, ${gradient.map((stop) => `rgb(${stop.color.x * 255}, ${stop.color.y * 255}, ${stop.color.z * 255}) ${(stop.anchor * 0.9 + 0.05) * 100}%`).join(",")})`,
           }}
@@ -183,6 +189,31 @@ const GradientInput = ({
           ))}
         </div>
       </div>
+
+      {selected !== null && (
+        <div className="mt-6">
+          <RgbColorPicker
+            className="!w-full !rounded-none"
+            color={{
+              r: gradient.at(selected).color.x * 255,
+              g: gradient.at(selected).color.y * 255,
+              b: gradient.at(selected).color.z * 255,
+            }}
+            onChange={(c) =>
+              setGradient((g) => {
+                const updated = [...g];
+                updated.at(selected).color = new Vector4(
+                  c.r / 255,
+                  c.g / 255,
+                  c.b / 255,
+                  1,
+                );
+                return updated;
+              })
+            }
+          />
+        </div>
+      )}
     </div>
   );
 };
