@@ -107,7 +107,7 @@ const Polaroid = forwardRef<HTMLDivElement, PolaroidProps>(
         initial="initial"
         animate="animate"
         onClick={(e) => e.stopPropagation()}
-        className="relative isolate bg-blue-100 p-5"
+        className="relative isolate bg-white p-5"
         ref={ref}
       >
         <div className="relative size-96 overflow-hidden bg-black">
