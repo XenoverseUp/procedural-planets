@@ -4,7 +4,7 @@ import { SimpleNoiseFilter, NoiseFilter, RidgidNoiseFilter } from "@/lib/noise";
 import { VECTOR_ZERO } from "@/lib/vector";
 import GradientStop from "@/lib/gradient";
 
-export const meshResolutionAtom = atom(256);
+export const meshResolutionAtom = atom(144);
 export const planetRadiusAtom = atom(2);
 
 export const isBlendAtom = atom(true);
