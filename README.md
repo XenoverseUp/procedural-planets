@@ -1,5 +1,7 @@
 # Procedural Planet Generation (GPGPU)
 
+Read the full article on [Medium](https://medium.com/fractions/gpgpu-on-the-web-procedural-planet-meshes-0601b044c818?sk=529caf4fffdb74a381b4f53dc7495d00).
+
 This is a procedural planet mesh generation tool working on web technologies. Using multilayered simplex noises, we can simulate continents and mountains. In the showcase, a polaroid of the scene and the `.obj` file can be exported. Thanks to _Sebastian Lague_ for it's series on the subject and the inspiration.
 
 <img src="docs/showcase.png" style="width: 100%" />
